@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "daggerheart-review-issue-schema",
+  "title": "Daggerheart Review Issue Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope", "target_file", "issues"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "enum": ["chunk_review", "global_review"]
+    },
+    "target_file": {
+      "type": "string",
+      "minLength": 1
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "severity",
+          "category",
+          "chunk_labels",
+          "location",
+          "problem",
+          "reference",
+          "suggested_fix"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "term_miss",
+              "term_overuse",
+              "mechanics_form",
+              "translationese",
+              "dialogue_stiff",
+              "description_flat",
+              "feels_translated",
+              "term_wrong",
+              "markdown",
+              "style"
+            ]
+          },
+          "chunk_labels": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "line_start": {
+            "type": ["integer", "null"],
+            "minimum": 1
+          },
+          "line_end": {
+            "type": ["integer", "null"],
+            "minimum": 1
+          },
+          "source_excerpt": {
+            "type": "string"
+          },
+          "translation_excerpt": {
+            "type": "string"
+          },
+          "problem": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "suggested_fix": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
