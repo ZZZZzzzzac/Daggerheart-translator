@@ -45,7 +45,7 @@ done
 project/<项目名>/
 ├── source/         # 原始文件（PDF/MD），管线输入
 │   └── temp/       # 临时产物（_chunks/、_tagged.md 等）
-├── scripts/        # 本项目专有的脚本
+├── project_scripts/        # 本项目专有的脚本（与 skill 的 scripts/ 区分）
 ├── data/           # 结构化 JSON 输出
 └── glossary/       # 项目术语表
 ```
