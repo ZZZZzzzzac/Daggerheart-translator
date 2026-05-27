@@ -32,6 +32,12 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 2. 将待翻译的 PDF/MD 文件放入项目的 `source/` 子目录
 3. 在项目目录下告诉 AI："加载 daggerheart-translation-pipeline skill，翻译这个文件"
 
+## 注意事项
+
+1. 尽可能使用claude code或cli工具，codex会导致管线约束失效。
+2. 运行前可以自行检查需要的Python库是否安装，运行过程中安装可能会导致下载慢或者额外的token消耗
+
+
 ## 适配其他 TTRPG
 
 替换以下文件即可适配其他规则书：
