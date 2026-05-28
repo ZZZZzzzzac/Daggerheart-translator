@@ -38,6 +38,17 @@ description: Identify the type of a translated Daggerheart text and format it in
 - 机制语法保留原样：`**花费 1 恐惧点**`、` *脆弱* `
 - 特性类型标签（被动/动作/反应）映射正确
 
+## 格式转换
+
+SKILL 输出的 JSON 为 zzz 格式（各实体类型分组打包）。如需其他格式，使用 `scripts/` 下的脚本转换：
+
+| 脚本 | 用途 |
+|------|------|
+| `scripts/zzz2rrr.py` | zzz 格式 ↔ rrr 格式（扁平列表，每张卡一个独立条目）。用法：`python zzz2rrr.py <输入.json> --zzz`（zzz→rrr）或 `--rrr`（rrr→zzz），也支持 `.dhcb` |
+| `scripts/zzz2keyword.py` | zzz/rrr 格式 → SealChat 术语表关键词列表。用法：`python zzz2keyword.py <输入.json>`，输出 `_keyword.json` |
+
+需要时才转换，一般不需要。不需要依赖。
+
 ## 边界
 
 有模板就按模板提取。规则书、背景、叙事文本等非卡牌内容保留 Markdown，不强行结构化。不臆造字段。
