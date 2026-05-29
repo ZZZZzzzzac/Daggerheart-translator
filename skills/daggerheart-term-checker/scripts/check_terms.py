@@ -72,6 +72,54 @@ def _extract_markers(text):
     return markers
 
 
+def _marker_key(marker):
+    if not marker:
+        return ("", "")
+    return (_normalise(marker.get("slot2", "")), _normalise(marker.get("slot3", "")))
+
+
+def _choose_nearest(candidates, target_index):
+    return min(candidates, key=lambda idx: (abs(idx - target_index), idx))
+
+
+def _pair_markers(src_markers, trans_markers):
+    """优先按 推荐译文+注释 对位；仅在无法精确匹配时退回顺序兜底。"""
+    pairings = {}
+    pairing_modes = {}
+    unmatched_trans = set(range(len(trans_markers)))
+    key_to_trans = {}
+
+    for trans_idx, trans_marker in enumerate(trans_markers):
+        key_to_trans.setdefault(_marker_key(trans_marker), []).append(trans_idx)
+
+    for src_idx, src_marker in enumerate(src_markers):
+        candidates = [
+            trans_idx
+            for trans_idx in key_to_trans.get(_marker_key(src_marker), [])
+            if trans_idx in unmatched_trans
+        ]
+        if not candidates:
+            continue
+        best_idx = _choose_nearest(candidates, src_idx)
+        pairings[src_idx] = best_idx
+        pairing_modes[src_idx] = "exact"
+        unmatched_trans.remove(best_idx)
+
+    remaining_src = [idx for idx in range(len(src_markers)) if idx not in pairings]
+    remaining_trans = sorted(unmatched_trans)
+    paired_count = min(len(remaining_src), len(remaining_trans))
+
+    for offset in range(paired_count):
+        src_idx = remaining_src[offset]
+        trans_idx = remaining_trans[offset]
+        pairings[src_idx] = trans_idx
+        pairing_modes[src_idx] = "fallback"
+
+    missing_src = remaining_src[paired_count:]
+    extra_trans = remaining_trans[paired_count:]
+    return pairings, pairing_modes, missing_src, extra_trans
+
+
 def _context_snippet(text, pos, radius=40):
     if not text:
         return ""
@@ -95,7 +143,14 @@ def _adopted(current, recommended):
     return "是" if current_norm in options else "否"
 
 
-def _build_row(label, src_marker=None, trans_marker=None, anomaly_messages=None, trans_target=""):
+def _build_row(
+    label,
+    src_marker=None,
+    trans_marker=None,
+    anomaly_messages=None,
+    src_target="",
+    trans_target="",
+):
     anomaly_messages = anomaly_messages or []
 
     original = src_marker["slot1"] if src_marker else ""
@@ -108,11 +163,12 @@ def _build_row(label, src_marker=None, trans_marker=None, anomaly_messages=None,
     if not note and trans_marker:
         note = trans_marker["slot3"]
 
-    snippet_pos = 0
-    if trans_marker:
-        snippet_pos = trans_marker["pos"]
-    elif src_marker:
-        snippet_pos = src_marker["pos"]
+    source_context = ""
+    translated_context = ""
+    if src_marker and src_target:
+        source_context = _context_snippet(src_target, src_marker["pos"])
+    if trans_marker and trans_target:
+        translated_context = _context_snippet(trans_target, trans_marker["pos"])
 
     return {
         "chunk": label,
@@ -121,7 +177,9 @@ def _build_row(label, src_marker=None, trans_marker=None, anomaly_messages=None,
         "recommended": recommended,
         "current": current,
         "adopted_recommendation": _adopted(current, recommended),
-        "context": _context_snippet(trans_target, snippet_pos) if trans_target else "",
+        "context": translated_context or source_context,
+        "source_context": source_context,
+        "translated_context": translated_context,
         "note": note,
         "anomalies": anomaly_messages,
     }
@@ -149,6 +207,8 @@ def review_chunk(tagged_path, trans_path, label):
                 "current": "",
                 "adopted_recommendation": "无法判断",
                 "context": "",
+                "source_context": "",
+                "translated_context": "",
                 "note": "",
                 "anomalies": ["原文 chunk 缺少 KILO_TARGET 区段"],
             }
@@ -165,6 +225,8 @@ def review_chunk(tagged_path, trans_path, label):
                 "current": "",
                 "adopted_recommendation": "无法判断",
                 "context": "",
+                "source_context": "",
+                "translated_context": "",
                 "note": "",
                 "anomalies": ["译文 chunk 缺少 KILO_TARGET 区段"],
             }
@@ -177,22 +239,21 @@ def review_chunk(tagged_path, trans_path, label):
     if not src_markers and not trans_markers:
         return rows, 0
 
-    max_len = max(len(src_markers), len(trans_markers))
+    pairings, pairing_modes, missing_src, extra_trans = _pair_markers(src_markers, trans_markers)
 
-    for idx in range(max_len):
-        src_marker = src_markers[idx] if idx < len(src_markers) else None
-        trans_marker = trans_markers[idx] if idx < len(trans_markers) else None
+    for src_idx, src_marker in enumerate(src_markers):
+        trans_idx = pairings.get(src_idx)
+        trans_marker = trans_markers[trans_idx] if trans_idx is not None else None
         anomalies = []
 
-        if src_marker is None:
-            anomalies.append("译文多出术语标记")
         if trans_marker is None:
             anomalies.append("译文缺少术语标记")
-        if src_marker and trans_marker:
+        elif pairing_modes.get(src_idx) == "fallback":
             if _normalise(src_marker["slot2"]) != _normalise(trans_marker["slot2"]):
                 anomalies.append("推荐译文槽位被改动")
             if _normalise(src_marker["slot3"]) != _normalise(trans_marker["slot3"]):
                 anomalies.append("注释槽位被改动")
+        if trans_marker:
             if not _normalise(trans_marker["slot1"]):
                 anomalies.append("当前译文槽位为空")
 
@@ -205,6 +266,20 @@ def review_chunk(tagged_path, trans_path, label):
                 src_marker=src_marker,
                 trans_marker=trans_marker,
                 anomaly_messages=anomalies,
+                src_target=tagged_target,
+                trans_target=trans_target,
+            )
+        )
+
+    for trans_idx in extra_trans:
+        structural_anomalies += 1
+        rows.append(
+            _build_row(
+                label,
+                src_marker=None,
+                trans_marker=trans_markers[trans_idx],
+                anomaly_messages=["译文多出术语标记"],
+                src_target=tagged_target,
                 trans_target=trans_target,
             )
         )
@@ -243,7 +318,17 @@ def write_md_report(report, output_path):
     if not report["rows"]:
         lines.append("未发现任何术语标记。")
     else:
-        headers = ["chunk", "原文", "推荐译文", "当前译文", "是否采用推荐", "上下文", "注释", "异常"]
+        headers = [
+            "chunk",
+            "原文",
+            "推荐译文",
+            "当前译文",
+            "是否采用推荐",
+            "原文上下文",
+            "译文上下文",
+            "注释",
+            "异常",
+        ]
         lines.append("| " + " | ".join(headers) + " |")
         lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
         for row in report["rows"]:
@@ -256,7 +341,8 @@ def write_md_report(report, output_path):
                         _escape_cell(row["recommended"]),
                         _escape_cell(row["current"]),
                         _escape_cell(row["adopted_recommendation"]),
-                        _escape_cell(row["context"]),
+                        _escape_cell(row.get("source_context", "")),
+                        _escape_cell(row.get("translated_context", "")),
                         _escape_cell(row["note"]),
                         _escape_cell("；".join(row["anomalies"])),
                     ]
@@ -325,6 +411,8 @@ def main(project_dir, output_path="", json_output_path=""):
                     "current": "",
                     "adopted_recommendation": "无法判断",
                     "context": "",
+                    "source_context": "",
+                    "translated_context": "",
                     "note": "",
                     "anomalies": ["译文 chunk 文件不存在"],
                 }
