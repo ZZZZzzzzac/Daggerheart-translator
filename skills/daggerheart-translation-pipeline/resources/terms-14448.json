@@ -294,7 +294,7 @@
   {"term": "tick down", "translation": "下调", "note": "倒计时推进的一种"},
   {"term": "tick up", "translation": "上调", "note": "倒计时推进的一种"},
   {"term": "Tier", "translation": "位阶", "variants": ["tiers"]},
-  {"term": "Token", "translation": "指示物", "variants": ["tokens"], "case_sensitive": true},
+  {"term": "Token", "translation": "指示物", "variants": ["tokens"]},
   {"term": "TOUCHSTONES", "translation": "灵感来源"},
   {"term": "Trait", "translation": "属性", "variants": ["Traits"]},
   {"term": "Traversals", "translation": "险境", "variants": ["Traversal"]},

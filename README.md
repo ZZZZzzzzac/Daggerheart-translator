@@ -6,11 +6,12 @@ Daggerheart TTRPG 内容的翻译技能合集。英文 PDF/DOCX 输入，中文 
 
 ```
 skills/                           # 技能源码
-  daggerheart-translation-pipeline/  # 10 步翻译管线（主入口）
+  daggerheart-translation-pipeline/  # 12 步翻译管线（主入口）
   daggerheart-md-converter/          # PDF/DOCX → 原始 Markdown
   daggerheart-md-format-fixer/       # 原始 Markdown → 标准原文 Markdown
   daggerheart-chinese-writing/      # 中文行文规范
   daggerheart-glossary-extractor/   # 文档术语提取
+  daggerheart-term-checker/         # 术语审阅报告与清标记
   daggerheart-json-formatter/      # 译文 → 结构化 JSON
 project/
   example/                        # 翻译项目模板（复制以新建项目）
@@ -31,6 +32,8 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 1. 复制 `project/example/` 为 `project/<你的项目名>/`
 2. 将待翻译的 PDF/MD 文件放入项目的 `source/` 子目录
 3. 在项目目录下告诉 AI："加载 daggerheart-translation-pipeline skill，翻译这个文件"
+
+当前管线会在分块翻译后保留术语标记，先生成术语审阅报告，再批量清除标记并继续合并、校验、JSON 提取。
 
 ## 注意事项
 

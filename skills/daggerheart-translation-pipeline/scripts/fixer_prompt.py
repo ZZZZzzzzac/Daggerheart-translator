@@ -25,7 +25,7 @@ RULES = """## 严格规则
 - 只修 issue JSON 中点名的问题，以及 validator JSON 中的硬错误
 - 如果 issue JSON 是 global review 结果，只处理其中 `chunk_labels` 包含当前 chunk 的条目
 - 不准顺手重写整段、全文润色、统一文风到 issue 之外的内容
-- 不准保留 `【】` 术语标记
+- 若输入 chunk 中已存在 `【】` 术语标记，只能改第一槽 `当前译文`，不得删除标记，也不得改动后两槽
 - 修改后将结果写回原译文 chunk 文件
 """
 

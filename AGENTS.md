@@ -1,16 +1,17 @@
 # Daggerheart 翻译技能合集
 
-本仓库包含 6 个 Daggerheart TTRPG 翻译技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
+本仓库包含 7 个 Daggerheart TTRPG 翻译技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
 
 ## 技能清单
 
 | 技能 | 文件 | 用途 |
 |------|------|------|
-| `daggerheart-translation-pipeline` | `skills/daggerheart-translation-pipeline/SKILL.md` | 10 步翻译管线（主编排） |
+| `daggerheart-translation-pipeline` | `skills/daggerheart-translation-pipeline/SKILL.md` | 12 步翻译管线（主编排） |
 | `daggerheart-md-converter` | `skills/daggerheart-md-converter/SKILL.md` | PDF/DOCX → 原始 Markdown |
 | `daggerheart-md-format-fixer` | `skills/daggerheart-md-format-fixer/SKILL.md` | 原始 Markdown → 标准原文 Markdown |
 | `daggerheart-chinese-writing` | `skills/daggerheart-chinese-writing/SKILL.md` | 中文行文规范 |
 | `daggerheart-glossary-extractor` | `skills/daggerheart-glossary-extractor/SKILL.md` | 文档术语提取 |
+| `daggerheart-term-checker` | `skills/daggerheart-term-checker/SKILL.md` | 术语审阅报告与清标记 |
 | `daggerheart-json-formatter` | `skills/daggerheart-json-formatter/SKILL.md` | 译文 → JSON |
 
 ## 安装
@@ -55,6 +56,6 @@ project/<项目名>/
 
 ## 使用
 
-用户加载 `daggerheart-translation-pipeline` skill 后按 SKILL.md 指示的 10 步管线执行。管线所有产物写入当前翻译项目的 `source/` 和 `source/temp/` 下。
+用户加载 `daggerheart-translation-pipeline` skill 后按 SKILL.md 指示的 12 步管线执行。管线所有产物写入当前翻译项目的 `source/` 和 `source/temp/` 下。
 
 技能之间通过 `__file__` 相对路径解析互相引用，不依赖安装位置。

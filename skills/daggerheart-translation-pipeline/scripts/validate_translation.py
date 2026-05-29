@@ -1,7 +1,7 @@
 """Validate translated markdown for recurring real-world errors.
 
 Usage:
-    python validate_translation.py <translated.md>
+    python validate_translation.py <translated.md> [--allow-term-markers]
 
 原则：
 - 只检查已经在实际翻译中出现过、且能稳定判断的问题
@@ -46,6 +46,8 @@ CHECKS = [
     (r'【.*】', '❌ 残留术语标记【】', 'error'),
     (r'\*\*\d+\*\* \*\*', '❌ 拆分加粗', 'error'),
 ]
+
+TERM_MARKER_PATTERN = r'【.*】'
 
 KILO_MARKER_ORDER = [
     '[[[KILO_META_START]]]',
@@ -239,7 +241,7 @@ def check_bold_nesting(lines):
     return errors
 
 
-def validate(filepath):
+def validate(filepath, allow_term_markers=False):
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
@@ -249,6 +251,8 @@ def validate(filepath):
     warn_lines = {}   # line_no -> [(pattern, desc, matched_text)]
 
     for pattern, desc, severity in CHECKS:
+        if allow_term_markers and pattern == TERM_MARKER_PATTERN:
+            continue
         for i, line in enumerate(content_lines, 1):
             if re.search(pattern, line):
                 if severity == 'error':
@@ -319,16 +323,22 @@ def format_errors(error_lines, warn_lines, all_lines):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: python validate_translation.py <translated.md>")
+    args = sys.argv[1:]
+    if not args:
+        print("Usage: python validate_translation.py <translated.md> [--allow-term-markers]")
         sys.exit(1)
 
-    path = sys.argv[1]
+    allow_term_markers = False
+    if "--allow-term-markers" in args:
+        allow_term_markers = True
+        args.remove("--allow-term-markers")
+
+    path = args[0]
     if not os.path.exists(path):
         print(f"文件不存在: {path}")
         sys.exit(1)
 
-    error_lines, warn_lines, all_lines = validate(path)
+    error_lines, warn_lines, all_lines = validate(path, allow_term_markers=allow_term_markers)
 
     if error_lines or warn_lines:
         total_err = sum(len(v) for v in error_lines.values())

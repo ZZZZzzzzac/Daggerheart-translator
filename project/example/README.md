@@ -3,7 +3,7 @@
 ```
 project/<项目名>/
 ├── source/         # 原始文件（PDF/MD），管线的输入
-│   └── temp/       # 临时文件，下划线开头（_merged_terms.json、_chunks/ 等）
+│   └── temp/       # 临时文件，下划线开头（_merged_terms.json、_chunks/、_translated_chunks_clean/ 等）
 ├── project_scripts/        # 本项目专有的脚本（与 skill 的 scripts/ 区分）
 ├── data/           # json-formatter 从文档抽取的结构化 JSON
 └── glossary/       # 术语表（_glossary.json 等）

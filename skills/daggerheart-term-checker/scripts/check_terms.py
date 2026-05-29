@@ -1,17 +1,22 @@
-"""Check whether tagged terms were correctly adopted in translated output.
-
-Compares _chunks/ (term-tagged originals) against _translated_chunks/
-(translations) chunk by chunk. For each 【译文 (原文) ...】 marker in the
-tagged chunk, verifies that the English term is gone and the recommended
-Chinese translation appears in the translated chunk.
+"""Build a per-occurrence term review report from tagged chunks.
 
 Usage:
-    python check_terms.py <project_dir> [--output <report.md>]
+    python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>]
 
-Prints a summary table to stdout and writes a full Markdown report.
-Exit code 0 = no issues found.
+Reads:
+    source/temp/_chunks/              -> source markers: 【原文｜推荐译文｜注释】
+    source/temp/_translated_chunks/   -> translated markers: 【当前译文｜推荐译文｜注释】
+
+Writes:
+    source/temp/_term_review_report.md
+    source/temp/_term_review_report.json
+
+Exit code:
+    0 = report generated successfully
+    1 = structural anomalies found or input missing
 """
 
+import json
 import os
 import re
 import sys
@@ -20,7 +25,7 @@ from datetime import datetime
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-TERM_MARKER = re.compile(r"【([^(】]+?)\s*\(([^)]+)\)[^】]*】")
+MARKER_RE = re.compile(r"【([^｜】]+)｜([^｜】]+)(?:｜([^】]*))?】")
 
 TARGET_START = "[[[KILO_TARGET_START]]]"
 TARGET_END = "[[[KILO_TARGET_END]]]"
@@ -42,95 +47,87 @@ def _extract_kilo_target(text):
     return "".join(lines[start + 1 : end])
 
 
-def _extract_terms(text):
-    pairs = []
-    seen = set()
-    for m in TERM_MARKER.finditer(text):
-        cn = m.group(1).strip()
-        en = m.group(2).strip()
-        key = (en.lower(), cn)
-        if key not in seen:
-            seen.add(key)
-            pairs.append((en, cn))
-    return pairs
+def _normalise(text):
+    return re.sub(r"\s+", "", (text or "")).strip()
 
 
-def _has_english(text, term):
-    try:
-        return bool(re.search(r"\b" + re.escape(term) + r"\b", text, re.IGNORECASE))
-    except re.error:
-        return term.lower() in text.lower()
+def _split_recommended(text):
+    parts = re.split(r"\s*[\/／]\s*", text or "")
+    return [_normalise(part) for part in parts if _normalise(part)]
 
 
-def _has_chinese(text, cn):
-    normalised_text = re.sub(r"\s+", "", text)
-    parts = [p.strip() for p in cn.split("/") if p.strip()]
-    for p in parts:
-        normalised_cn = re.sub(r"\s+", "", p)
-        if normalised_cn in normalised_text:
-            return True
-    return False
+def _extract_markers(text):
+    markers = []
+    for idx, match in enumerate(MARKER_RE.finditer(text), 1):
+        markers.append(
+            {
+                "index": idx,
+                "slot1": match.group(1).strip(),
+                "slot2": match.group(2).strip(),
+                "slot3": (match.group(3) or "").strip(),
+                "raw": match.group(0),
+                "pos": match.start(),
+            }
+        )
+    return markers
 
 
-def _find_section_headers(text):
-    """Return list of (position, header_text) for ✦ lines."""
-    return [(m.start(), m.group().strip()) for m in re.finditer(r"^✦[^\n]*", text, re.MULTILINE)]
-
-
-def _find_snippet(en, tagged_target, trans_target):
-    """Find the translated text around where the term should appear.
-
-    Uses ✦ section headers as anchors to locate the corresponding
-    section in the translated chunk, then returns a short snippet.
-    """
-    # Find the term position in tagged text
-    term_pat = re.compile(r"【[^】]*\(" + re.escape(en) + r"\)[^】]*】")
-    term_match = term_pat.search(tagged_target)
-    if not term_match:
+def _context_snippet(text, pos, radius=40):
+    if not text:
         return ""
-
-    term_pos = term_match.start()
-
-    # Locate which ✦ section the term falls in
-    tagged_sections = _find_section_headers(tagged_target)
-    trans_sections = _find_section_headers(trans_target)
-
-    section_idx = -1
-    for i, (pos, _header) in enumerate(tagged_sections):
-        if pos < term_pos:
-            section_idx = i
-
-    if section_idx < 0 or section_idx >= len(trans_sections):
-        # No matching section — return first content line of translated
-        lines = [
-            l.strip()
-            for l in trans_target.split("\n")
-            if l.strip() and not l.strip().startswith("✦")
-        ]
-        return lines[0][:60] if lines else ""
-
-    # Extract the corresponding section from translated
-    trans_start = trans_sections[section_idx][0]
-    trans_end = (
-        trans_sections[section_idx + 1][0]
-        if section_idx + 1 < len(trans_sections)
-        else len(trans_target)
-    )
-    section_text = trans_target[trans_start:trans_end]
-
-    # Clean: remove header, blank lines, join first few content lines
-    content_lines = [
-        l.strip()
-        for l in section_text.split("\n")
-        if l.strip() and not l.strip().startswith("✦")
-    ]
-    snippet = " ".join(content_lines[:3])
-    if len(snippet) > 60:
-        snippet = snippet[:57] + "..."
+    start = max(0, pos - radius)
+    end = min(len(text), pos + radius)
+    snippet = re.sub(r"\s+", " ", text[start:end]).strip()
+    if start > 0:
+        snippet = "..." + snippet
+    if end < len(text):
+        snippet = snippet + "..."
     return snippet
 
 
-def check_chunk(tagged_path, trans_path, label):
+def _adopted(current, recommended):
+    current_norm = _normalise(current)
+    if not current_norm:
+        return "无法判断"
+    options = _split_recommended(recommended)
+    if not options:
+        return "无法判断"
+    return "是" if current_norm in options else "否"
+
+
+def _build_row(label, src_marker=None, trans_marker=None, anomaly_messages=None, trans_target=""):
+    anomaly_messages = anomaly_messages or []
+
+    original = src_marker["slot1"] if src_marker else ""
+    recommended = src_marker["slot2"] if src_marker else ""
+    note = src_marker["slot3"] if src_marker else ""
+    current = trans_marker["slot1"] if trans_marker else ""
+
+    if not recommended and trans_marker:
+        recommended = trans_marker["slot2"]
+    if not note and trans_marker:
+        note = trans_marker["slot3"]
+
+    snippet_pos = 0
+    if trans_marker:
+        snippet_pos = trans_marker["pos"]
+    elif src_marker:
+        snippet_pos = src_marker["pos"]
+
+    return {
+        "chunk": label,
+        "index": src_marker["index"] if src_marker else (trans_marker["index"] if trans_marker else 0),
+        "original": original,
+        "recommended": recommended,
+        "current": current,
+        "adopted_recommendation": _adopted(current, recommended),
+        "context": _context_snippet(trans_target, snippet_pos) if trans_target else "",
+        "note": note,
+        "anomalies": anomaly_messages,
+    }
+
+
+def review_chunk(tagged_path, trans_path, label):
     with open(tagged_path, "r", encoding="utf-8") as f:
         tagged_text = f.read()
     with open(trans_path, "r", encoding="utf-8") as f:
@@ -139,179 +136,160 @@ def check_chunk(tagged_path, trans_path, label):
     tagged_target = _extract_kilo_target(tagged_text)
     trans_target = _extract_kilo_target(trans_text)
 
+    rows = []
+    structural_anomalies = 0
+
     if not tagged_target:
-        return [], {"skip": 1, "ok": 0, "eng_residual": 0, "not_found": 0}
+        rows.append(
+            {
+                "chunk": label,
+                "index": 0,
+                "original": "",
+                "recommended": "",
+                "current": "",
+                "adopted_recommendation": "无法判断",
+                "context": "",
+                "note": "",
+                "anomalies": ["原文 chunk 缺少 KILO_TARGET 区段"],
+            }
+        )
+        return rows, 1
+
     if not trans_target:
-        issues = []
-        for en, cn in _extract_terms(tagged_target):
-            issues.append(
-                {
-                    "en": en,
-                    "cn": cn,
-                    "chunk": label,
-                    "problem": "译文 TARGET 区段为空",
-                    "snippet": "",
-                }
+        rows.append(
+            {
+                "chunk": label,
+                "index": 0,
+                "original": "",
+                "recommended": "",
+                "current": "",
+                "adopted_recommendation": "无法判断",
+                "context": "",
+                "note": "",
+                "anomalies": ["译文 chunk 缺少 KILO_TARGET 区段"],
+            }
+        )
+        return rows, 1
+
+    src_markers = _extract_markers(tagged_target)
+    trans_markers = _extract_markers(trans_target)
+
+    if not src_markers and not trans_markers:
+        return rows, 0
+
+    max_len = max(len(src_markers), len(trans_markers))
+
+    for idx in range(max_len):
+        src_marker = src_markers[idx] if idx < len(src_markers) else None
+        trans_marker = trans_markers[idx] if idx < len(trans_markers) else None
+        anomalies = []
+
+        if src_marker is None:
+            anomalies.append("译文多出术语标记")
+        if trans_marker is None:
+            anomalies.append("译文缺少术语标记")
+        if src_marker and trans_marker:
+            if _normalise(src_marker["slot2"]) != _normalise(trans_marker["slot2"]):
+                anomalies.append("推荐译文槽位被改动")
+            if _normalise(src_marker["slot3"]) != _normalise(trans_marker["slot3"]):
+                anomalies.append("注释槽位被改动")
+            if not _normalise(trans_marker["slot1"]):
+                anomalies.append("当前译文槽位为空")
+
+        if anomalies:
+            structural_anomalies += 1
+
+        rows.append(
+            _build_row(
+                label,
+                src_marker=src_marker,
+                trans_marker=trans_marker,
+                anomaly_messages=anomalies,
+                trans_target=trans_target,
             )
-        return issues, {"skip": 0, "ok": 0, "eng_residual": 0, "not_found": len(issues)}
-
-    terms = _extract_terms(tagged_target)
-    if not terms:
-        return [], {"skip": 0, "ok": 0, "eng_residual": 0, "not_found": 0}
-
-    issues = []
-    stats = {"skip": 0, "ok": 0, "eng_residual": 0, "not_found": 0}
-
-    for en, cn in terms:
-        eng_left = _has_english(trans_target, en)
-        cn_used = _has_chinese(trans_target, cn)
-
-        if eng_left and cn_used:
-            snippet = _find_snippet(en, tagged_target, trans_target)
-            issues.append(
-                {
-                    "en": en,
-                    "cn": cn,
-                    "chunk": label,
-                    "problem": "英文残留且存在中文译法",
-                    "snippet": snippet,
-                }
-            )
-            stats["eng_residual"] += 1
-        elif eng_left:
-            snippet = _find_snippet(en, tagged_target, trans_target)
-            issues.append(
-                {
-                    "en": en,
-                    "cn": cn,
-                    "chunk": label,
-                    "problem": "英文残留",
-                    "snippet": snippet,
-                }
-            )
-            stats["eng_residual"] += 1
-        elif not cn_used:
-            snippet = _find_snippet(en, tagged_target, trans_target)
-            issues.append(
-                {
-                    "en": en,
-                    "cn": cn,
-                    "chunk": label,
-                    "problem": "未使用推荐译法",
-                    "snippet": snippet,
-                }
-            )
-            stats["not_found"] += 1
-        else:
-            stats["ok"] += 1
-
-    return issues, stats
-
-
-def _print_table(issues, stats):
-    if not issues:
-        print("\n所有术语均已正确使用，未发现问题。")
-        return
-
-    en_w = min(max(len(r["en"]) for r in issues), 30)
-    cn_w = min(max(len(r["cn"]) for r in issues), 25)
-    prob_w = max(len(r["problem"]) for r in issues)
-    snippet_w = min(max(len(r.get("snippet", "")) for r in issues), 40)
-
-    header = (
-        f"| {'原文':<{en_w}} | {'推荐译法':<{cn_w}} | {'当前译法':<{snippet_w}} | {'问题':<{prob_w}} |"
-    )
-    sep = (
-        f"| {'-' * en_w} | {'-' * cn_w} | {'-' * snippet_w} | {'-' * prob_w} |"
-    )
-    print()
-    print(header)
-    print(sep)
-
-    for r in issues:
-        snippet = r.get("snippet", "")
-        print(
-            f"| {r['en']:<{en_w}} "
-            f"| {r['cn']:<{cn_w}} "
-            f"| {snippet:<{snippet_w}} "
-            f"| {r['problem']:<{prob_w}} |"
         )
 
-    total = stats["ok"] + stats["eng_residual"] + stats["not_found"]
-    print(f"\n共检查 {total} 条术语：{stats['ok']} 正确，"
-          f"{stats['eng_residual']} 英文残留，{stats['not_found']} 未使用推荐译法")
-
-
-def _deduplicate_issues(issues):
-    """Merge identical (en, cn, problem) issues. Keep the snippet from the
-    first occurrence."""
-    by_key = {}
-    for r in issues:
-        key = (r["en"], r["cn"], r["problem"])
-        if key not in by_key:
-            by_key[key] = dict(r)
-        # Keep first snippet, discard "chunk" key
-    result = []
-    for entry in by_key.values():
-        entry.pop("chunk", None)
-        result.append(entry)
-    return result
+    return rows, structural_anomalies
 
 
 def default_output_path(project_dir):
-    return os.path.join(project_dir, "source", "temp", "_term_check_report.md")
+    return os.path.join(project_dir, "source", "temp", "_term_review_report.md")
 
 
-def write_md_report(issues, stats, project_dir, output_path):
-    deviations = _deduplicate_issues(issues)
-    project_abs = os.path.abspath(project_dir)
-    checked_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+def default_json_output_path(project_dir):
+    return os.path.join(project_dir, "source", "temp", "_term_review_report.json")
 
-    total = stats["ok"] + stats["eng_residual"] + stats["not_found"]
 
+def _escape_cell(text):
+    return (text or "").replace("|", "\\|").replace("\n", " ")
+
+
+def write_md_report(report, output_path):
     lines = [
-        "# 术语检查报告",
+        "# 术语审阅报告",
         "",
-        f"**项目**：`{project_abs}`",
-        f"**检查时间**：{checked_at}",
-        f"**统计**：共 {total} 条术语 — {stats['ok']} 正确，"
-        f"{stats['eng_residual']} 英文残留，{stats['not_found']} 未使用推荐译法",
+        f"**项目**：`{report['project']}`",
+        f"**检查时间**：{report['checked_at']}",
+        (
+            f"**统计**：共 {report['stats']['total_rows']} 条术语，"
+            f"{report['stats']['adopted_yes']} 条采用推荐，"
+            f"{report['stats']['adopted_no']} 条未采用推荐，"
+            f"{report['stats']['adopted_unknown']} 条无法判断，"
+            f"{report['stats']['structural_anomalies']} 条结构异常"
+        ),
         "",
     ]
 
-    if not deviations:
-        lines.append("所有术语均已正确使用，未发现问题。")
+    if not report["rows"]:
+        lines.append("未发现任何术语标记。")
     else:
-        en_w = min(max(len(r["en"]) for r in deviations), 30)
-        cn_w = min(max(len(r["cn"]) for r in deviations), 25)
-        snippet_w = min(max(len(r.get("snippet", "")) for r in deviations), 45)
-        prob_w = max(len(r["problem"]) for r in deviations) if deviations else 10
-
-        h_en = "原文".ljust(en_w)
-        h_cn = "推荐译法".ljust(cn_w)
-        h_snippet = "当前译法".ljust(snippet_w)
-        h_prob = "问题".ljust(prob_w)
-
-        lines.append(f"| {h_en} | {h_cn} | {h_snippet} | {h_prob} |")
-        lines.append(f"| {'-' * en_w} | {'-' * cn_w} | {'-' * snippet_w} | {'-' * prob_w} |")
-
-        for r in deviations:
-            snippet = r.get("snippet", "")
+        headers = ["chunk", "原文", "推荐译文", "当前译文", "是否采用推荐", "上下文", "注释", "异常"]
+        lines.append("| " + " | ".join(headers) + " |")
+        lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
+        for row in report["rows"]:
             lines.append(
-                f"| {r['en']:<{en_w}} "
-                f"| {r['cn']:<{cn_w}} "
-                f"| {snippet:<{snippet_w}} "
-                f"| {r['problem']:<{prob_w}} |"
+                "| "
+                + " | ".join(
+                    [
+                        _escape_cell(row["chunk"]),
+                        _escape_cell(row["original"]),
+                        _escape_cell(row["recommended"]),
+                        _escape_cell(row["current"]),
+                        _escape_cell(row["adopted_recommendation"]),
+                        _escape_cell(row["context"]),
+                        _escape_cell(row["note"]),
+                        _escape_cell("；".join(row["anomalies"])),
+                    ]
+                )
+                + " |"
             )
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    return output_path
+
+def write_json_report(report, output_path):
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(report, f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
 
-def main(project_dir, output_path=""):
+def _print_summary(report, md_path, json_path):
+    stats = report["stats"]
+    print(
+        f"\n共审阅 {stats['total_rows']} 条术语："
+        f"{stats['adopted_yes']} 条采用推荐，"
+        f"{stats['adopted_no']} 条未采用推荐，"
+        f"{stats['adopted_unknown']} 条无法判断，"
+        f"{stats['structural_anomalies']} 条结构异常"
+    )
+    print(f"Markdown 报告已写入: {md_path}")
+    print(f"JSON 报告已写入: {json_path}")
+
+
+def main(project_dir, output_path="", json_output_path=""):
     chunks_dir = os.path.join(project_dir, "source", "temp", "_chunks")
     trans_dir = os.path.join(project_dir, "source", "temp", "_translated_chunks")
 
@@ -323,17 +301,14 @@ def main(project_dir, output_path=""):
         sys.exit(1)
 
     chunk_files = sorted(
-        f
-        for f in os.listdir(chunks_dir)
-        if f.endswith(".md") and not f.startswith("_prompt_")
+        f for f in os.listdir(chunks_dir) if f.endswith(".md") and not f.startswith("_prompt_")
     )
     if not chunk_files:
         print("错误：_chunks/ 中没有 chunk 文件。")
         sys.exit(1)
 
-    all_issues = []
-    total_stats = {"skip": 0, "ok": 0, "eng_residual": 0, "not_found": 0}
-    pairs_checked = 0
+    all_rows = []
+    structural_anomalies = 0
 
     for chunk_file in chunk_files:
         tagged_path = os.path.join(chunks_dir, chunk_file)
@@ -341,39 +316,66 @@ def main(project_dir, output_path=""):
         label = os.path.splitext(chunk_file)[0]
 
         if not os.path.exists(trans_path):
-            print(f"警告：译文 chunk 不存在，跳过: {chunk_file}")
-            total_stats["skip"] += 1
+            all_rows.append(
+                {
+                    "chunk": label,
+                    "index": 0,
+                    "original": "",
+                    "recommended": "",
+                    "current": "",
+                    "adopted_recommendation": "无法判断",
+                    "context": "",
+                    "note": "",
+                    "anomalies": ["译文 chunk 文件不存在"],
+                }
+            )
+            structural_anomalies += 1
             continue
 
-        issues, cstats = check_chunk(tagged_path, trans_path, label)
-        all_issues.extend(issues)
-        for k, v in cstats.items():
-            total_stats[k] += v
-        pairs_checked += 1
+        rows, chunk_anomalies = review_chunk(tagged_path, trans_path, label)
+        all_rows.extend(rows)
+        structural_anomalies += chunk_anomalies
 
-    if pairs_checked == 0:
-        print("错误：没有可比较的 chunk 对。")
-        sys.exit(1)
+    stats = {
+        "total_rows": len(all_rows),
+        "adopted_yes": sum(1 for row in all_rows if row["adopted_recommendation"] == "是"),
+        "adopted_no": sum(1 for row in all_rows if row["adopted_recommendation"] == "否"),
+        "adopted_unknown": sum(1 for row in all_rows if row["adopted_recommendation"] == "无法判断"),
+        "structural_anomalies": structural_anomalies,
+    }
 
-    _print_table(all_issues, total_stats)
+    report = {
+        "project": os.path.abspath(project_dir),
+        "checked_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "stats": stats,
+        "rows": all_rows,
+    }
 
     output_path = output_path or default_output_path(project_dir)
-    report_path = write_md_report(all_issues, total_stats, project_dir, output_path)
-    print(f"\n完整报告已写入: {report_path}")
+    json_output_path = json_output_path or default_json_output_path(project_dir)
 
-    if all_issues:
+    write_md_report(report, output_path)
+    write_json_report(report, json_output_path)
+    _print_summary(report, output_path, json_output_path)
+
+    if structural_anomalies:
         sys.exit(1)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python check_terms.py <project_dir> [--output <report.md>]")
+        print("Usage: python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>]")
         sys.exit(1)
 
     project_dir = sys.argv[1]
     output_path = ""
+    json_output_path = ""
+
     if "--output" in sys.argv:
         idx = sys.argv.index("--output")
         output_path = sys.argv[idx + 1]
+    if "--json-output" in sys.argv:
+        idx = sys.argv.index("--json-output")
+        json_output_path = sys.argv[idx + 1]
 
-    main(project_dir, output_path)
+    main(project_dir, output_path=output_path, json_output_path=json_output_path)
