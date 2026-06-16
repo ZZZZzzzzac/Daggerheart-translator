@@ -106,10 +106,22 @@ def simplify_markdown_links_fn(markdown_text):
     return re.sub(pattern, lambda match: match.group(1), markdown_text)
 
 
-def replace_pc_gm_fn(markdown_text):
-    text = re.sub(r'(?<![A-Za-z\(（])PC(?![A-Za-z\)）])', '玩家角色', markdown_text)
-    text = re.sub(r'(?<![A-Za-z\(（])GM(?![A-Za-z\)）])', '游戏主持人', text)
+REPLACEMENTS = [
+    (r'(?<![A-Za-z\(（])PC(?![A-Za-z\)）])', '玩家角色'),
+    (r'(?<![A-Za-z\(（])GM(?![A-Za-z\)）])', '游戏主持人'),
+    (r'重骰', '重掷'),
+]
+
+
+def replace_keywords_fn(markdown_text):
+    """按 REPLACEMENTS 列表执行关键词替换"""
+    text = markdown_text
+    for pattern, replacement in REPLACEMENTS:
+        text = re.sub(pattern, replacement, text)
     return text
+
+
+replace_pc_gm_fn = replace_keywords_fn
 
 
 def bold_numbers_and_dice_fn(markdown_text):
@@ -175,7 +187,7 @@ makeup_list = [
     # bold_numbers_and_dice_fn,
     add_space_around_italics_fn,
     simplify_markdown_links_fn,
-    replace_pc_gm_fn,
+    replace_keywords_fn,
 ]
 
 
