@@ -156,7 +156,7 @@ def work_zzz(data: List[Any], input_path: str = "") -> Any:
             dict_in["领域2"] = domain_parts[1] if len(domain_parts) > 1 else ""
             dict_in["起始生命"] = int(d.get("初始生命点", ""))
             dict_in["起始闪避"] = int(d.get("初始闪避值", ""))
-            dict_in["起始物品"] = d.get("初始物品", " ")
+            dict_in["起始物品"] = d.get("初始物品") or d.get("职业物品") or " "
             dict_in["简介"] = d.get("简介") or d.get("描述") or "N/A"
             dict_in["希望特性"] = d.get("希望特性", "")
             dict_in["职业特性"] = d.get("职业特性", "")
@@ -165,26 +165,37 @@ def work_zzz(data: List[Any], input_path: str = "") -> Any:
         elif type_ == "种族":
             if name_ not in dict_out["customFieldDefinitions"]["ancestries"]:
                 dict_out["customFieldDefinitions"]["ancestries"].append(name_)
-            features = d.get("描述", "").replace(":", "：").replace("\n\n", "\n").split("\n")
-            feature = features[0].split("：")
-            dict_in["名称"] = feature[0]
-            dict_in["种族"] = name_
-            dict_in["简介"] = d.get("简介") or d.get("描述") or "N/A"
-            dict_in["效果"] = feature[1]
-            dict_in["类别"] = 1
-            dict_in["imageUrl"] = ""
-            dict_out["ancestry"].append(dict_in)
+            intro_lines = []
+            features = []
+            for raw_line in d.get("描述", "").replace(":", "：").splitlines():
+                line = raw_line.strip()
+                if not line:
+                    continue
+                if "：" in line:
+                    feature_name, effect = line.split("：", 1)
+                    features.append([feature_name.strip(), effect.strip()])
+                elif features:
+                    features[-1][1] += "\n" + line
+                else:
+                    intro_lines.append(line)
 
-            dict_in = {}
-            feature = features[1].split("：")
-            dict_in["id"] = gen_uuid()
-            dict_in["名称"] = feature[0]
-            dict_in["种族"] = name_
-            dict_in["简介"] = d.get("简介") or d.get("描述") or "N/A"
-            dict_in["效果"] = feature[1]
-            dict_in["类别"] = 2
-            dict_in["imageUrl"] = ""
-            dict_out["ancestry"].append(dict_in)
+            if len(features) != 2:
+                raise ValueError(
+                    f"种族 {name_} 的描述中应有两项特性，实际找到 {len(features)} 项"
+                )
+
+            intro = d.get("简介") or "\n".join(intro_lines) or "无"
+            for category, (feature_name, effect) in enumerate(features, start=1):
+                dict_in = {
+                    "id": gen_uuid(),
+                    "名称": feature_name,
+                    "种族": name_,
+                    "简介": intro,
+                    "效果": effect,
+                    "类别": category,
+                    "imageUrl": "",
+                }
+                dict_out["ancestry"].append(dict_in)
         elif type_ == "社群":
             if name_ not in dict_out["customFieldDefinitions"]["communities"]:
                 dict_out["customFieldDefinitions"]["communities"].append(name_)
@@ -212,7 +223,7 @@ def work_zzz(data: List[Any], input_path: str = "") -> Any:
             dict_in["等级"] = int(d.get("等级", ""))
             dict_in["属性"] = d.get("属性", "")
             recall = d.get("回想", "")
-            dict_in["回想"] = int(recall) if recall.isdigit() else recall
+            dict_in["回想"] = int(recall) if str(recall).isdigit() else recall
             dict_in["描述"] = d.get("描述", "")
             dict_in["imageUrl"] = ""
             dict_out["domain"].append(dict_in)
