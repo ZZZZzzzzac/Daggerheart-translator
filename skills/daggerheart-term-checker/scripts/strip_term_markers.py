@@ -15,12 +15,48 @@ import sys
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-NEW_MARKER_RE = re.compile(r"【([^｜】]+)｜[^】]*】")
 OLD_MARKER_RE = re.compile(r"【([^(】]+?)\s*\([^)]+\)[^】]*】")
 
 
+def strip_new_term_markers(text):
+    """Strip pipe-delimited markers while respecting nested 【...】 in notes."""
+    output = []
+    index = 0
+
+    while index < len(text):
+        if text[index] != "【":
+            output.append(text[index])
+            index += 1
+            continue
+
+        depth = 0
+        end = index
+        while end < len(text):
+            if text[end] == "【":
+                depth += 1
+            elif text[end] == "】":
+                depth -= 1
+                if depth == 0:
+                    break
+            end += 1
+
+        if end >= len(text):
+            output.append(text[index])
+            index += 1
+            continue
+
+        marker = text[index + 1:end]
+        if "｜" in marker:
+            output.append(marker.split("｜", 1)[0].strip())
+        else:
+            output.append(text[index:end + 1])
+        index = end + 1
+
+    return "".join(output)
+
+
 def strip_term_markers_text(text):
-    text = NEW_MARKER_RE.sub(lambda match: match.group(1).strip(), text)
+    text = strip_new_term_markers(text)
     text = OLD_MARKER_RE.sub(lambda match: match.group(1).strip(), text)
     return text
 

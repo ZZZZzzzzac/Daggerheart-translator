@@ -99,6 +99,12 @@ def add_space_around_italics_fn(markdown_text):
     return re.sub(pattern, lambda m: f" {m.group(0)} ", markdown_text)
 
 
+def add_space_between_chinese_and_ascii_fn(markdown_text):
+    """Separate retained English names from adjacent Chinese prose."""
+    markdown_text = re.sub(r'(?<=[A-Za-z0-9])(?=[一-龥])', ' ', markdown_text)
+    return re.sub(r'(?<=[一-龥])(?=[A-Za-z])', ' ', markdown_text)
+
+
 def simplify_markdown_links_fn(markdown_text):
     if markdown_text.startswith("![]"):
         return markdown_text
@@ -186,6 +192,7 @@ makeup_list = [
     format_resource_phrases_fn,
     # bold_numbers_and_dice_fn,
     add_space_around_italics_fn,
+    add_space_between_chinese_and_ascii_fn,
     simplify_markdown_links_fn,
     replace_keywords_fn,
 ]
