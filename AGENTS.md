@@ -1,6 +1,6 @@
 # Daggerheart 翻译技能合集
 
-本仓库包含 7 个 Daggerheart TTRPG 翻译技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
+本仓库包含 8 个技能：7 个 Daggerheart TTRPG 翻译技能，外加 1 个 ParaTranz 平台操作技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
 
 ## 技能清单
 
@@ -13,10 +13,11 @@
 | `daggerheart-glossary-extractor` | `skills/daggerheart-glossary-extractor/SKILL.md` | 文档术语提取 |
 | `daggerheart-term-checker` | `skills/daggerheart-term-checker/SKILL.md` | 术语审阅报告与清标记 |
 | `daggerheart-json-formatter` | `skills/daggerheart-json-formatter/SKILL.md` | 译文 → JSON |
+| `paratranz-ops` | `skills/paratranz-ops/SKILL.md` | ParaTranz API 操作：查进度、拉快照、回写译文、对账 |
 
 ## 安装
 
-将 `skills/` 目录下的 6 个子目录链接或复制到当前工具的 skill 目录。各工具路径如下：
+将 `skills/` 目录下的各个技能目录链接或复制到当前工具的 skill 目录。各工具路径如下：
 
 | 工具 | skill 目录 | 安装命令（示例） |
 |------|-----------|-----------------|
@@ -28,7 +29,7 @@
 **你（AI）收到安装请求时**：
 1. 检查当前工作目录下存在哪个工具目录（`.claude/`、`.kilo/`、`.opencode/`、`.agents/` 等）
 2. 在对应的 `skills/` 子目录下创建指向本仓库 `skills/*/` 的目录链接（junction/symlink）
-3. 不要复制整个仓库，只链接 `skills/` 下的 6 个子目录
+3. 不要复制整个仓库，只链接 `skills/` 下的各个技能目录
 
 **通用安装命令**（用户手动执行）：
 ```bash
