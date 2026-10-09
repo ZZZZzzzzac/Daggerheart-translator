@@ -16,11 +16,15 @@ Exit code:
     1 = structural anomalies found or input missing
 """
 
+from collections import Counter
+import argparse
 import json
 import os
 import re
 import sys
 from datetime import datetime
+
+from term_markers import parse_markers, readable_context
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -57,19 +61,7 @@ def _split_recommended(text):
 
 
 def _extract_markers(text):
-    markers = []
-    for idx, match in enumerate(MARKER_RE.finditer(text), 1):
-        markers.append(
-            {
-                "index": idx,
-                "slot1": match.group(1).strip(),
-                "slot2": match.group(2).strip(),
-                "slot3": (match.group(3) or "").strip(),
-                "raw": match.group(0),
-                "pos": match.start(),
-            }
-        )
-    return markers
+    return parse_markers(text)[0]
 
 
 def _marker_key(marker):
@@ -100,7 +92,10 @@ def _pair_markers(src_markers, trans_markers):
         ]
         if not candidates:
             continue
-        best_idx = _choose_nearest(candidates, src_idx)
+        # Match repeated metadata in occurrence order, not nearest absolute index.
+        # Other terms can reorder and shift global indices; nearest may consume a
+        # later occurrence then wrap back, presenting unrelated sentence contexts.
+        best_idx = candidates[0]
         pairings[src_idx] = best_idx
         pairing_modes[src_idx] = "exact"
         unmatched_trans.remove(best_idx)
@@ -121,16 +116,7 @@ def _pair_markers(src_markers, trans_markers):
 
 
 def _context_snippet(text, pos, radius=40):
-    if not text:
-        return ""
-    start = max(0, pos - radius)
-    end = min(len(text), pos + radius)
-    snippet = re.sub(r"\s+", " ", text[start:end]).strip()
-    if start > 0:
-        snippet = "..." + snippet
-    if end < len(text):
-        snippet = snippet + "..."
-    return snippet
+    return readable_context(text, pos)
 
 
 def _adopted(current, recommended):
@@ -197,6 +183,11 @@ def review_chunk(tagged_path, trans_path, label):
     rows = []
     structural_anomalies = 0
 
+    for side, text in [('原文', tagged_text), ('译文', trans_text)]:
+        lines = [line.strip() for line in text.splitlines()]
+        if lines.count(TARGET_START) != 1 or lines.count(TARGET_END) != 1 or lines.index(TARGET_START) >= lines.index(TARGET_END):
+            return [_build_row(label, anomaly_messages=[side + ' KILO_TARGET 包装缺失、重复或顺序错误'])], 1
+
     if not tagged_target:
         rows.append(
             {
@@ -236,8 +227,16 @@ def review_chunk(tagged_path, trans_path, label):
     src_markers = _extract_markers(tagged_target)
     trans_markers = _extract_markers(trans_target)
 
+    for side, text in [('原文', tagged_target), ('译文', trans_target)]:
+        for pos, error in parse_markers(text)[1]:
+            row = _build_row(label, anomaly_messages=[side + ': ' + error])
+            row['index'] = pos
+            row['context'] = readable_context(text, pos)
+            row['source_context' if side == '原文' else 'translated_context'] = row['context']
+            rows.append(row)
+            structural_anomalies += 1
     if not src_markers and not trans_markers:
-        return rows, 0
+        return rows, structural_anomalies
 
     pairings, pairing_modes, missing_src, extra_trans = _pair_markers(src_markers, trans_markers)
 
@@ -284,6 +283,16 @@ def review_chunk(tagged_path, trans_path, label):
             )
         )
 
+    src_counts = Counter(_marker_key(m) for m in src_markers)
+    trans_counts = Counter(_marker_key(m) for m in trans_markers)
+    for row in rows:
+        key = (_normalise(row['recommended']), _normalise(row['note']))
+        row['alignment_assumption'] = 'same_metadata_occurrence_order'
+        # Different legitimate first-slot choices do not prove misalignment.
+        # Unequal multiplicity does: without persistent IDs we cannot know which
+        # duplicate was added/removed, even for the remaining paired occurrences.
+        if not row['anomalies'] and src_counts[key] != trans_counts[key]:
+            row['alignment_unknown'] = True
     return rows, structural_anomalies
 
 
@@ -375,7 +384,7 @@ def _print_summary(report, md_path, json_path):
     print(f"JSON 报告已写入: {json_path}")
 
 
-def main(project_dir, output_path="", json_output_path=""):
+def build_report(project_dir):
     chunks_dir = os.path.join(project_dir, "source", "temp", "_chunks")
     trans_dir = os.path.join(project_dir, "source", "temp", "_translated_chunks")
 
@@ -395,6 +404,9 @@ def main(project_dir, output_path="", json_output_path=""):
 
     all_rows = []
     structural_anomalies = 0
+    for extra in sorted(set(f for f in os.listdir(trans_dir) if f.endswith('.md') and not f.startswith('_prompt_')) - set(chunk_files)):
+        all_rows.append(_build_row(os.path.splitext(extra)[0], anomaly_messages=['译文多出 chunk 文件']))
+        structural_anomalies += 1
 
     for chunk_file in chunk_files:
         tagged_path = os.path.join(chunks_dir, chunk_file)
@@ -439,31 +451,31 @@ def main(project_dir, output_path="", json_output_path=""):
         "rows": all_rows,
     }
 
+    from term_review import enrich_report
+    return enrich_report(report, project_dir)
+
+
+def main(project_dir, output_path="", json_output_path=""):
+    report = build_report(project_dir)
     output_path = output_path or default_output_path(project_dir)
     json_output_path = json_output_path or default_json_output_path(project_dir)
-
     write_md_report(report, output_path)
     write_json_report(report, json_output_path)
+    from term_review import write_queue
+    write_queue(report, project_dir)
     _print_summary(report, output_path, json_output_path)
-
-    if structural_anomalies:
+    print(f"决策队列: {report['review_stats']['unresolved_decisions']} 项；词面符合推荐: {report['review_stats']['baseline_matches']} 条（不是语义正确认证）")
+    if report['stats']['structural_anomalies']:
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>]")
-        sys.exit(1)
-
-    project_dir = sys.argv[1]
-    output_path = ""
-    json_output_path = ""
-
-    if "--output" in sys.argv:
-        idx = sys.argv.index("--output")
-        output_path = sys.argv[idx + 1]
-    if "--json-output" in sys.argv:
-        idx = sys.argv.index("--json-output")
-        json_output_path = sys.argv[idx + 1]
-
-    main(project_dir, output_path=output_path, json_output_path=json_output_path)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('project_dir')
+    parser.add_argument('--output', default='')
+    parser.add_argument('--json-output', default='')
+    args = parser.parse_args()
+    try:
+        main(args.project_dir, args.output, args.json_output)
+    except (ValueError, OSError) as exc:
+        parser.exit(1, f"错误：{exc}\n")

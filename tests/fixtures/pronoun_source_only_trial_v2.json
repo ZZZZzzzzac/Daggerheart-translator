@@ -1,0 +1,74 @@
+{
+  "instructions": "Translate each source into Chinese. Apply shared singular/plural and role guidance. Report only genuinely unresolved consequential ambiguity outside the Chinese. No existing translations or evaluation keys are included. Apply supplied reviewed decisions only to matching project/source/context; explicitly changed actors override older examples.",
+  "reviewed_decisions": {
+    "schema_version": 1,
+    "project": "Synthetic rescue fixture",
+    "reviewed_decisions": [
+      {
+        "id": "synthetic-captive-consequences",
+        "status": "synthetic-reviewed-fixture",
+        "feature": "Binding Ring",
+        "source": "A lantern guardian traps one PC in a binding ring. The trapped PC or a helper can attempt a Strength Roll to open the ring. If the attempt works, remove Restrained and mark 1 Stress. If it fails, mark 1 HP while the guardian recovers 1 HP.",
+        "source_sha256": "e76de325887c16acd4f979f0eab611d44116861d15ba1d925e656ef487941181",
+        "context": "One trapped PC; either that PC or one helper rolls.",
+        "applicability": "Applies only to this synthetic fixture project and exact source. Explicit changed actors override the fixture record.",
+        "outcomes": {
+          "roller": [
+            "captive PC",
+            "another PC"
+          ],
+          "success": {
+            "captive PC": [
+              "clear Restrained",
+              "mark 1 Stress"
+            ]
+          },
+          "failure": {
+            "captive PC": [
+              "mark 1 HP"
+            ],
+            "lantern guardian": [
+              "clear 1 HP"
+            ]
+          }
+        },
+        "helper_rule": "The same captive receives these consequences even when another PC rolls.",
+        "provenance": "Entirely synthetic test data. Not a real user approval or a published game rule."
+      }
+    ]
+  },
+  "cases": [
+    {
+      "source": "A PC may touch the sigil. They mark a Stress.",
+      "id": "p01"
+    },
+    {
+      "source": "Two PCs touch the sigil. They each mark a Stress.",
+      "id": "p02"
+    },
+    {
+      "source": "A PC is Restrained. Another PC makes a Strength Roll to free the restrained PC. On a success, the restrained PC clears Restrained and marks a Stress.",
+      "id": "p03"
+    },
+    {
+      "source": "A lantern guardian traps one PC in a binding ring. The trapped PC or a helper can attempt a Strength Roll to open the ring. If the attempt works, remove Restrained and mark 1 Stress. If it fails, mark 1 HP while the guardian recovers 1 HP.",
+      "project": "Synthetic rescue fixture",
+      "id": "p04"
+    },
+    {
+      "source": "A lantern guardian traps one PC in a binding ring. The trapped PC or a helper can attempt a Strength Roll to open the ring. If the attempt works, the trapped PC removes Restrained and the rolling PC marks 1 Stress. If it fails, the rolling PC marks 1 HP while the guardian recovers 1 HP.",
+      "project": "Synthetic rescue fixture",
+      "id": "p05"
+    },
+    {
+      "source": "A PC and an ally stand by the shrine. They mark a Stress.",
+      "id": "p06"
+    },
+    {
+      "source": "A PC helps another PC after they mark a Stress.",
+      "id": "p07"
+    }
+  ],
+  "packet_version": 2,
+  "fixture_origin": "Synthetic text authored solely for regression tests; no licensed source corpus or conversation records."
+}

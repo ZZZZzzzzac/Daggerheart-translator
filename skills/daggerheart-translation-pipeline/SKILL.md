@@ -42,7 +42,9 @@ description: Orchestrates the end-to-end Daggerheart translation flow: project s
 
 固定优先级：
 
-`terms-14448.json` > `adversaries_*.json` > `glossary/_glossary.json`
+`terms-core.json` > `adversaries_*.json` > `glossary/_glossary.json`
+
+核心表是人工维护的规则术语基线，不是 ParaTranz 导出快照。六个官方战役框架名称保留于核心表以统一译名。项目独有的人名、地名、组织及概念应留在项目术语表；不得自动回填核心表。框架专属机制使用各自的框架术语表，按当前项目需要选用，不放入总表。`resources/scoped/` 仅供按项目选择条目，不参与默认合并。具体边界与迁移记录见 `resources/README.md`。
 
 ## 路径约定
 
@@ -111,7 +113,7 @@ python scripts/setup_project.py <项目目录>
 将全局术语表与本文档术语表合并，并对原文做内联标记。
 
 ```bash
-python scripts/merge_terms.py --terms "resources/terms-14448.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
+python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
 python scripts/replace_terms.py "source/_original.md" "source/temp/_merged_terms.json" "source/temp/_tagged.md"
 ```
 
@@ -142,6 +144,8 @@ python scripts/split_chunks.py "source/temp/_tagged.md" --min-chars 4000 --targe
 
 ```bash
 python scripts/translation_prompt.py "<chunk_file>"
+# 若本项目提供了用户已审定解释，可显式附加：
+# --reviewed-decisions "<本项目的 reviewed-decisions.json>"
 ```
 
 硬约束：
@@ -179,43 +183,46 @@ python scripts/translation_prompt.py "<chunk_file>"
 
 全自动模式下，跳过该确认，直接并行执行。
 
-## 第 7 步：术语审阅报告
+## 第 7 步：完整审计 + 短决策队列 + 全文 QA
 
-调用 `daggerheart-term-checker` 技能，扫描 `_chunks/` 与 `_translated_chunks/`，按术语出现位置生成逐条审阅报告。
+调用 `daggerheart-term-checker`，保留逐出现位置九列审计，同时生成完整、不截断的短决策队列：
 
 ```bash
 python <term_checker_skill_root>/scripts/check_terms.py <项目目录>
 ```
 
-- 默认输出：
-  - `source/temp/_term_review_report.md`
-  - `source/temp/_term_review_report.json`
-- 报告逐条列出：`chunk`、`原文`、`推荐译文`、`当前译文`、`是否采用推荐`、`原文上下文`、`译文上下文`、`注释`、`异常`
-- `是否采用推荐` 仅是提示，不是硬规则；允许根据上下文保留非推荐译法
-- checker 优先按 `推荐译文 + 注释` 对位，不再把局部术语换序误判成结构损坏
-- 若发现标记数量不一致、标记损坏、推荐译文槽位被改坏等结构异常，必须先修复再继续
+- `_term_review_report.md/.json` 保留所有出现位置。
+- `_term_decision_queue.md/.json` 汇总字符串差异、结构/对位未知和独立语义 QA 的未决项；仅相同双语完整句及同一决策才合并。
+- 词面采用推荐不代表语义正确；不得遗漏人名/普通词误标、主体与规则错误或无标记文字。
+- 可用 `python scripts/semantic_qa_prompt.py <项目目录>` 生成全文独立 QA 提示词。若翻译时显式提供项目内已审定解释，QA 同样传入 `--reviewed-decisions <同一文件>`；必须匹配项目、完整源文/摘要及情境，不能自动套用其他项目裁决或覆盖源文明确改变的角色。
+- AI 必须独立对照全部源译文做语义 QA，先自行修复有充分依据的问题；修改后重跑检查。只有真实未决项请用户决定，不要求用户逐词审阅完整审计。
+- 使用 checker 技能规定的 hash-bound `_term_semantic_issues.json` 汇入尚未解决的语义问题，已修复项单独留审计记录。
+- 向用户提交任何未决问题前，必须走 term-checker 的严格上下文导出：提供可定位的完整原文能力/段落与必要上下文、当前对应译文、明确问题、具体选项、推荐及理由。原文和译文须与当前实际文件对应，不得把概述标作原文。
+- 同一能力有多个问题时合为一张问题卡展示共同材料，独立问题仍分别计数；不得删减问题来压低数量。翻译交付阻塞、可保留原文的玩法裁定和源文缺项分开说明。
+- 确定合理的例外用 `approve_term_review.py --review-digest <当前审阅哈希> --reviewer AI:model --approve <ID> --reason <依据>` 逐项记录。完成全文 QA 后记录 `--accept-baseline --semantic-reviewed`。声明不等于脚本验证了语义。
+- 结构异常必须先修复，不能批准绕过；所有未决计数都保留，不使用未经验证的置信度分数隐藏问题。
 
 手动模式：
-- 向用户展示术语审阅报告
-- 用户人工审阅每条术语后，直接修改 `source/temp/_translated_chunks/` 中各标记的第一槽 `当前译文`
-- 用户确认审阅通过前，不得进入下一步
+- 展示剩余决策队列与 AI 修复摘要，取得用户仍未裁决问题的选择。
+- 全部问题处理后，用户明确确认继续，才记录 `approve_term_review.py <项目目录> --review-digest <当前审阅哈希> --reviewer human:<确认者> --release`。
+- 任一源文/译文或分组输入改变都会使旧批准失效；重新生成报告并审阅当前版本。部分批准不能放行。
 
 全自动模式：
-- AI 必须通读术语审阅报告，结合上下文与注释，自动决定每条术语是否采用推荐译文
-- 若需修正，直接修改 `source/temp/_translated_chunks/` 中各标记的第一槽 `当前译文`
-- 修改后重新生成一次术语审阅报告，确认结构异常已消失，并将最终报告作为继续执行依据
+- AI 仍须完成全文语义 QA、修复确定问题并披露未能裁决的限制；不把推荐词面一致当作审阅结果。
+- 用户已明确选全自动时，下一步显式使用 `--mode auto`，不需要人工放行；不能临时用此选项绕过手动确认。
 
-## 第 8 步：清除术语标记
-
-在术语审阅完成后，批量移除所有术语标记，只保留每个标记第一槽中的最终中文译文。
+## 第 8 步：带可执行门禁的清标记
 
 ```bash
+# 手动模式：要求当前内容哈希对应的完整审阅与用户放行记录
 python <term_checker_skill_root>/scripts/strip_term_markers.py <项目目录>
+# 已获用户选择的全自动模式
+python <term_checker_skill_root>/scripts/strip_term_markers.py <项目目录> --mode auto
 ```
 
-- 输入：`source/temp/_translated_chunks/`
-- 输出：`source/temp/_translated_chunks_clean/`
-- 非破坏性：保留原始带标记译文 chunk，合并阶段只使用清理后的目录
+- 输入：`source/temp/_translated_chunks/`；输出：`source/temp/_translated_chunks_clean/`。
+- 保留原件；合并仅用 clean 目录。清标记前重新校验结构和实际文件，不信任手工改过的报告。
+- 具体接受 ID、语义问题 schema、批准理由和失效规则见 `daggerheart-term-checker/SKILL.md`。
 
 ## 第 9 步：合并
 

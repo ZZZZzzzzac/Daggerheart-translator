@@ -1,0 +1,91 @@
+{
+  "description": "Synthetic semantic regression key; no model-quality or published-rule claim.",
+  "cases": [
+    {
+      "id": "singular-neutral",
+      "source": "A PC may touch the sigil. They mark a Stress.",
+      "expectation": {
+        "number": "singular",
+        "stress_payer": "the PC",
+        "must_not": "invent plural characters or gender"
+      }
+    },
+    {
+      "id": "plural-group",
+      "source": "Two PCs touch the sigil. They each mark a Stress.",
+      "expectation": {
+        "number": "plural",
+        "stress_payer": "each of the two PCs",
+        "must_not": "collapse both into one character"
+      }
+    },
+    {
+      "id": "helper-not-captive",
+      "source": "A PC is Restrained. Another PC makes a Strength Roll to free the restrained PC. On a success, the restrained PC clears Restrained and marks a Stress.",
+      "expectation": {
+        "roller": "another PC",
+        "stress_payer": "restrained PC",
+        "clears_restrained": "restrained PC"
+      }
+    },
+    {
+      "id": "reviewed-rescue",
+      "source": "A lantern guardian traps one PC in a binding ring. The trapped PC or a helper can attempt a Strength Roll to open the ring. If the attempt works, remove Restrained and mark 1 Stress. If it fails, mark 1 HP while the guardian recovers 1 HP.",
+      "project": "Synthetic rescue fixture",
+      "decision_id": "synthetic-captive-consequences",
+      "expectation": {
+        "roller": [
+          "captive PC",
+          "another PC"
+        ],
+        "success": {
+          "captive PC": [
+            "clear Restrained",
+            "mark 1 Stress"
+          ]
+        },
+        "failure": {
+          "captive PC": [
+            "mark 1 HP"
+          ],
+          "lantern guardian": [
+            "clear 1 HP"
+          ]
+        }
+      }
+    },
+    {
+      "id": "changed-explicit-actor",
+      "source": "A lantern guardian traps one PC in a binding ring. The trapped PC or a helper can attempt a Strength Roll to open the ring. If the attempt works, the trapped PC removes Restrained and the rolling PC marks 1 Stress. If it fails, the rolling PC marks 1 HP while the guardian recovers 1 HP.",
+      "project": "Synthetic rescue fixture",
+      "expectation": {
+        "old_decision_applies": false,
+        "success_stress_payer": "rolling PC",
+        "failure_hp_payer": "rolling PC",
+        "clears_restrained": "restrained PC",
+        "heals": "lantern guardian"
+      }
+    },
+    {
+      "id": "coordinated-plural",
+      "source": "A PC and an ally stand by the shrine. They mark a Stress.",
+      "expectation": {
+        "number": "plural",
+        "stress_payer": "the PC and ally",
+        "resolution": "Use the ordinary coordinated plural antecedent; no unnecessary ambiguity escalation."
+      }
+    },
+    {
+      "id": "genuine-unresolved",
+      "source": "A PC helps another PC after they mark a Stress.",
+      "expectation": {
+        "resolution": "Preserve and report genuinely unresolved antecedent: first PC or second PC can be singular they; no supplied context settles which character marks Stress. Do not silently choose the nearest noun.",
+        "acceptable_note": "A plural reading can also be noted, but must not erase the two plausible singular antecedents."
+      }
+    }
+  ],
+  "rubric_revision": 2,
+  "revision_note": "Synthetic regression: coordinated plural is distinct from a genuinely unclear antecedent.",
+  "packet_version": 2,
+  "fixture_origin": "Synthetic text authored solely for regression tests; no licensed source corpus or conversation records."
+}

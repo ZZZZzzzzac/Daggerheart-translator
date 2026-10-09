@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "advisory_examples_only",
+  "provenance": {
+    "kind": "synthetic",
+    "purpose": "Workflow demonstrations only; not official rules, reference translations or user decisions."
+  },
+  "usage_limits": [
+    "Source meaning is authoritative; do not treat examples as replacement rules.",
+    "No translation-quality gain is implied by tests passing."
+  ],
+  "examples": [
+    {
+      "id": "access-versus-activation",
+      "type": "contextual_clarity",
+      "source": "A scout unlocks the signal technique. Activating it costs one focus token.",
+      "comparison_zh": "侦察兵获得信号技巧后就能直接发动。",
+      "illustrative_revision_zh": "侦察兵解锁信号技巧。发动时需要花费一个专注指示物。",
+      "lesson": "区分获得使用资格与实际发动能力；不能省略发动代价。"
+    },
+    {
+      "id": "location-without-extra-movement",
+      "type": "source_fidelity",
+      "source": "Inside the lantern tower, alchemists test new powders.",
+      "comparison_zh": "炼金师深入灯塔，试验新的粉末。",
+      "illustrative_revision_zh": "炼金师在灯塔内试验新的粉末。",
+      "lesson": "地点说明本身不包含进入、深入或移动的动作。"
+    }
+  ]
+}

@@ -82,10 +82,14 @@ $PY $P edit-strings plan.json --apply       # 按 id 改词条，可显式设 st
 | 「拉最新译文下来加工」 | `para.py pull <fileId>`，再走 `pipeline/converter.py` 等本地流程 |
 | 「把本地这批译文写回 para」 | 上面的回写流程（steps 1–6） |
 | 「核对线上和本地是否一致」 | `para.py diff <fileId> <local.json>`，退出码 0 才算一致 |
-| 「更新/导出术语表」 | `para.py terms --out ...`；`daggerheart-translation-pipeline/resources/terms-14448.json` 是上一版快照 |
+| 「更新/导出术语表」 | `para.py terms --out ...`；导出到当前项目的独立快照；`daggerheart-translation-pipeline/resources/terms-core.json` 是人工维护基线，不得覆盖 |
 | 「看某条讨论里的翻译口径」 | `para.py issue <id> --out issue.json`，楼层在 `floors[]` |
 | 「下载整包工件」 | 不走本技能：`python pipeline/00_download_and_convert.py` 或 `pipeline/download_paratranz.py`（artifacts 接口，按目录映射落到 `projects/`） |
 | 「在 para 上新建/上传文件」 | `para.py` 未覆盖；参考 `projects/Daggerheart-Core-Rulebook/scripts/srd2_equipment_sync.py`（先 `GET /files` 查重名，`POST /files`，再回读逐 key 校验） |
+
+## 与翻译管线的术语边界
+
+ParaTranz 全量术语导出只作为项目快照或对照资料，不能自动覆盖 `../daggerheart-translation-pipeline/resources/terms-core.json`。核心表保留规则通用术语与六个官方框架名称；项目独有名词放入项目 `glossary/_glossary.json`。`resources/scoped/` 中框架机制只按项目显式选用，不默认合并，也不自动提升进核心表。维护说明见 [术语范围](../daggerheart-translation-pipeline/resources/README.md)。本节不更改 API 权限、凭证处理或线上写回行为。
 
 ## 已知 fileId
 
