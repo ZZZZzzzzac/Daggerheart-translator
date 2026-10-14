@@ -23,7 +23,7 @@ def render(data):
     rows=data.get('findings')
     if not isinstance(rows,list):
         raise ValueError('findings must be an array')
-    for key in ('progressFormat','storagePrefix','notes','emptyMessage','sourceDescription','sourceCutoff'):
+    for key in ('progressFormat','storagePrefix','notes','emptyMessage','sourceDescription','sourceCutoff','progressNotice'):
         if key in data and not isinstance(data[key],str):raise ValueError('Invalid optional text field')
     ids=set()
     for f in rows:
