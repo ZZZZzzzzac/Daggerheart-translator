@@ -7,6 +7,16 @@ def sample():
 class RendererTests(unittest.TestCase):
     def test_round_trip_and_offline(self):
         d=sample();s=m.render(d);body=re.search(r'<script id="report-data" type="application/json">(.*?)</script>',s,re.S).group(1);self.assertEqual(json.loads(body),d);self.assertNotIn('<script src=',s);self.assertIn('target="_blank" rel="noopener noreferrer"',s)
+    def test_primary_actions_are_together_in_order(self):
+        s=m.render(sample());header=s.split('<header>',1)[1].split('</header>',1)[0]
+        footer=s.split('<footer',1)[1].split('</footer>',1)[0]
+        self.assertNotIn('id="sourceLink"',header)
+        ordered=['id="previous"','id="next"','id="complete"','id="sourceLink"']
+        positions=[footer.index(token) for token in ordered]
+        self.assertEqual(positions,sorted(positions))
+        self.assertEqual(s.count('id="sourceLink"'),1)
+        self.assertIn('target="_blank" rel="noopener noreferrer"',footer)
+        self.assertIn('aria-disabled="true" tabindex="-1"',footer)
     def test_script_injection_escaped(self):
         d=sample();d['findings'][0]['problem']='</script><img src=x onerror=alert(1)> __JS__';s=m.render(d);self.assertNotIn('<img src=x',s);self.assertIn('\\u003c/script',s);self.assertIn('__JS__',s)
     def test_missing_fields(self):
