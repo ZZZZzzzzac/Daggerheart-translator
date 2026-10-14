@@ -1,0 +1,20 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {sourceAction,applySourceAction}=require('../assets/report.js');
+assert.deepEqual(sourceAction(null),{visible:false,href:null,label:''});
+assert.deepEqual(sourceAction({id:'local-document'}),{visible:false,href:null,label:''});
+assert.equal(sourceAction({url:'https://paratranz.cn/projects/1/strings?id=2'}).label,'转到 ParaTranz ↗');
+assert.equal(sourceAction({url:'https://example.org/item',provider:'Docs'}).label,'转到 Docs ↗');
+assert.equal(sourceAction({url:'https://example.org/item'}).label,'转到 来源 ↗');
+for(const url of ['file:///tmp/private.txt','javascript:alert(1)','https://user:secret@example.org'])assert.throws(()=>sourceAction({url}));
+console.log('PASS optional local source, provider names, legacy ParaTranz and blocked unsafe links');
+
+const node={attributes:{},setAttribute(k,v){this.attributes[k]=v},removeAttribute(k){delete this[k];delete this.attributes[k]}};
+applySourceAction(node,{url:'https://example.org/item',provider:'Docs'});
+assert.equal(node.href,'https://example.org/item');assert.equal(node.hidden,false);assert.equal(node.tabIndex,0);
+applySourceAction(node,{id:'local'});
+assert.equal(node.href,undefined);assert.equal(node.hidden,true);assert.equal(node.tabIndex,-1);assert.equal(node.attributes['aria-disabled'],'true');assert.equal(node.textContent,'');
+applySourceAction(node,{url:'https://paratranz.cn/projects/1'});
+assert.equal(node.hidden,false);assert.equal(node.textContent,'转到 ParaTranz ↗');
+applySourceAction(node,null);assert.equal(node.href,undefined);assert.equal(node.hidden,true);
+console.log('PASS remote → local → platform → empty navigation removes stale href/focus/label');

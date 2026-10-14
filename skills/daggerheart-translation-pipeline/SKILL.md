@@ -42,7 +42,9 @@ description: Orchestrates the end-to-end Daggerheart translation flow: project s
 
 固定优先级：
 
-`terms-14448.json` > `adversaries_*.json` > `glossary/_glossary.json`
+`terms-core.json` > `adversaries_*.json` > `glossary/_glossary.json`
+
+核心表是人工维护的规则术语基线，不是 ParaTranz 导出快照。六个官方战役框架名称保留于核心表以统一译名。项目独有的人名、地名、组织及概念应留在项目术语表；不得自动回填核心表。框架专属机制使用各自的框架术语表，按当前项目需要选用，不放入总表。`resources/scoped/` 仅供按项目选择条目，不参与默认合并。具体边界与迁移记录见 `resources/README.md`。
 
 ## 路径约定
 
@@ -111,7 +113,7 @@ python scripts/setup_project.py <项目目录>
 将全局术语表与本文档术语表合并，并对原文做内联标记。
 
 ```bash
-python scripts/merge_terms.py --terms "resources/terms-14448.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
+python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
 python scripts/replace_terms.py "source/_original.md" "source/temp/_merged_terms.json" "source/temp/_tagged.md"
 ```
 

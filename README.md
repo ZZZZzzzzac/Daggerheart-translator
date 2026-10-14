@@ -35,6 +35,20 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 当前管线会在分块翻译后保留术语标记，先生成术语审阅报告，再批量清除标记并继续合并、校验、JSON 提取。
 
+## 通用译文审阅
+
+加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)：拿到原文和译文，核对配对关系，逐段语义抓虫，再生成精准高亮、可保存进度的HTML供人审阅。接受普通文本、UTF-8文件或配对JSON，不需要ParaTranz账号、项目号或数字ID；平台适配和Daggerheart术语只是可选项目层。历史技能名保留兼容已有安装。
+
+脚本提供对齐/覆盖账本、证据与时效校验、HTML渲染，不会自动宣称完成语义审阅。默认只读，报告勾选不改源文档。见 [通用输入与端到端示例](skills/daggerheart-translation-audit/references/paired-inputs.md)。
+
+## 术语表分层
+
+- `terms-core.json`：以原人工清洗表为基线，维护跨项目复用的规则术语和官方战役框架名称；不是 ParaTranz 的自动同步导出。
+- `glossary/_glossary.json`：当前项目独有的人名、地名、组织及概念。官方战役框架名称统一使用核心表。
+- `resources/scoped/`：按框架分别保存专属机制，保留原译名供对应项目选用，不默认加载。
+
+详见 [术语范围与迁移说明](skills/daggerheart-translation-pipeline/resources/README.md)。
+
 ## 注意事项
 
 1. 尽可能使用claude code或cli工具，codex会导致管线约束失效。
@@ -45,7 +59,7 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 替换以下文件即可适配其他规则书：
 
-- `skills/daggerheart-translation-pipeline/resources/terms-*.json` — 术语表
+- `skills/daggerheart-translation-pipeline/resources/terms-core.json` — 人工维护的规则核心术语表
 - `skills/daggerheart-chinese-writing/REFERENCE.md` — 术语规范
 - `skills/daggerheart-chinese-writing/匕语/` — 行文规范
 - `skills/daggerheart-json-formatter/examples/template.md` — 输出模板

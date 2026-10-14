@@ -21,6 +21,12 @@ description: Extract document-specific glossary from Daggerheart project origina
 - 文档中反复出现（≥2 次）的专有名词
 - 以及其他理论上会反复使用, 需要保持翻译一致性的术语
 
+## 与核心术语表的边界
+
+`daggerheart-translation-pipeline/resources/terms-core.json` 是人工维护的跨项目规则术语及官方战役框架名称表。先参考其中已有的规则译名；新提取的项目独有人名、地名、组织名以及概念只写入本项目的 `glossary/_glossary.json`。不要修改核心表，也不要用 ParaTranz 导出覆盖它。
+
+`resources/scoped/` 中的历史条目仅在原文确实涉及对应内容时，选择相关条目并保留其原字段加入项目术语表；不要整包自动导入。规则术语与项目用法冲突时交给管线的冲突审阅流程处理。
+
 ## 不提取
 
 - 泛型名词（sword、potion、castle）
