@@ -13,7 +13,7 @@
 | `daggerheart-glossary-extractor` | `skills/daggerheart-glossary-extractor/SKILL.md` | 文档术语提取 |
 | `daggerheart-term-checker` | `skills/daggerheart-term-checker/SKILL.md` | 术语审阅报告与清标记 |
 | `daggerheart-json-formatter` | `skills/daggerheart-json-formatter/SKILL.md` | 译文 → JSON |
-| `daggerheart-translation-audit` | `skills/daggerheart-translation-audit/SKILL.md` | 通用双语文本/文件抓虫与HTML审阅；ParaTranz为可选来源 |
+| `daggerheart-translation-audit` | `skills/daggerheart-translation-audit/SKILL.md` | 对已取得原文与译文做通用抓虫与HTML审阅 |
 | `paratranz-ops` | `skills/paratranz-ops/SKILL.md` | ParaTranz API 操作：查进度、拉快照、回写译文、对账 |
 
 ## 安装

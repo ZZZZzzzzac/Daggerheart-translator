@@ -37,9 +37,9 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 ## 通用译文审阅
 
-加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)：拿到原文和译文，核对配对关系，逐段语义抓虫，再生成精准高亮、可保存进度的HTML供人审阅。接受普通文本、UTF-8文件或配对JSON，不需要ParaTranz账号、项目号或数字ID；平台适配和Daggerheart术语只是可选项目层。历史技能名保留兼容已有安装。
+加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)：对已经取得的原文与译文规范配对、逐段语义抓虫，再生成精准高亮、可保存进度的HTML供人审阅。这个skill不负责取得文本。Daggerheart内容必须调用 `daggerheart-chinese-writing` 指导语言与术语。
 
-脚本提供对齐/覆盖账本、证据与时效校验、HTML渲染，不会自动宣称完成语义审阅。默认只读，报告勾选不改源文档。见 [通用输入与端到端示例](skills/daggerheart-translation-audit/references/paired-inputs.md)。
+脚本只校验本地审阅记录和证据、生成报告，不自动宣称完成语义审阅；报告勾选也不修改原译文。见[输入格式与合成示例](skills/daggerheart-translation-audit/references/paired-inputs.md)。
 
 ## 术语表分层
 
