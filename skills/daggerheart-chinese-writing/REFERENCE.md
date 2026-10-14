@@ -3,6 +3,10 @@
 **不是术语表**——所有 1:1 的译名见 `terms-core.json`。
 这里只放术语表解决不了的：上下文相关选择、格式规范、句式模板。
 
+## SRD2 语境参考
+
+遇到 Hedge、Moon、Transformation、Ghost、Focus、Favor，按所属子职业、转变或资源规则查阅 [SRD2 语境参考](../daggerheart-translation-pipeline/resources/reference/srd2-context-only.json)，仅用于语义选择，不作为自动替换表。记录中的中文沿当前源译，语境／实体选择仍待核对；Ghost 的转变选项“鬼魂”不得覆盖敌人特性“幽灵形态”。新增核心词的大小写标记也不能代替实体判断；来源与边界见 [新增说明](../daggerheart-translation-pipeline/resources/reference/srd2-additions.md)。
+
 ## 点 / 值 / 槽 分类原则
 
 - **点**：频繁增减的资源。希望点、恐惧点、压力点、生命点。

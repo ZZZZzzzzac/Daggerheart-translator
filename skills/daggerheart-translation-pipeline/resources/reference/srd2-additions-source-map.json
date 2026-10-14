@@ -1,0 +1,1428 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "eb21c181aca69fa8df78f35410d9de8781a1a6af",
+  "snapshot": {
+    "name": "snapshot_latest.json",
+    "sha256": "5c8c95db9950a99fa876156d2498d4d4ba97e4595f0b8b582d231bea883536d0",
+    "record_count": 1777,
+    "source": "ParaTranz 14448 SRD2 snapshot, reviewed 2026-10-14"
+  },
+  "official_pdf": {
+    "name": "DH_SRD_2_2026_08_25.pdf",
+    "url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf",
+    "sha256": "55d8b92b7e58aa1da99a4a59aa77352483ef4fbda71baddb9af9bfc1f333bd2a"
+  },
+  "scope": "42 SRD2 additions only: 36 active core records and 6 read-only contextual records. Existing glossary translations and matching code are unchanged. Current-source Chinese is not a declaration of official Chinese translation.",
+  "allowed_same_translation_alias_reuse": [
+    {
+      "new_term": "Vampire",
+      "existing_resource": "adversaries_name.json",
+      "existing_term": "VAMPIRE",
+      "translation": "吸血鬼",
+      "reason": "转变选项与同名敌人共用译名；保留原表，按正文辨别实体，不合并规则效果。"
+    }
+  ],
+  "entries": [
+    {
+      "term": "Dread",
+      "finding_id": "A001",
+      "destination": "core",
+      "source_translation": "恐怖",
+      "source_id": 1052583264,
+      "source_key": "SRD2_SECTION_25",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583264",
+      "pdf_page": 7,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=7",
+      "original_excerpt": "### DREAD",
+      "translation_excerpt": "### 恐怖 DREAD",
+      "original_sha256": "aa7dde976fd37bf9a3d7462b3e3a70990a68c5370e8dcc9cb7c97019b2236470",
+      "translation_sha256": "0b50d19d90868490c7bc3c3fa8cdc764b20566b64ad3f052bdbe0b1bcd809e94",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Dread",
+        "DREAD"
+      ],
+      "alias_evidence": [
+        {
+          "form": "DREAD",
+          "source_id": 1052583264,
+          "source_key": "SRD2_SECTION_25",
+          "original_excerpt": "### DREAD Dread is the domain of nightmares "
+        }
+      ]
+    },
+    {
+      "term": "Assassin",
+      "finding_id": "A002",
+      "destination": "core",
+      "source_translation": "刺客",
+      "source_id": 1052583277,
+      "source_key": "SRD2_SECTION_38",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583277",
+      "pdf_page": 9,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=9",
+      "original_excerpt": "### ASSASSIN",
+      "translation_excerpt": "### 刺客 ASSASSIN",
+      "original_sha256": "f28e9c5af71b38dd7e974d50537faea4cb4814e1768417878af6b3219b1494db",
+      "translation_sha256": "73b13d0b53ba7eb8b4845d04014322351648630ff734508b0f065dbb83d05405",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Assassin",
+        "ASSASSIN",
+        "Assassins",
+        "assassins"
+      ],
+      "alias_evidence": [
+        {
+          "form": "ASSASSIN",
+          "source_id": 1052583277,
+          "source_key": "SRD2_SECTION_38",
+          "original_excerpt": "### ASSASSIN Assassins are masters at inflictin"
+        },
+        {
+          "form": "Assassins",
+          "source_id": 1052583277,
+          "source_key": "SRD2_SECTION_38",
+          "original_excerpt": "### ASSASSIN Assassins are masters at inflicting deadly i"
+        },
+        {
+          "form": "assassins",
+          "source_id": 1052583277,
+          "source_key": "SRD2_SECTION_38",
+          "original_excerpt": "iolence as only a means to an end, assassins approach death as a profession. Ma"
+        }
+      ]
+    },
+    {
+      "term": "Brawler",
+      "finding_id": "A002",
+      "destination": "core",
+      "source_translation": "格斗家",
+      "source_id": 1052583289,
+      "source_key": "SRD2_SECTION_50",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583289",
+      "pdf_page": 12,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12",
+      "original_excerpt": "### BRAWLER",
+      "translation_excerpt": "### 格斗家 BRAWLER",
+      "original_sha256": "8f7cfd02e83f0cb5ec8a067db0d6979802e132d0d09755cbd6d2280a036ba58d",
+      "translation_sha256": "7616a51199f3ead523f0d24bf32519557ac1de0357441f7c0805fbfeb6cf5ea7",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Brawler",
+        "BRAWLER",
+        "Brawlers",
+        "brawlers"
+      ],
+      "alias_evidence": [
+        {
+          "form": "BRAWLER",
+          "source_id": 1052583289,
+          "source_key": "SRD2_SECTION_50",
+          "original_excerpt": "### BRAWLER Experts in unarmed combat, brawler"
+        },
+        {
+          "form": "Brawlers",
+          "source_id": 1052583289,
+          "source_key": "SRD2_SECTION_50",
+          "original_excerpt": "heir body and mind to work as one. Brawlers are valued for their power and ver"
+        },
+        {
+          "form": "brawlers",
+          "source_id": 1052583289,
+          "source_key": "SRD2_SECTION_50",
+          "original_excerpt": "BRAWLER Experts in unarmed combat, brawlers hone their bodies into lethal weap"
+        }
+      ]
+    },
+    {
+      "term": "Warlock",
+      "finding_id": "A002",
+      "destination": "core",
+      "source_translation": "邪术师",
+      "source_id": 1052583380,
+      "source_key": "SRD2_SECTION_141",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583380",
+      "pdf_page": 26,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26",
+      "original_excerpt": "### WARLOCK",
+      "translation_excerpt": "### 邪术师 WARLOCK",
+      "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
+      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Warlock",
+        "WARLOCK",
+        "warlocks"
+      ],
+      "alias_evidence": [
+        {
+          "form": "WARLOCK",
+          "source_id": 1052583380,
+          "source_key": "SRD2_SECTION_141",
+          "original_excerpt": "### WARLOCK Those who’ve traded their lives—or"
+        },
+        {
+          "form": "warlocks",
+          "source_id": 1052583380,
+          "source_key": "SRD2_SECTION_141",
+          "original_excerpt": " for incredible power are known as warlocks. Often, these mortals have reached"
+        }
+      ]
+    },
+    {
+      "term": "Witch",
+      "finding_id": "A002",
+      "destination": "core",
+      "source_translation": "灵巫",
+      "source_id": 1052583393,
+      "source_key": "SRD2_SECTION_154",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583393",
+      "pdf_page": 29,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29",
+      "original_excerpt": "### WITCH",
+      "translation_excerpt": "### 灵巫 WITCH",
+      "original_sha256": "92e2e3cb013d37aaf24e0e8f88583ed484219a80175248ebb804e9fa0eef1575",
+      "translation_sha256": "0501948a27d303cfa669540fa3fd71c4d5aea22b8e1b6c52d8c679a3e13214d6",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Witch",
+        "WITCH",
+        "Witches"
+      ],
+      "alias_evidence": [
+        {
+          "form": "WITCH",
+          "source_id": 1052583393,
+          "source_key": "SRD2_SECTION_154",
+          "original_excerpt": "### WITCH Witches are magical practitioners "
+        },
+        {
+          "form": "Witches",
+          "source_id": 1052583393,
+          "source_key": "SRD2_SECTION_154",
+          "original_excerpt": "### WITCH Witches are magical practitioners who comm"
+        }
+      ]
+    },
+    {
+      "term": "Executioners Guild",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "执刑公会",
+      "source_id": 1052583279,
+      "source_key": "SRD2_SECTION_40",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583279",
+      "pdf_page": 9,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=9",
+      "original_excerpt": "### EXECUTIONERS GUILD",
+      "translation_excerpt": "### 执刑公会 EXECUTIONERS GUILD",
+      "original_sha256": "94f6b3c65a631eb96b2b26e5c58b7e205441c1fe5d8b27d37dd0eed2ecd3608d",
+      "translation_sha256": "87a965901f9e4e10fd389ca1f3f498318809eabda3d345015ef6f89943726066",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Executioners Guild",
+        "EXECUTIONERS GUILD"
+      ],
+      "alias_evidence": [
+        {
+          "form": "EXECUTIONERS GUILD",
+          "source_id": 1052583279,
+          "source_key": "SRD2_SECTION_40",
+          "original_excerpt": "### EXECUTIONERS GUILD Play the Executioners Guild if you"
+        }
+      ]
+    },
+    {
+      "term": "Poisoners Guild",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "毒师公会",
+      "source_id": 1052583280,
+      "source_key": "SRD2_SECTION_41",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583280",
+      "pdf_page": 10,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=10",
+      "original_excerpt": "### POISONERS GUILD",
+      "translation_excerpt": "### 毒师公会 POISONERS GUILD",
+      "original_sha256": "195224cde42682efd5ac6b5cd5a4c014f4bcab4ac4e66a8229c6ca74cfb54a3d",
+      "translation_sha256": "e9176776a753c22b8786e3d2dcd3dd4559ad8ad9db3ded685f220b64a5e0e762",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Poisoners Guild",
+        "POISONERS GUILD"
+      ],
+      "alias_evidence": [
+        {
+          "form": "POISONERS GUILD",
+          "source_id": 1052583280,
+          "source_key": "SRD2_SECTION_41",
+          "original_excerpt": "### POISONERS GUILD Play the Poisoners Guild if you wa"
+        }
+      ]
+    },
+    {
+      "term": "Juggernaut",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "重拳主宰",
+      "source_id": 1052583291,
+      "source_key": "SRD2_SECTION_52",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583291",
+      "pdf_page": 12,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12",
+      "original_excerpt": "### JUGGERNAUT",
+      "translation_excerpt": "### 重拳主宰 JUGGERNAUT",
+      "original_sha256": "ac69b700617a79ea4b2cfeca3a5f1e3f276320ab1fda71256bee63e9fd56c91e",
+      "translation_sha256": "3524a6f6602d3c2fb1e39e41102e5abafea2e8a1ea19164ca033d12bd90d868d",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Juggernaut",
+        "JUGGERNAUT"
+      ],
+      "alias_evidence": [
+        {
+          "form": "JUGGERNAUT",
+          "source_id": 1052583291,
+          "source_key": "SRD2_SECTION_52",
+          "original_excerpt": "### JUGGERNAUT Play the Juggernaut if you want to"
+        }
+      ]
+    },
+    {
+      "term": "Martial Artist",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "武艺达人",
+      "source_id": 1052583292,
+      "source_key": "SRD2_SECTION_53",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583292",
+      "pdf_page": 12,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12",
+      "original_excerpt": "### MARTIAL ARTIST",
+      "translation_excerpt": "### 武艺达人 MARTIAL ARTIST",
+      "original_sha256": "22f3b39c461fe7d025fecc82a7e4f1e0812fbe804fded3f3c49b8595310cd865",
+      "translation_sha256": "ea66dc0faff52d877f64c8dcee18d0d1283deb2d002e437171a02e7d66fc8737",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Martial Artist",
+        "MARTIAL ARTIST",
+        "Martial Artists"
+      ],
+      "alias_evidence": [
+        {
+          "form": "MARTIAL ARTIST",
+          "source_id": 1052583292,
+          "source_key": "SRD2_SECTION_53",
+          "original_excerpt": "### MARTIAL ARTIST Play the Martial Artist if you wan"
+        },
+        {
+          "form": "Martial Artists",
+          "source_id": 1052583296,
+          "source_key": "SRD2_SECTION_57",
+          "original_excerpt": "cial body positionings that enable Martial Artists to attack, react, or defend in com"
+        }
+      ]
+    },
+    {
+      "term": "Pact of the Endless",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "无尽之契",
+      "source_id": 1052583383,
+      "source_key": "SRD2_SECTION_144",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583383",
+      "pdf_page": 27,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=27",
+      "original_excerpt": "### PACT OF THE ENDLESS",
+      "translation_excerpt": "### 无尽之契 PACT OF THE ENDLESS",
+      "original_sha256": "e01110a4efcdeb8b35b20c1bc8c3c02a508ecb4fe6aed0886219a34b5155546d",
+      "translation_sha256": "dd36e60e951739bfeb34cd2cfe8abc3866ecdf94a03e8a915ac2503692cd5fad",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Pact of the Endless",
+        "PACT OF THE ENDLESS"
+      ],
+      "alias_evidence": [
+        {
+          "form": "PACT OF THE ENDLESS",
+          "source_id": 1052583383,
+          "source_key": "SRD2_SECTION_144",
+          "original_excerpt": "### PACT OF THE ENDLESS Play the Pact of the Endless if yo"
+        }
+      ]
+    },
+    {
+      "term": "Pact of the Wrathful",
+      "finding_id": "A003",
+      "destination": "core",
+      "source_translation": "愤怒之契",
+      "source_id": 1052583384,
+      "source_key": "SRD2_SECTION_145",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583384",
+      "pdf_page": 27,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=27",
+      "original_excerpt": "### PACT OF THE WRATHFUL",
+      "translation_excerpt": "### 愤怒之契 PACT OF THE WRATHFUL",
+      "original_sha256": "131cde006f224ff47abaab3f63e1632f72314eea6e1cb3a9c150857e90401e34",
+      "translation_sha256": "40ab98ee1316e1be510be296de5c59d7059ec7d715fad25ff97cdf7d116a219a",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Pact of the Wrathful",
+        "PACT OF THE WRATHFUL"
+      ],
+      "alias_evidence": [
+        {
+          "form": "PACT OF THE WRATHFUL",
+          "source_id": 1052583384,
+          "source_key": "SRD2_SECTION_145",
+          "original_excerpt": "### PACT OF THE WRATHFUL Play the Pact of the Wrathful if y"
+        }
+      ]
+    },
+    {
+      "term": "Hedge",
+      "finding_id": "A003",
+      "destination": "context-only",
+      "source_translation": "树篱集会",
+      "source_id": 1052583395,
+      "source_key": "SRD2_SECTION_156",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583395",
+      "pdf_page": 29,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29",
+      "original_excerpt": "### HEDGE",
+      "translation_excerpt": "### 树篱集会 HEDGE",
+      "original_sha256": "07c29c371364a3349c192b5ea4b6f2a3be031cdfd7ec17f97fc068321797709b",
+      "translation_sha256": "79908b7d0c287a8f3b444401db694f6e96d0700945d3681eda05f69d75af9f0e",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Moon",
+      "finding_id": "A003",
+      "destination": "context-only",
+      "source_translation": "月亮集会",
+      "source_id": 1052583396,
+      "source_key": "SRD2_SECTION_157",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583396",
+      "pdf_page": 30,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=30",
+      "original_excerpt": "### MOON",
+      "translation_excerpt": "### 月亮集会 MOON",
+      "original_sha256": "1dd037ef23a941943cf21e1eaeb2917c85f30d6049fa3977031cc4b0b706a3d3",
+      "translation_sha256": "288f3199870e8658daab8a86d677824fe08a137be8f767e7585a063567b19291",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Aetheris",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "天辉族",
+      "source_id": 1052583406,
+      "source_key": "SRD2_SECTION_167",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583406",
+      "pdf_page": 32,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=32",
+      "original_excerpt": "### AETHERIS",
+      "translation_excerpt": "### 天辉族 AETHERIS",
+      "original_sha256": "f00992d0c70f38979ee56544f69f3d30e5a6bba6faf586a60727d82d9385f4cc",
+      "translation_sha256": "edf2d43cdd8ec555f2328f9aa1e4a0fbbdf72be66679ea748805a4eabad86c8f",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Aetheris",
+        "AETHERIS",
+        "aetheris"
+      ],
+      "alias_evidence": [
+        {
+          "form": "AETHERIS",
+          "source_id": 1052583406,
+          "source_key": "SRD2_SECTION_167",
+          "original_excerpt": "### AETHERIS Aetheris are humanoids most easily"
+        },
+        {
+          "form": "aetheris",
+          "source_id": 1052583406,
+          "source_key": "SRD2_SECTION_167",
+          "original_excerpt": "terns of lines and symbols—but all aetheris develop them as they mature. These"
+        }
+      ]
+    },
+    {
+      "term": "Elemental Kin",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "元素裔",
+      "source_id": 1052583410,
+      "source_key": "SRD2_SECTION_171",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583410",
+      "pdf_page": 33,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=33",
+      "original_excerpt": "### ELEMENTAL KIN",
+      "translation_excerpt": "### 元素裔 ELEMENTAL KIN",
+      "original_sha256": "0354e34ebf041fab4c05d5e374a532ae7952b5576e54fa537184d1cd49476fdc",
+      "translation_sha256": "0fb6628c0b6a85b5e083539cf9d40b78ba78a1f140f63dbaab6413dbe4c07e38",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Elemental Kin",
+        "ELEMENTAL KIN",
+        "Elemental kin",
+        "elemental kin",
+        "elemental kins"
+      ],
+      "alias_evidence": [
+        {
+          "form": "ELEMENTAL KIN",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "### ELEMENTAL KIN Elemental kin are humanoid mortals"
+        },
+        {
+          "form": "Elemental kin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "### ELEMENTAL KIN Elemental kin are humanoid mortals descended fro"
+        },
+        {
+          "form": "elemental kin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "heir elemental heritage. At birth, elemental kin closely resemble the element they "
+        },
+        {
+          "form": "elemental kins",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "ccomplish a variety of tasks. Some elemental kins’ physical characteristics are pass"
+        }
+      ]
+    },
+    {
+      "term": "Earthkin",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "地裔",
+      "source_id": 1052583411,
+      "source_key": "SRD2_SECTION_172",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583411",
+      "pdf_page": 33,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=33",
+      "original_excerpt": "### EARTHKIN",
+      "translation_excerpt": "### 地裔  EARTHKIN",
+      "original_sha256": "602e1cd238a4d03e44c48fd39d3fa9f444873ab5ec6bc4a39b68c460277fb4af",
+      "translation_sha256": "79245e7f73705307f39cf687fa0fdd4c55fb3533e9e3ded128238e2602a3383a",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Earthkin",
+        "EARTHKIN",
+        "earthkin"
+      ],
+      "alias_evidence": [
+        {
+          "form": "EARTHKIN",
+          "source_id": 1052583411,
+          "source_key": "SRD2_SECTION_172",
+          "original_excerpt": "### EARTHKIN Earthkin are humanoids whose bodie"
+        },
+        {
+          "form": "earthkin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "gh families, such as one family of earthkin bearing shifting skin with the tex"
+        }
+      ]
+    },
+    {
+      "term": "Emberkin",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "烬裔",
+      "source_id": 1052583412,
+      "source_key": "SRD2_SECTION_173",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583412",
+      "pdf_page": 33,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=33",
+      "original_excerpt": "### EMBERKIN",
+      "translation_excerpt": "### 烬裔 EMBERKIN",
+      "original_sha256": "d5bfed69a5783a73b6c97b1453d1736a4f93c27c607d8232b3ae163acd841dfa",
+      "translation_sha256": "5d3438e5e15240ce66bf45e9ccdf8808193f2bf095a75a85e39a8839e445d558",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Emberkin",
+        "EMBERKIN",
+        "emberkin"
+      ],
+      "alias_evidence": [
+        {
+          "form": "EMBERKIN",
+          "source_id": 1052583412,
+          "source_key": "SRD2_SECTION_173",
+          "original_excerpt": "### EMBERKIN Emberkin are humanoids whose bodie"
+        },
+        {
+          "form": "emberkin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": " elemental influence. For example, emberkin might express excitement with flar"
+        }
+      ]
+    },
+    {
+      "term": "Skykin",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "空裔",
+      "source_id": 1052583413,
+      "source_key": "SRD2_SECTION_174",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583413",
+      "pdf_page": 34,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=34",
+      "original_excerpt": "### SKYKIN",
+      "translation_excerpt": "### 空裔  SKYKIN",
+      "original_sha256": "cdcb50ee40e63d18a0974ac4d82c13fd2ce81ae45d41b4f1f84a5601517e16d6",
+      "translation_sha256": "6fed991147a85b24e286348c1596ee612726a05bd97c87238a3d1bafe478eeb9",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Skykin",
+        "SKYKIN",
+        "skykin"
+      ],
+      "alias_evidence": [
+        {
+          "form": "SKYKIN",
+          "source_id": 1052583413,
+          "source_key": "SRD2_SECTION_174",
+          "original_excerpt": "### SKYKIN Skykin are humanoids whose bodies "
+        },
+        {
+          "form": "skykin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "across a stonekin’s shoulders or a skykin’s ever-present breeze tousling the"
+        }
+      ]
+    },
+    {
+      "term": "Tidekin",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "潮裔",
+      "source_id": 1052583414,
+      "source_key": "SRD2_SECTION_175",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583414",
+      "pdf_page": 34,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=34",
+      "original_excerpt": "### TIDEKIN",
+      "translation_excerpt": "### 潮裔 TIDEKIN",
+      "original_sha256": "64271618777c1dc6d12069b88654d3248c7a2999af5d1dec1e7b6c18381854c9",
+      "translation_sha256": "b2f37c482f298739993f3771f57e0cdf54ceb488b551faeff9088e7e3d0809f0",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Tidekin",
+        "TIDEKIN",
+        "tidekin"
+      ],
+      "alias_evidence": [
+        {
+          "form": "TIDEKIN",
+          "source_id": 1052583414,
+          "source_key": "SRD2_SECTION_175",
+          "original_excerpt": "### TIDEKIN Tidekin are humanoids whose bodies"
+        },
+        {
+          "form": "tidekin",
+          "source_id": 1052583410,
+          "source_key": "SRD2_SECTION_171",
+          "original_excerpt": "res of fire from their eyes, while tidekin might use currents of color over t"
+        }
+      ]
+    },
+    {
+      "term": "Gnome",
+      "finding_id": "A004",
+      "destination": "core",
+      "source_translation": "侏儒",
+      "source_id": 1052583423,
+      "source_key": "SRD2_SECTION_184",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583423",
+      "pdf_page": 36,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=36",
+      "original_excerpt": "### GNOME",
+      "translation_excerpt": "### **侏儒 GNOME**",
+      "original_sha256": "b7473d710ff7f6e8c0ab73d6d75321675960d5654f5b75974db55d2f55510b8f",
+      "translation_sha256": "dce76c5ce1de6310fb1746e497666558caabf552c16d808f150d628b89fdd2df",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Gnome",
+        "GNOME",
+        "Gnomes",
+        "gnomes"
+      ],
+      "alias_evidence": [
+        {
+          "form": "GNOME",
+          "source_id": 1052583423,
+          "source_key": "SRD2_SECTION_184",
+          "original_excerpt": "### GNOME Gnomes are typically small humanoi"
+        },
+        {
+          "form": "Gnomes",
+          "source_id": 1052583423,
+          "source_key": "SRD2_SECTION_184",
+          "original_excerpt": "### GNOME Gnomes are typically small humanoids with"
+        },
+        {
+          "form": "gnomes",
+          "source_id": 1052583423,
+          "source_key": "SRD2_SECTION_184",
+          "original_excerpt": ". Alongside these characteristics, gnomes are easily identified by their sof"
+        }
+      ]
+    },
+    {
+      "term": "Duneborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "沙丘之民",
+      "source_id": 1052583434,
+      "source_key": "SRD2_SECTION_195",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583434",
+      "pdf_page": 38,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=38",
+      "original_excerpt": "### DUNEBORNE",
+      "translation_excerpt": "### 沙丘之民 DUNEBORNE",
+      "original_sha256": "f8327841d415958fff619831969e42668b3769295f0e81ce40bad927e2f1d834",
+      "translation_sha256": "c867420b57800eff2ce45573d27014b69e5e317a366843ea4bdf3101a8f65de9",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Duneborne",
+        "DUNEBORNE",
+        "duneborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "DUNEBORNE",
+          "source_id": 1052583434,
+          "source_key": "SRD2_SECTION_195",
+          "original_excerpt": "### DUNEBORNE Being part of a duneborne communit"
+        },
+        {
+          "form": "duneborne",
+          "source_id": 1052583434,
+          "source_key": "SRD2_SECTION_195",
+          "original_excerpt": "### DUNEBORNE Being part of a duneborne community means you’ve made a home"
+        }
+      ]
+    },
+    {
+      "term": "Freeborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "自由之民",
+      "source_id": 1052583435,
+      "source_key": "SRD2_SECTION_196",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583435",
+      "pdf_page": 38,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=38",
+      "original_excerpt": "### FREEBORNE",
+      "translation_excerpt": "### 自由之民 FREEBORNE",
+      "original_sha256": "bee5b078e47ce66a3a29315ffad697f783f72206ea76829367dff061e5198e4c",
+      "translation_sha256": "09866c66f690b5b0e1232d8994c5d659074a1d21b3bc29d37834795267037890",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Freeborne",
+        "FREEBORNE",
+        "freeborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "FREEBORNE",
+          "source_id": 1052583435,
+          "source_key": "SRD2_SECTION_196",
+          "original_excerpt": "### FREEBORNE Being part of a freeborne communit"
+        },
+        {
+          "form": "freeborne",
+          "source_id": 1052583435,
+          "source_key": "SRD2_SECTION_196",
+          "original_excerpt": "### FREEBORNE Being part of a freeborne community means you’re from a coll"
+        }
+      ]
+    },
+    {
+      "term": "Frostborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "霜雪之民",
+      "source_id": 1052583436,
+      "source_key": "SRD2_SECTION_197",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583436",
+      "pdf_page": 39,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=39",
+      "original_excerpt": "### FROSTBORNE",
+      "translation_excerpt": "### 霜雪之民 FROSTBORNE",
+      "original_sha256": "666921fd8329aba60cb9c453c9746b99e784d508ec6b6e54db878ba713655a85",
+      "translation_sha256": "a5ca1ebeaf7d99d0a50510e7ec2ed032b3a0db682f3c426272cd970ee7311c0c",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Frostborne",
+        "FROSTBORNE",
+        "frostborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "FROSTBORNE",
+          "source_id": 1052583436,
+          "source_key": "SRD2_SECTION_197",
+          "original_excerpt": "### FROSTBORNE Being part of a frostborne communi"
+        },
+        {
+          "form": "frostborne",
+          "source_id": 1052583436,
+          "source_key": "SRD2_SECTION_197",
+          "original_excerpt": "### FROSTBORNE Being part of a frostborne community means you come from a pl"
+        }
+      ]
+    },
+    {
+      "term": "Hearthborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "炉火之民",
+      "source_id": 1052583437,
+      "source_key": "SRD2_SECTION_198",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583437",
+      "pdf_page": 39,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=39",
+      "original_excerpt": "### HEARTHBORNE",
+      "translation_excerpt": "### 炉火之民 HEARTHBORNE",
+      "original_sha256": "eb1b479580a85b7b29a99f0e7562966f52a29738940e5e87d522819e97bcb883",
+      "translation_sha256": "072523dc1fe311e75e84a1449072c4c630f7782fd0dd75aa549275c948561cf8",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Hearthborne",
+        "HEARTHBORNE",
+        "hearthborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "HEARTHBORNE",
+          "source_id": 1052583437,
+          "source_key": "SRD2_SECTION_198",
+          "original_excerpt": "### HEARTHBORNE Being part of a hearthborne commun"
+        },
+        {
+          "form": "hearthborne",
+          "source_id": 1052583437,
+          "source_key": "SRD2_SECTION_198",
+          "original_excerpt": "### HEARTHBORNE Being part of a hearthborne community means you come from humb"
+        }
+      ]
+    },
+    {
+      "term": "Reborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "失乡之民",
+      "source_id": 1052583441,
+      "source_key": "SRD2_SECTION_202",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583441",
+      "pdf_page": 40,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=40",
+      "original_excerpt": "### REBORNE",
+      "translation_excerpt": "### 失乡之民 REBORNE",
+      "original_sha256": "aa71105224a9d14aca3cb36917973fbf47f6090b96f9a249b3a9ca5687ad0190",
+      "translation_sha256": "911537578ca3968d1c538f17ddabf4cd8f3524ff1ea3d5d016c64a1cca22e437",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Reborne",
+        "REBORNE",
+        "reborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "REBORNE",
+          "source_id": 1052583441,
+          "source_key": "SRD2_SECTION_202",
+          "original_excerpt": "### REBORNE You were once a member of a differ"
+        },
+        {
+          "form": "reborne",
+          "source_id": 1052583441,
+          "source_key": "SRD2_SECTION_202",
+          "original_excerpt": "ed location, history, and culture, reborne are individuals who might never me"
+        }
+      ]
+    },
+    {
+      "term": "Warborne",
+      "finding_id": "A005",
+      "destination": "core",
+      "source_translation": "战乱之民",
+      "source_id": 1052583447,
+      "source_key": "SRD2_SECTION_208",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583447",
+      "pdf_page": 41,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=41",
+      "original_excerpt": "### WARBORNE",
+      "translation_excerpt": "### 战乱之民 WARBORNE",
+      "original_sha256": "0a983a0616e4dfffdcacdbaacf78a6fd43a7fb680667315d3d9a9857d7245b3c",
+      "translation_sha256": "c07b5f3431fe29baf9b7d2ba372a727f624558d8c77c6ed565e6759e28f97c9a",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Warborne",
+        "WARBORNE",
+        "warborne"
+      ],
+      "alias_evidence": [
+        {
+          "form": "WARBORNE",
+          "source_id": 1052583447,
+          "source_key": "SRD2_SECTION_208",
+          "original_excerpt": "### WARBORNE Being part of a warborne community"
+        },
+        {
+          "form": "warborne",
+          "source_id": 1052583447,
+          "source_key": "SRD2_SECTION_208",
+          "original_excerpt": "### WARBORNE Being part of a warborne community means you come from a pl"
+        }
+      ]
+    },
+    {
+      "term": "Transformation",
+      "finding_id": "A006",
+      "destination": "context-only",
+      "source_translation": "转变",
+      "source_id": 1052583449,
+      "source_key": "SRD2_SECTION_210",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583449",
+      "pdf_page": 42,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=42",
+      "original_excerpt": "### TRANSFORMATIONS",
+      "translation_excerpt": "### 转变 TRANSFORMATIONS",
+      "original_sha256": "d01555f7209c83806cb0e49d75ce9bfd037c66bc25d29d07e7339ab6d7a77aa2",
+      "translation_sha256": "ec4621d67ecc88a56b5d8fbd4a269a6d15cb1e972a8a003e7a47cf3437691300",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Demigod",
+      "finding_id": "A006",
+      "destination": "core",
+      "source_translation": "半神",
+      "source_id": 1052583451,
+      "source_key": "SRD2_SECTION_212",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583451",
+      "pdf_page": 43,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=43",
+      "original_excerpt": "### DEMIGOD",
+      "translation_excerpt": "### 半神 DEMIGOD",
+      "original_sha256": "b0e24e37f8ca69f1fcef7005e1f68145dce98a11301572c3b7b546690b106ec3",
+      "translation_sha256": "f0586a14f7f5b156b468407a80fe7da7c5a023b282831f90bfca8d47318920fb",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Demigod",
+        "DEMIGOD",
+        "Demigods",
+        "demigods"
+      ],
+      "alias_evidence": [
+        {
+          "form": "DEMIGOD",
+          "source_id": 1052583451,
+          "source_key": "SRD2_SECTION_212",
+          "original_excerpt": "### DEMIGOD Demigods are mortal creatures whos"
+        },
+        {
+          "form": "Demigods",
+          "source_id": 1052583451,
+          "source_key": "SRD2_SECTION_212",
+          "original_excerpt": "### DEMIGOD Demigods are mortal creatures whose veins f"
+        },
+        {
+          "form": "demigods",
+          "source_id": 1052583451,
+          "source_key": "SRD2_SECTION_212",
+          "original_excerpt": " receiving a gift from a god. Many demigods appear as a typical member of thei"
+        }
+      ]
+    },
+    {
+      "term": "Ghost",
+      "finding_id": "A006",
+      "destination": "context-only",
+      "source_translation": "鬼魂",
+      "source_id": 1052583452,
+      "source_key": "SRD2_SECTION_213",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583452",
+      "pdf_page": 43,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=43",
+      "original_excerpt": "### GHOST",
+      "translation_excerpt": "### 鬼魂 GHOST",
+      "original_sha256": "923001e1b45286cfde79996f2b2c78cca24bda9afa29601b10590e0bd39edbac",
+      "translation_sha256": "9e30859e3d6f19196930a4d83b3683bb3a0c53c3b487a649714853a591d67337",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Reanimated",
+      "finding_id": "A006",
+      "destination": "core",
+      "source_translation": "复生者",
+      "source_id": 1052583453,
+      "source_key": "SRD2_SECTION_214",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583453",
+      "pdf_page": 44,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=44",
+      "original_excerpt": "### REANIMATED",
+      "translation_excerpt": "### 复生者 REANIMATED",
+      "original_sha256": "67bd8ebd40e566188ac5651a27787f539c67f34a2abdfc9ae3f383868a4866d6",
+      "translation_sha256": "a7fa3fe147f227734ba5f5c244133051d0daa9fc311150545b87e8e691bd0afd",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Reanimated",
+        "REANIMATED"
+      ],
+      "alias_evidence": [
+        {
+          "form": "REANIMATED",
+          "source_id": 1052583453,
+          "source_key": "SRD2_SECTION_214",
+          "original_excerpt": "### REANIMATED Reanimated are corpses who have be"
+        }
+      ]
+    },
+    {
+      "term": "Shapeshifter",
+      "finding_id": "A006",
+      "destination": "core",
+      "source_translation": "变形者",
+      "source_id": 1052583454,
+      "source_key": "SRD2_SECTION_215",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583454",
+      "pdf_page": 44,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=44",
+      "original_excerpt": "### SHAPESHIFTER",
+      "translation_excerpt": "### 变形者 SHAPESHIFTER",
+      "original_sha256": "b2b258eb77e99aa86bab9d31ef7b3b6d9e00e337370cb94c1b953b258e1cef71",
+      "translation_sha256": "0a4ada9fe4176cd31526de5c380711ae8cbd5037931c2cd4617e66c28977ec7c",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Shapeshifter",
+        "SHAPESHIFTER",
+        "Shapeshifters",
+        "shapeshifters"
+      ],
+      "alias_evidence": [
+        {
+          "form": "SHAPESHIFTER",
+          "source_id": 1052583454,
+          "source_key": "SRD2_SECTION_215",
+          "original_excerpt": "### SHAPESHIFTER Shapeshifters are creatures who ca"
+        },
+        {
+          "form": "Shapeshifters",
+          "source_id": 1052583454,
+          "source_key": "SRD2_SECTION_215",
+          "original_excerpt": "### SHAPESHIFTER Shapeshifters are creatures who can change their"
+        },
+        {
+          "form": "shapeshifters",
+          "source_id": 1052583454,
+          "source_key": "SRD2_SECTION_215",
+          "original_excerpt": "power from an otherworldly entity, shapeshifters have a unique relationship with th"
+        }
+      ]
+    },
+    {
+      "term": "Vampire",
+      "finding_id": "A006",
+      "destination": "core",
+      "source_translation": "吸血鬼",
+      "source_id": 1052583455,
+      "source_key": "SRD2_SECTION_216",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583455",
+      "pdf_page": 45,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=45",
+      "original_excerpt": "### VAMPIRE",
+      "translation_excerpt": "### 吸血鬼 VAMPIRE",
+      "original_sha256": "15bf35cdf96f2fbf77c46eb4be2e5d56ee9b108873b333178a68796910662353",
+      "translation_sha256": "239bd5a1ede84d606f39b854a16d9f104c8ef9b864eeeabc56b6799353b958fe",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Vampire",
+        "VAMPIRE",
+        "Vampires",
+        "vampires"
+      ],
+      "alias_evidence": [
+        {
+          "form": "VAMPIRE",
+          "source_id": 1052583455,
+          "source_key": "SRD2_SECTION_216",
+          "original_excerpt": "### VAMPIRE Vampires are undead creatures with"
+        },
+        {
+          "form": "Vampires",
+          "source_id": 1052583455,
+          "source_key": "SRD2_SECTION_216",
+          "original_excerpt": "### VAMPIRE Vampires are undead creatures with sharp fa"
+        },
+        {
+          "form": "vampires",
+          "source_id": 1052583455,
+          "source_key": "SRD2_SECTION_216",
+          "original_excerpt": " methods. Because those who become vampires die and come back as supernatural "
+        }
+      ]
+    },
+    {
+      "term": "Werewolf",
+      "finding_id": "A006",
+      "destination": "core",
+      "source_translation": "狼人",
+      "source_id": 1052583456,
+      "source_key": "SRD2_SECTION_217",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583456",
+      "pdf_page": 45,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=45",
+      "original_excerpt": "### WEREWOLF",
+      "translation_excerpt": "### 狼人 WEREWOLF",
+      "original_sha256": "6eb5257e49b9be2b5ff8934287f552c87471e4d2299402096ee82051abdd9eba",
+      "translation_sha256": "13c76ca5190df11b70cef460f3c2b77e87b80c53da1249de84267dbbfc03299c",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Werewolf",
+        "WEREWOLF",
+        "Werewolves",
+        "werewolves"
+      ],
+      "alias_evidence": [
+        {
+          "form": "WEREWOLF",
+          "source_id": 1052583456,
+          "source_key": "SRD2_SECTION_217",
+          "original_excerpt": "### WEREWOLF Werewolves are creatures who trans"
+        },
+        {
+          "form": "Werewolves",
+          "source_id": 1052583456,
+          "source_key": "SRD2_SECTION_217",
+          "original_excerpt": "### WEREWOLF Werewolves are creatures who transform into l"
+        },
+        {
+          "form": "werewolves",
+          "source_id": 1052583456,
+          "source_key": "SRD2_SECTION_217",
+          "original_excerpt": "atural wolves. While some are born werewolves, others undergo this transformatio"
+        }
+      ]
+    },
+    {
+      "term": "Combo Die",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "连击骰",
+      "source_id": 1052583289,
+      "source_key": "SRD2_SECTION_50",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583289",
+      "pdf_page": 12,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12",
+      "original_excerpt": "with a Melee weapon, you can mark a Stress to start a\ncombo strike. When you do, roll your Combo Die and note\nthe result, then continue rolling your Combo Die until the\nresult of your latest roll is lower than the roll that preceded",
+      "translation_excerpt": "多打连击 Combo Strikes： 当你使用近战武器进行一次成功的攻击并掷出伤害后，你可以标记 1 压力点来发动连环打击。当你这样做时，掷出你的连击骰并记录结果，然后继续掷连击骰，直到最新一次的掷骰结果低于前一次的结果为止。在此次攻击中，你额外造成所有连击骰结果总和的伤害。这些结果无法以任何方式被调整。",
+      "original_sha256": "8f7cfd02e83f0cb5ec8a067db0d6979802e132d0d09755cbd6d2280a036ba58d",
+      "translation_sha256": "7616a51199f3ead523f0d24bf32519557ac1de0357441f7c0805fbfeb6cf5ea7",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Combo Die"
+      ],
+      "alias_evidence": []
+    },
+    {
+      "term": "Patron Die",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "宗主骰",
+      "source_id": 1052583380,
+      "source_key": "SRD2_SECTION_141",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583380",
+      "pdf_page": 26,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26",
+      "original_excerpt": "relates to your patron’s sphere of influence, you can spend\na Favor to call upon their aid, rolling your Patron Die and\nadding its result to the total. Your Patron Die starts at a d6\nand increases to a d8  at level 5.",
+      "translation_excerpt": "宗主契约 Patron’s Pact： 你向一个超自然实体——例如神祇、妖精或恶魔——献身以换取力量。将其名字写在角色卡上，然后与游戏主持人共同确定其权能领域（例如自然、混沌、智慧、恶作剧、爱、战争、正义或死亡）。在进行与宗主权能领域相关的动作掷骰前，你可以花费 1 恩惠点祈求其援助，掷出你的宗主骰并将其结果加入掷骰总值。你的宗主骰初始为 d6，并在 5 级时提升至 d8。",
+      "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
+      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Patron Die",
+        "Patron Dice"
+      ],
+      "alias_evidence": [
+        {
+          "form": "Patron Dice",
+          "source_id": 1052583383,
+          "source_key": "SRD2_SECTION_144",
+          "original_excerpt": "f Favor to roll an equal number of Patron Dice. For each result of 4 or higher, c"
+        }
+      ]
+    },
+    {
+      "term": "Focus",
+      "finding_id": "A009",
+      "destination": "context-only",
+      "source_translation": "专注点",
+      "source_id": 1052583297,
+      "source_key": "SRD2_SECTION_58",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583297",
+      "pdf_page": 13,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=13",
+      "original_excerpt": "### FOCUS",
+      "translation_excerpt": "### 专注点 FOCUS",
+      "original_sha256": "8391dc95b531f437c003f012bb7b8f9abf319d40cfc46e5fe118bcf0c3b1bba7",
+      "translation_sha256": "c35ef52e62dc4656d72711c30dd2ba334428e986b530cbf605be221b18bc0ad1",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Favor",
+      "finding_id": "A009",
+      "destination": "context-only",
+      "source_translation": "恩惠点",
+      "source_id": 1052583380,
+      "source_key": "SRD2_SECTION_141",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583380",
+      "pdf_page": 26,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26",
+      "original_excerpt": "relates to your patron’s sphere of influence, you can spend\na Favor to call upon their aid, rolling your Patron Die and\nadding its result to the total. Your Patron Die starts at a d6\nand increases to a d8  at level 5.",
+      "translation_excerpt": "宗主契约 Patron’s Pact： 你向一个超自然实体——例如神祇、妖精或恶魔——献身以换取力量。将其名字写在角色卡上，然后与游戏主持人共同确定其权能领域（例如自然、混沌、智慧、恶作剧、爱、战争、正义或死亡）。在进行与宗主权能领域相关的动作掷骰前，你可以花费 1 恩惠点祈求其援助，掷出你的宗主骰并将其结果加入掷骰总值。你的宗主骰初始为 d6，并在 5 级时提升至 d8。",
+      "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
+      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_status": "current_source_translation",
+      "semantic_status": "context_or_entity_pending"
+    },
+    {
+      "term": "Patron",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "宗主",
+      "source_id": 1052583380,
+      "source_key": "SRD2_SECTION_141",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583380",
+      "pdf_page": 26,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26",
+      "original_excerpt": "Those who’ve traded their lives—or perhaps even their\nsouls—to an otherworldly patron in exchange for incredible\npower are known as warlocks. Often, these mortals have\nreached a point of desperation that leads them to make this",
+      "translation_excerpt": "那些以自身性命——甚至可能是灵魂——与异界宗主做交易，以换取非凡力量的人，被称为邪术师。这些凡人往往是走投无路之下才做出此等牺牲：他们希望保护自己或所爱之人、援助社群、寻求复仇、提升地位，或是进一步实现自己的野心。他们所恳求的强大存在与邪术师本身一样形形色色：神祇、精魂、恶魔，乃至连建立契约的凡人也未曾知晓的其他存在。每个存在都有其超凡力量的所能影响的领域，不过那些收集灵魂的宗主极少以仁慈著称。因此，邪术师的力量取决于他们与宗主之间维系的关系。尽管拥有骇人的魔法，邪术师仍可能发现自己不过是他人或他物手中的提线木偶。",
+      "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
+      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Patron"
+      ],
+      "alias_evidence": []
+    },
+    {
+      "term": "Sphere of Influence",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "权能领域",
+      "source_id": 1052583381,
+      "source_key": "SRD2_SECTION_142",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583381",
+      "pdf_page": 26,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26",
+      "original_excerpt": "### SPHERE OF INFLUENCE EXAMPLES",
+      "translation_excerpt": "### 权能领域范例",
+      "original_sha256": "06aa15faeff4af5f92801b34fee1d41d3d65bd80f394607fb32768094e6c2af9",
+      "translation_sha256": "b8a0d4d1ff1be4f1fc42d4c8b660869491ccde60c0a0a772f390ba6be796b8ae",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Sphere of Influence",
+        "SPHERE OF INFLUENCE",
+        "sphere of influence"
+      ],
+      "alias_evidence": [
+        {
+          "form": "SPHERE OF INFLUENCE",
+          "source_id": 1052583381,
+          "source_key": "SRD2_SECTION_142",
+          "original_excerpt": "### SPHERE OF INFLUENCE EXAMPLES When building a warlock, "
+        },
+        {
+          "form": "sphere of influence",
+          "source_id": 1052583380,
+          "source_key": "SRD2_SECTION_141",
+          "original_excerpt": ". The entities each have their own sphere of influence that defines their otherworldly po"
+        }
+      ]
+    },
+    {
+      "term": "Martial Stance",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "武术架势",
+      "source_id": 1052583295,
+      "source_key": "SRD2_SECTION_56",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583295",
+      "pdf_page": 13,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=13",
+      "original_excerpt": "### MARTIAL STANCES",
+      "translation_excerpt": "### 武术架势 MARTIAL STANCES",
+      "original_sha256": "8a4e9aa53c48966f4a52aada2966be7f9fcfc7e7a8113eed7778022fad20beaf",
+      "translation_sha256": "99d489b9df4f6acb517e4cb18762edb65a0c5caa3cca5e2ed069bf6484b0eb6f",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Martial Stance",
+        "Martial Stances",
+        "MARTIAL STANCES",
+        "martial stances",
+        "martial stance"
+      ],
+      "alias_evidence": [
+        {
+          "form": "Martial Stances",
+          "source_id": 1052583292,
+          "source_key": "SRD2_SECTION_53",
+          "original_excerpt": "ecial benefits in combat. Take the Martial Stances sheet and choose two martial stanc"
+        },
+        {
+          "form": "MARTIAL STANCES",
+          "source_id": 1052583295,
+          "source_key": "SRD2_SECTION_56",
+          "original_excerpt": "### MARTIAL STANCES When you choose the Martial Artist"
+        },
+        {
+          "form": "martial stances",
+          "source_id": 1052583292,
+          "source_key": "SRD2_SECTION_53",
+          "original_excerpt": "l your inner resolve to shift into martial stances that grant you special benefits in"
+        },
+        {
+          "form": "martial stance",
+          "source_id": 1052583298,
+          "source_key": "SRD2_SECTION_59",
+          "original_excerpt": " can spend a Focus to shift into a martial stance and gain its effects. You can shif"
+        }
+      ]
+    },
+    {
+      "term": "Hexed",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "诅咒",
+      "source_id": 1052583393,
+      "source_key": "SRD2_SECTION_154",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583393",
+      "pdf_page": 29,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29",
+      "original_excerpt": "Hex: Mark a Stress to temporarily Hex a target within\nFar range. While Hexed, the target gains a penalty to\ntheir damage rolls and Difficulty equal to your tier. The\nmaximum number of creatures you can Hex at one time is",
+      "translation_excerpt": "诅咒术 Hex： 标记 1 压力点，使远距离范围内的一个目标暂时进入诅咒状态。处于诅咒状态时，目标的伤害掷骰和难度获得等同于你位阶的减值。你同时能够同时诅咒的生物数量上限等同于你的施法属性。",
+      "original_sha256": "92e2e3cb013d37aaf24e0e8f88583ed484219a80175248ebb804e9fa0eef1575",
+      "translation_sha256": "0501948a27d303cfa669540fa3fd71c4d5aea22b8e1b6c52d8c679a3e13214d6",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Hexed"
+      ],
+      "alias_evidence": []
+    },
+    {
+      "term": "Marked for Death",
+      "finding_id": "A009",
+      "destination": "core",
+      "source_translation": "死亡标记",
+      "source_id": 1052583277,
+      "source_key": "SRD2_SECTION_38",
+      "source_file": "SRD/DH_SRD_2_2026_08_25.md.json",
+      "source_url": "https://paratranz.cn/projects/14448/strings?id=1052583277",
+      "pdf_page": 9,
+      "pdf_url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=9",
+      "original_excerpt": "\nMarked for Death: On a successful weapon attack, you can\nmark a Stress to make the target Marked for Death. When\nyou deal damage to a target you’ve Marked for Death, add a",
+      "translation_excerpt": "死亡标记 Marked for Death： 在使用武器成功进行攻击时，你可以标记 1 压力点令目标处于 *死亡标记*  状态。你对处于该状态的目标进行攻击时，在伤害掷骰中增加等同于你位阶数量的d4。",
+      "original_sha256": "f28e9c5af71b38dd7e974d50537faea4cb4814e1768417878af6b3219b1494db",
+      "translation_sha256": "73b13d0b53ba7eb8b4845d04014322351648630ff734508b0f065dbb83d05405",
+      "translation_status": "current_source_translation",
+      "semantic_status": "named_rule_context_required",
+      "active_forms": [
+        "Marked for Death"
+      ],
+      "alias_evidence": []
+    }
+  ]
+}
