@@ -1,47 +1,45 @@
 ---
 name: daggerheart-translation-audit
-description: 通用双语翻译抓虫：接收配对原文与译文文本、文件或平台导出，逐段语义审阅、记录证据与覆盖情况，生成精准高亮、可保存进度的HTML人工审阅报告。ParaTranz和Daggerheart规则仅为可选来源与项目层，不要求账号或平台ID。
+description: 对已经取得的原文与译文做通用翻译抓虫：规范配对输入、逐段语义审阅、复核证据，生成精准高亮且可保存进度的HTML供人审阅。适用于各类文档与语言组合；不负责取得原译文。
 ---
 
-# 通用翻译抓虫与HTML审阅
+# 通用翻译抓虫
 
-核心流程：**原文与译文 → 核对对齐 → 逐段语义审阅 → 复核问题 → HTML供人审阅**。适用于任何领域和语言组合。历史目录/技能名保留以兼容已有安装，不代表必须使用Daggerheart或ParaTranz。
+输入是**已经取得的原文与译文**。本skill只做：**格式化输入 → 核对对齐 → 语义抓虫 → 复核 → HTML审阅**。历史技能名保留兼容，不限制题材。
 
-脚本负责固定文本、校验覆盖/证据和生成HTML，**不自动完成语义审阅**。报告“完成”只表示用户看过该问题，不表示源文件已修改。默认只读。
+取得文本属于外部任务：ParaTranz交给 `paratranz-ops`，飞书交给飞书CLI，本地现成文件直接使用；不要把这些来源的操作流程带进本skill。
 
-## 选择输入
+**若内容属于Daggerheart，必须先调用 `daggerheart-chinese-writing` skill，以其语言与术语规范指导审阅和建议译文。** 不在这里另抄一套规则。其他领域使用用户给定的术语表或风格要求。
 
-- **普通文本、文件、已配对JSON**：使用 `scripts/paired_audit.py`，先读 [references/paired-inputs.md](references/paired-inputs.md)。只需Python标准库，无账号、凭据、项目号或数字ID。
-- **ParaTranz**：可选适配器 `scripts/audit_data.py` 继续支持既有snapshot/diff/validate命令，见 [references/data-contract.md](references/data-contract.md)。适配器复用同仓库paratranz-ops客户端，不将平台要求带入通用流程。
-- **领域要求**：按实际项目读取术语表、风格指南和原始依据。只有Daggerheart项目才读 [references/domain-daggerheart.md](references/domain-daggerheart.md)。
+## 输入与工作流
 
-## 必须完成的工作
+1. **规范配对**：将已有材料整理为带稳定ID的原文/译文段落对，保留字序、标点、换行和必要上下文。明确一对多/多对一关系；未匹配内容保留空侧，不能丢段或盲按行号配对。格式见 [references/paired-inputs.md](references/paired-inputs.md)。
+2. **逐段实际读**：核主体、指代、条件、否定、例外、事实、数值/单位、义务语气、漏译/增译及术语。每个纳入段落都留审阅记录，包括无问题者；机械差异与数字扫描只能给线索，不能替代语义判断。
+3. **记录可处理的问题**：保存问题ID、精确证据、影响、具体建议和严重度，区分确认与待核实。完整原文/现译始终保留；高亮只标与当前问题相关的片段，漏译允许只亮原文，不伪造另一侧内容。
+4. **独立复核**：复核者先读原译文和上下文，再判断候选是否成立。没有独立支持时保留待核实，不编造确认。已有材料中的对齐/抽取错误与翻译错误应分开说明，不把无根据的推测算成译错。
+5. **核验覆盖与证据**：检查所有输入段落都有记录，问题与当前文本一致。输入改动后重新判断相关段落；本地内容hash只用于拦住错位/过时证据。部分结果明确未审ID，不宣称完整完成。
+6. **形成HTML**：默认一屏一项，原文、现译、问题、建议最醒目。上一条/下一条/完成集中在底栏；输入自带有效链接时才显示跳转。长文明确分页，全文可达，精准高亮与进度保存/导入导出保留。无发现也如实显示覆盖情况，不制造假问题。
 
-1. **保留输入与对齐证据**：记录来源、读取时间、版本/内容hash和稳定段落ID。短文可以整份一对一；长文按已核实的章节/段落关系配对。漏译或增加内容用显式空侧保留，不能丢弃无法匹配的文字、盲按行号对齐或凭猜测重排。
-2. **逐段实际阅读**：完整上下文核主体、指代、条件/否定/例外、事实、数值/单位、语气义务、漏译/增译及领域用语。每个纳入段落都留覆盖记录，包括无问题者。数字/词语扫描只是线索，不足以标记语义已审。
-3. **记录可判断的问题**：完整原文/现译、精确证据、影响、具体建议、状态、严重度、当前文本hash；finding ID稳定，不因排序重编号。精准高亮只标当前问题涉及的范围，遗漏允许单侧，不编造另一侧证据。
-4. **复核与溯源**：独立复核候选，区分确认、歧义和驳回；无复核时明确披露。源文件、抽取/导入原文、译文三层不能混为一谈。原始PDF/网页/OCR有错时保留定位依据，不把所有问题都归于译者。
-5. **检查时效与覆盖**：交付前重新读取可访问来源；hash变化的段落和相关上下文重审。不把“文字变了”自动判为“已修”。完整报告必须全量覆盖；部分报告显式标注未审ID、范围与截止时间。
-6. **交付HTML**：默认一屏一项，中英/双语文本、问题、建议为核心；正文长时明确分页、全文可达。底部集中上一条/下一条/完成，有链接才显示来源跳转。进度可保存、导入导出。零发现也可输出HTML覆盖说明，不能编造发现凑界面。
+详细判断标准：[references/workflow.md](references/workflow.md)。报告界面约定：[references/report-ui.md](references/report-ui.md)。
 
-详细判断标准：[references/workflow.md](references/workflow.md)。展示字段和测试要求：[references/report-ui.md](references/report-ui.md)。
+## 本地规范化与报告
 
-## 通用最短可运行路径
-
-命令相对于本skill目录，真实工作产物放在仓库外。以下两份UTF-8文本作为一个完整pair，不自动切行对齐：
+以下 `pairs.json` 是已准备好的配对内容，不包含来源操作。
 
 ```bash
-python scripts/paired_audit.py normalize --original-file /path/original.txt --translation-file /path/translation.txt --id manual --title "文档审阅" --out /path/snapshot.json
-python scripts/paired_audit.py prepare /path/snapshot.json --out /path/review.json
-# 审阅者实际阅读文本、核实对齐，填写review.json中的coverage和findings。
-python scripts/paired_audit.py validate /path/snapshot.json /path/review.json
-python scripts/paired_audit.py export /path/snapshot.json /path/review.json --report-id manual-audit-v1 --out /path/report.json
+python scripts/paired_audit.py normalize --pairs /path/pairs.json --out /path/input.json
+python scripts/paired_audit.py prepare /path/input.json --out /path/review.json
+# 审阅者实际逐段阅读、核对对齐，填写review.json。
+python scripts/paired_audit.py validate /path/input.json /path/review.json
+python scripts/paired_audit.py export /path/input.json /path/review.json --report-id document-audit-v1 --out /path/report.json
 python scripts/render_report.py /path/report.json /path/report.html
 ```
 
-已配对的多段输入用 `normalize --pairs pairs.json --out snapshot.json`。`prepare`只建未审账本，不填写判断；`export --allow-incomplete`仅用于明确需要的部分报告。可直接打开[合成HTML示例](examples/consumer-report.html)；配对输入、审阅记录与端到端用法见 `examples/` 和通用输入契约，不包含真实翻译项目数据。
+`prepare`只建立未审记录，不进行自动语义审阅。需要交付部分结果时显式使用 `--allow-incomplete`。数据格式和合成示例见输入契约；可直接打开[合成HTML](examples/consumer-report.html)。
 
-## 验证与边界
+## 边界与验证
+
+脚本只规范输入、校验证据/覆盖和渲染报告，不自动证明翻译正确。HTML中的“完成”只记录用户审阅进度，不修改原译文。结构测试和分页模拟不能替代真实浏览器视觉验收。
 
 ```bash
 python -m unittest discover -s tests -v
@@ -49,5 +47,3 @@ node tests/test_report_state.js
 node tests/test_highlighting.js
 node tests/test_source_action.js
 ```
-
-结构校验不能证明语义判断正确；模拟分页也不等于真实浏览器视觉验收。保留已验证和未验证的边界。报告不授权修改原文件、写回平台或发布译文；修复需要另行明确批准并重新读取当前文本，避免覆盖他人更新。不要向技能仓库提交真实项目快照、用户审阅进度或凭据。

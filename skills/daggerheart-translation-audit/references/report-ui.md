@@ -4,17 +4,17 @@
 
 ## 输入 schemaVersion 1
 
-顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`sourceCutoff`、`findings` 数组（可为空）。可选 `notes`、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
+顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`findings` 数组（可为空）。可选 `notes`、`sourceDescription`（输入自带的说明）、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
 
 每项字段（除注明可选者外均必需）：
 - `finding_id`：报告内唯一、跨版本稳定的字符串编号，不能按每次排序重编。
-- `id`：原平台条目 ID，整数或字符串。
-- `url`：可选HTTPS来源链接；本地输入可省略。`provider`可选来源名称。无链接隐藏跳转操作，有链接显示真实provider；兼容既有ParaTranz链接。
-- `label`：所属角色、能力或装备名；`title`：具体问题标题。
+- `id`：对应输入段落的稳定 ID；使用字符串，兼容既有整数标识。
+- `url`：可选HTTPS来源链接；本地输入可省略。`provider`可选来源名称。无链接隐藏跳转操作，有链接显示真实provider；未给名称时显示链接域名。
+- `label`：段落、章节或问题分类名称；`title`：具体问题标题。
 - `status`：`confirmed` 或 `uncertain`；`severity`：字符串等级。
 - `problem`、`suggestion`：判断及建议。
 - `original`、`translation`：完整本条原文和现译；未译用空字符串。
-- `original_focus`、`translation_focus`：默认展示的完整相关能力或规则段，不能只截关键词，也不能为了缩短而遗漏触发、成本、例外或限制。必须是对应全文的连续子串。
+- `original_focus`、`translation_focus`：默认展示的完整相关句段，不能只截关键词，也不能为了缩短而遗漏条件、例外或限制。必须是对应全文的连续子串。
 - `location`：简短位置，如正文第42条。
 
 跨段选取时另给 `original_segments` / `translation_segments` 字符串数组，每段必须是全文连续子串；对应 focus 必须恰好为数组以两个换行连接的结果。选择范围须由语义审阅者确定，不用长度截断代替。
@@ -23,9 +23,9 @@
 
 ## 阅读与分页
 
-默认桌面1366×768和1920×1080按视口高度分为紧凑标题、并列中英、问题建议、固定操作四区。字号不随内容变小。每次用实际 DOM 字体、宽度和区域高度测量分页，完整字符按顺序保留；长段显示明确页数。完整条目和相关依据在原阅读区切换并分页，不通过裁切或省略隐藏原文。
+默认桌面1366×768和1920×1080按视口高度分为紧凑标题、并列原文/译文、问题建议、固定操作四区。字号不随内容变小。每次用实际 DOM 字体、宽度和区域高度测量分页，完整字符按顺序保留；长段显示明确页数。完整条目和相关依据在原阅读区切换并分页，不通过裁切或省略隐藏原文。
 
-固定底部操作栏按顺序集中“上一条”“下一条”“完成，下一条”“转到ParaTranz”，不要把高频跳转分散到页头。来源链接随导航、筛选、完成、撤销及导入更新；无当前条目时移除href并设置aria-disabled与不可聚焦状态，避免跳转上一个词条。
+固定底部操作栏按顺序集中“上一条”“下一条”“完成，下一条”“转到来源”（仅输入自带链接时），不要把高频跳转分散到页头。来源链接随导航、筛选、完成、撤销及导入更新；无当前条目时移除href并设置aria-disabled与不可聚焦状态，避免跳转上一个词条。
 
 更多菜单收纳搜索、分类、已完成管理、进度导入导出、范围和出处。默认无网络请求；来源链接一律新标签页，设置 `noopener noreferrer`。完成只记录用户审阅进度，不修改源译文。
 
@@ -41,7 +41,7 @@
 
 输入可带 original_highlights / translation_highlights，元素 `{start,end,reason,text?}`。偏移是完整原文/现译的 Unicode code point 半开区间，按序且不重叠；text 若提供须与原切片一致。可用 original_focus_ranges / translation_focus_ranges（每项 `{start,end}`）明确选中哪个原文片段，逐项对应 segments 或单个 focus。重叠出现的同一字符串也属于歧义，没有明确范围时应拒绝猜测。空译文允许空 focus 锚点，但不允许空高亮。
 
-高亮先从全文映射到选段，再与当前页求交集；不执行全文关键词替换，不改变原文。漏译允许只有英文高亮；译文缺失仅作界面说明，不能捏造中文证据。使用安全文本节点和 mark 元素绘制，reason只作为提示文字。详细数据规则见 [data-contract.md](data-contract.md)。
+高亮先从全文映射到选段，再与当前页求交集；不执行全文关键词替换，不改变原文。漏译允许只有原文高亮；译文缺失仅作界面说明，不能捏造译文证据。使用安全文本节点和 mark 元素绘制，reason只作为提示文字。详细数据规则见 [paired-inputs.md](paired-inputs.md)。
 
 运行 `node tests/test_highlighting.js` 检查重复数字的特定出现位置、单侧遗漏、分段间隔、跨页范围、Unicode code point和逐字符还原；同时运行 `node tests/test_report_state.js` 保证保存/导入进度不受影响。这些模拟测试不替代真实浏览器视觉验收。
 

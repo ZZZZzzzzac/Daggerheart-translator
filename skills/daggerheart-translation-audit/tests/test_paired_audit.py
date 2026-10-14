@@ -1,4 +1,4 @@
-"""Offline coverage/provenance tests for the source-agnostic audit entry point."""
+"""Local paired-text review and evidence tests for the source-agnostic audit entry point."""
 from pathlib import Path
 import subprocess
 import sys
@@ -16,8 +16,8 @@ def sample():
                                                    'translation': '清洁之后。\n', 'location': 'Cleaning'}]}
 
 
-def snapshot():
-    return audit.normalize(sample(), captured_at='2026-10-14T07:00:00+00:00')
+def normalized_input():
+    return audit.normalize(sample())
 
 
 def review_no_issue(snap):
@@ -48,8 +48,21 @@ class PairedAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, text):
             audit.validate(snap, review)
 
+    def test_plain_input_needs_no_capture_or_source_metadata(self):
+        data = sample()
+        data['segments'][0]['provenance'] = {'page': '7', 'paragraph': '2'}
+        normalized = audit.normalize(data)
+        self.assertEqual(normalized['type'], 'paired-audit-input')
+        self.assertEqual(normalized['segments'][0]['provenance'], data['segments'][0]['provenance'])
+        for key in ('inputSources', 'capturedAt', 'snapshotSha256'):
+            self.assertNotIn(key, normalized)
+        self.assertNotIn('originalSha256', normalized['segments'][0])
+        report = audit.export_report(normalized, review_no_issue(normalized), 'plain-input')
+        self.assertNotIn('sourceCutoff', report)
+        self.assertEqual(report['inputSha256'], normalized['inputSha256'])
+
     def test_prepare_never_claims_review(self):
-        snap = snapshot()
+        snap = normalized_input()
         review = audit.prepare(snap)
         summary = audit.validate(snap, review)
         self.assertEqual(review['coverage'][0]['status'], 'unreviewed')
@@ -76,7 +89,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assertIn('clean-audit', render(report))
 
     def test_export_exact_text_without_provider_or_url(self):
-        snap = snapshot()
+        snap = normalized_input()
         report = audit.export_report(snap, reviewed_finding(snap), 'test')
         finding = report['findings'][0]
         self.assertNotIn('url', finding)
@@ -106,44 +119,43 @@ class PairedAuditTests(unittest.TestCase):
             audit.normalize(data)
 
     def test_duplicate_or_missing_coverage_rejected(self):
-        snap = snapshot(); review = review_no_issue(snap)
+        snap = normalized_input(); review = review_no_issue(snap)
         review['coverage'] *= 2
         self.assert_invalid(snap, review, 'Duplicate coverage')
         review['coverage'] = []
         self.assert_invalid(snap, review, 'every segment')
 
     def test_content_change_invalidates_review(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         data = sample(); data['segments'][0]['translation'] = '清洁之前。\n'
         revised = audit.normalize(data)
-        self.assert_invalid(revised, review, 'different snapshot')
-        review['snapshotSha256'] = revised['segmentsSha256']
+        self.assert_invalid(revised, review, 'different paired input')
+        review['inputSha256'] = revised['inputSha256']
         self.assert_invalid(revised, review, 'stale segment hash')
         review['coverage'][0]['segmentSha256'] = revised['segments'][0]['segmentSha256']
         self.assert_invalid(revised, review, 'stale finding segment hash')
 
     def test_metadata_or_alignment_change_requires_review(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         data = sample(); data['segments'][0]['alignmentNote'] = 'Now paired against the next paragraph.'
         revised = audit.normalize(data)
-        self.assert_invalid(revised, review, 'different snapshot')
-        self.assertEqual(audit.delta(snap, revised)['changed'][0]['fields'], ['alignment'])
+        self.assert_invalid(revised, review, 'different paired input')
 
-    def test_snapshot_tamper_rejected(self):
-        snap = snapshot(); review = review_no_issue(snap)
+    def test_normalized_input_tamper_rejected(self):
+        snap = normalized_input(); review = review_no_issue(snap)
         snap['segments'][0]['translation'] += '!'
-        self.assert_invalid(snap, review, 'stale translation hash')
-        snap = snapshot(); snap['segmentsSha256'] = '0' * 64
+        self.assert_invalid(snap, review, 'stale segment hash')
+        snap = normalized_input(); snap['inputSha256'] = '0' * 64
         self.assert_invalid(snap, review, 'collection hash')
 
     def test_claiming_review_requires_authored_fields(self):
-        snap = snapshot()
+        snap = normalized_input()
         for field, value in [('reviewer', ''), ('reviewedAt', '2026-10-14'), ('assessment', ''), ('alignment', 'unverified')]:
             review = reviewed_finding(snap); review['coverage'][0][field] = value
             self.assert_invalid(snap, review, 'reviewer|timezone|assessment|alignment')
 
     def test_unresolved_alignment_cannot_be_confirmed_or_complete(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         review['coverage'][0].update(alignment='unresolved', conclusion='uncertain')
         self.assert_invalid(snap, review, 'cannot support a confirmed')
         review['findings'][0]['status'] = 'uncertain'
@@ -152,7 +164,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assertEqual(summary['unresolvedAlignmentIds'], ['stable-key'])
 
     def test_exclusion_requires_scope_trace_and_is_not_semantic_review(self):
-        snap = snapshot(); review = audit.prepare(snap)
+        snap = normalized_input(); review = audit.prepare(snap)
         review['coverage'][0]['status'] = 'excluded'
         self.assert_invalid(snap, review, 'exclusion needs')
         review['coverage'][0]['reason'] = 'Outside the authorized review scope.'
@@ -177,7 +189,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assertIn('in-scope', report['emptyMessage'])
 
     def test_confirmed_requires_independent_support(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         del review['findings'][0]['second_pass']
         self.assert_invalid(snap, review, 'independent supporting')
         review = reviewed_finding(snap)
@@ -188,12 +200,12 @@ class PairedAuditTests(unittest.TestCase):
         self.assert_invalid(snap, review, 'independent supporting')
 
     def test_unreviewed_findings_rejected(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         review['coverage'][0].update(status='unreviewed', alignment='unverified', conclusion='', findingIds=[])
         self.assert_invalid(snap, review, 'lacks an actual semantic review')
 
     def test_findings_and_coverage_must_agree(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         review['coverage'][0]['findingIds'] = []
         self.assert_invalid(snap, review, 'do not match')
         review = reviewed_finding(snap); review['coverage'][0]['conclusion'] = 'no_issue'
@@ -202,7 +214,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assert_invalid(snap, review, 'duplicate finding_id')
 
     def test_evidence_and_focus_are_precise(self):
-        snap = snapshot()
+        snap = normalized_input()
         for field, value in [('text', 'After'), ('reason', ''), ('start', True), ('end', 1000)]:
             review = reviewed_finding(snap)
             review['findings'][0]['original_highlights'][0][field] = value
@@ -215,7 +227,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assert_invalid(snap, review, 'non-overlapping')
 
     def test_unlocalized_missing_text_does_not_need_fake_highlight(self):
-        snap = snapshot(); review = reviewed_finding(snap)
+        snap = normalized_input(); review = reviewed_finding(snap)
         finding = review['findings'][0]
         finding['translation_highlights'] = []
         self.assert_invalid(snap, review, 'explain why translation')
@@ -223,7 +235,7 @@ class PairedAuditTests(unittest.TestCase):
         self.assertTrue(audit.validate(snap, review)['completeReview'])
 
     def test_invalid_domains_or_stale_optional_text(self):
-        snap = snapshot()
+        snap = normalized_input()
         for field, value in [('status', 'resolved'), ('severity', 'catastrophic'), ('category', 'game_rule'), ('original', 'Different')]:
             review = reviewed_finding(snap); review['findings'][0][field] = value
             self.assert_invalid(snap, review, 'invalid|stale')
@@ -234,7 +246,6 @@ class PairedAuditTests(unittest.TestCase):
         row['translation'] = '🐈\r\n同。同。\r\n'
         snap = audit.normalize(data)
         self.assertEqual(snap['segments'][0]['original'], row['original'])
-        self.assertEqual(snap['segments'][0]['originalSha256'], audit.text_hash(row['original']))
         review = reviewed_finding(snap); f = review['findings'][0]
         f['original_highlights'] = [{'start': 9, 'end': 13, 'text': 'Same', 'reason': 'Second occurrence is the selected evidence.'}]
         f['translation_highlights'] = [{'start': 5, 'end': 6, 'text': '同', 'reason': 'Second occurrence.'}]
@@ -243,15 +254,6 @@ class PairedAuditTests(unittest.TestCase):
         report = audit.export_report(snap, review, 'unicode')
         self.assertEqual(report['findings'][0]['original_focus'], 'Same.')
         self.assertIn('unicode', render(report))
-
-    def test_diff_does_not_claim_resolution(self):
-        old = snapshot(); data = sample()
-        data['segments'][0]['translation'] = 'Changed'
-        data['segments'].append({'id': 'new', 'original': 'New', 'translation': ''})
-        result = audit.delta(old, audit.normalize(data))
-        self.assertEqual(result['added'], ['new'])
-        self.assertEqual(result['changed'], [{'id': 'stable-key', 'fields': ['translation']}])
-        self.assertIn('not proof of resolution', result['instruction'])
 
     def test_malformed_and_duplicate_key_json(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -274,17 +276,18 @@ class PairedAuditTests(unittest.TestCase):
         report = audit.export_report(snap, reviewed_finding(snap), 'provider')
         self.assertEqual(report['findings'][0]['provider'], 'Manual')
 
-    def test_whole_file_cli_preserves_bytes_and_never_aligns_lines(self):
+    def test_local_file_cli_preserves_text_and_never_aligns_lines(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); source, target = root/'source.txt', root/'target.txt'
             source.write_bytes(b'A\r\nB\r\n'); target.write_bytes('甲\n'.encode())
-            out = root/'snapshot.json'
+            out = root/'normalized_input.json'
             self.assertEqual(audit.main(['normalize', '--original-file', str(source), '--translation-file', str(target), '--out', str(out)]), 0)
             snap = audit.read_json(out)
             self.assertEqual(len(snap['segments']), 1)
             self.assertEqual(snap['segments'][0]['original'], 'A\r\nB\r\n')
             self.assertEqual(snap['segments'][0]['alignment']['method'], 'whole-document')
-            self.assertEqual(snap['inputSources'][0]['sha256'], audit.text_hash('A\r\nB\r\n'))
+            self.assertNotIn('inputSources', snap)
+            self.assertNotIn('capturedAt', snap)
             self.assertEqual(audit.main(['prepare', str(out), '--out', str(root/'review.json')]), 0)
             self.assertEqual(audit.main(['validate', str(out), str(root/'review.json')]), 1)
             self.assertEqual(audit.main(['normalize', '--original-text', 'x', '--translation-text', '', '--out', str(root/'empty.json')]), 0)
@@ -293,7 +296,7 @@ class PairedAuditTests(unittest.TestCase):
 
     def test_fixture_end_to_end_cli(self):
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp); snap = root/'snapshot.json'; report = root/'report.json'
+            root = Path(temp); snap = root/'normalized_input.json'; report = root/'report.json'
             fixture = BASE/'examples/consumer-review.json'
             self.assertEqual(audit.main(['normalize', '--pairs', str(BASE/'examples/consumer-pairs.json'), '--out', str(snap)]), 0)
             self.assertEqual(audit.main(['validate', str(snap), str(fixture)]), 0)

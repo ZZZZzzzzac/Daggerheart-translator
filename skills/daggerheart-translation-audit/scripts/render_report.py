@@ -18,12 +18,12 @@ def validate_link(value):
 def render(data):
     if data.get('schemaVersion') != 1 or not isinstance(data.get('reportId'), str) or not data['reportId']:
         raise ValueError('schemaVersion=1 and stable reportId are required')
-    if not isinstance(data.get('title'), str) or not isinstance(data.get('sourceCutoff'), str):
-        raise ValueError('title and sourceCutoff must be strings')
+    if not isinstance(data.get('title'), str):
+        raise ValueError('title must be a string')
     rows=data.get('findings')
     if not isinstance(rows,list):
         raise ValueError('findings must be an array')
-    for key in ('progressFormat','storagePrefix','notes','emptyMessage'):
+    for key in ('progressFormat','storagePrefix','notes','emptyMessage','sourceDescription','sourceCutoff'):
         if key in data and not isinstance(data[key],str):raise ValueError('Invalid optional text field')
     ids=set()
     for f in rows:

@@ -3,7 +3,7 @@ BASE=pathlib.Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('report_renderer',BASE/'scripts/render_report.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def sample():
     f=dict(finding_id='TEST-001',id=1,url='https://example.org/item/1',title='Example rule',label='Example ability',status='confirmed',severity='high',problem='Example issue',suggestion='Example correction',original='When you act, spend 1 resource.',translation='行动时，花费1资源。',original_focus='When you act, spend 1 resource.',translation_focus='行动时，花费1资源。',location='Example 1')
-    return dict(schemaVersion=1,reportId='synthetic-audit',title='Example report',sourceCutoff='Example snapshot',findings=[f])
+    return dict(schemaVersion=1,reportId='synthetic-audit',title='Example report',sourceCutoff='Legacy optional description',findings=[f])
 class RendererTests(unittest.TestCase):
     def test_round_trip_and_offline(self):
         d=sample();s=m.render(d);body=re.search(r'<script id="report-data" type="application/json">(.*?)</script>',s,re.S).group(1);self.assertEqual(json.loads(body),d);self.assertNotIn('<script src=',s);self.assertIn('target="_blank" rel="noopener noreferrer"',s)
@@ -59,5 +59,9 @@ class GenericRendererTests(unittest.TestCase):
     def test_related_reference_rejects_unsafe_urls(self):
         d=sample();d['findings'][0]['reference_evidence']={'text':'Context','url':'javascript:alert(1)'}
         self.assertRaises(ValueError,m.render,d)
+
+    def test_report_requires_no_source_or_capture_metadata(self):
+        d=sample();d.pop('sourceCutoff');d['findings'][0].pop('url')
+        self.assertIn('report-data',m.render(d))
 
 if __name__=='__main__':unittest.main()
