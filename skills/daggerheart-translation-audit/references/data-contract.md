@@ -30,6 +30,16 @@ findings 必填：finding_id（跨报告版本稳定且唯一）、id（string I
 
 校验器拒绝缺失覆盖、重复ID、纳入范围以外的问题、非独立确认、过时文本和没有官方证据的已确认源文问题。返回问题数、不同受影响词条数、未审ID；有未审项时 CLI 退出码1。该校验只在条目级拒绝范围外问题；partial的精确段落归属、证据是否足以支持结论，以及审阅者是否真的通读，仍由人工/AI语义复核确认。
 
+## 精准高亮（可选，兼容既有报告）
+
+每个发现可带 `original_highlights`、`translation_highlights`，数组元素为 `{start,end,reason}`。偏移基于该发现完整 `original` / `translation` 的 Unicode code point，范围为半开区间 `[start,end)`；不是UTF-8字节、JavaScript UTF-16单元、focus或分页内偏移。reason写该片段为何属于本问题的证据。可选text字段必须严格等于全文[start:end]切片，用于防止证据定位错位。数组按start升序、无重叠，start/end必须为整数且0≤start<end≤全文字符数。
+
+高亮只标该发现有问题的具体片段，不能对同一关键词或数字在全文全局染色。先定位完整能力段和问题证据，再选最小但足以表达差异的范围。数字错误应只覆盖相关数值及必要单位/条件；与本问题无关的同名术语保持不亮。源文导入错误亮实际串列/缺失对应位置，同时通过official_evidence解释。
+
+漏译可能只有英文存在证据：英文标遗漏内容，中文数组留空，问题说明明确“译文缺失对应内容”；不能在中文捏造文本或随意高亮邻句来凑双侧。译文多加内容同理，不强求每侧都有范围。没有自动可定位的证据就人工核对，不用整段高亮掩盖不确定性。
+
+全文和focus必须保持原字序及文本；focus及分段展示用对应全文位置映射，再与每页字符范围求交集绘制高亮。展示包可带original_focus_ranges / translation_focus_ranges，数组元素{start,end}使用同一全文code point坐标，按全文顺序且无重叠；每个范围依序对应original_segments / translation_segments的一个segment；若无segments，则只对应单个focus。空segment的focus锚点允许start==end（如未译侧[{start:0,end:0}]）；高亮范围仍不允许空区间。各切片用两个换行拼接必须严格等于对应focus。重复相同段落时必须提供此范围，不能默认匹配第一次。未提供范围时，renderer只允许每个focus segment在全文唯一出现，否则报错。分页后的全部文本拼接应严格还原输入，高亮跨页应保留两侧交集。数据校验器能查范围合法性，不能判断高亮选得是否准确，这仍需语义复核。
+
 ## 增量
 
 `diff baseline.json latest.json --out delta.json` 要求相同项目和相同选定文件集合，验证快照hash后输出 added、removed、changed（字段列表）。版本、时间、stage 等变化也要评估，不能只比较译文。变更是待复核线索，不自动给出已修结论。关联条目/邻段的影响由审阅者判断。

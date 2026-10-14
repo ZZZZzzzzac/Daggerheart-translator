@@ -164,6 +164,54 @@ class AuditDataTests(unittest.TestCase):
         data['coverage'][0]['record_sha256'] = a.digest(data['snapshot']['records'][0])
         with self.assertRaisesRegex(ValueError, 'Finding record hash'): a.validate(data)
 
+    def test_highlights_use_code_points_and_allow_one_sided_omission(self):
+        a.validate_highlights('A😀少一段', [dict(start=1, end=2, reason='emoji example')])
+        a.validate_highlights('', [])
+        data = self.audit(); f = self.finding()
+        f['original_highlights'] = [dict(start=5, end=6, reason='数值不一致')]
+        f['translation_highlights'] = []
+        data['findings'] = [f]
+        self.assertEqual(a.validate(data)['findings']['confirmed'], 1)
+
+    def test_highlight_ranges_reject_invalid_evidence(self):
+        bad = [None, {}, [None], [dict(start=True, end=2, reason='x')],
+               [dict(start=0, end=1.5, reason='x')],
+               [dict(start=-1, end=1, reason='x')],
+               [dict(start=2, end=2, reason='x')],
+               [dict(start=0, end=9, reason='x')],
+               [dict(start=0, end=1, reason=' ')],
+               [dict(start=2, end=3, reason='x'), dict(start=0, end=1, reason='x')],
+               [dict(start=0, end=2, reason='x'), dict(start=1, end=3, reason='x')]]
+        for spans in bad:
+            with self.subTest(spans=spans), self.assertRaises(ValueError):
+                a.validate_highlights('abc', spans)
+
+    def test_finding_invalid_highlight_is_rejected(self):
+        data = self.audit(); f = self.finding()
+        f['translation_highlights'] = [dict(start=0, end=999, reason='bad offset')]
+        data['findings'] = [f]
+        with self.assertRaisesRegex(ValueError, 'outside full text'): a.validate(data)
+
+    def test_highlight_text_assertion(self):
+        a.validate_highlights('A😀B', [dict(start=1, end=2, reason='x', text='😀')])
+        with self.assertRaisesRegex(ValueError, 'assertion'):
+            a.validate_highlights('A😀B', [dict(start=1, end=2, reason='x', text='B')])
+
+    def test_focus_ranges_reconstruct_selected_text(self):
+        data = self.audit(); f = self.finding()
+        f['original_focus_ranges'] = [dict(start=0, end=4), dict(start=7, end=11)]
+        f['original_segments'] = ['Lose', 'Hope']
+        f['original_focus'] = 'Lose\n\nHope'
+        data['findings'] = [f]
+        self.assertEqual(a.validate(data)['findings']['confirmed'], 1)
+        f['original_focus'] = 'invented'
+        with self.assertRaisesRegex(ValueError, 'reconstruct'): a.validate(data)
+
+    def test_empty_focus_anchor_for_untranslated_side(self):
+        a.validate_highlights('', [dict(start=0, end=0)], require_reason=False)
+        with self.assertRaises(ValueError):
+            a.validate_highlights('', [dict(start=0, end=0, reason='no invented evidence')])
+
 
 if __name__ == '__main__':
     unittest.main()

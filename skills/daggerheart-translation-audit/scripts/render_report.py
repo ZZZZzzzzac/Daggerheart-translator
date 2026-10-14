@@ -29,6 +29,34 @@ def render(data):
                 if not isinstance(pieces,list) or not all(isinstance(x,str) and x in f[lang] for x in pieces):raise ValueError('Focus segments must be exact source substrings')
                 if f[lang+'_focus']!='\n\n'.join(pieces):raise ValueError('Focus must match source segment join')
             elif f[lang+'_focus'] not in f[lang]:raise ValueError('Focus must be an exact source substring')
+        for lang in ('original','translation'):
+            full=f[lang]; hs=f.get(lang+'_highlights',[])
+            if not isinstance(hs,list):raise ValueError('Highlights must be arrays')
+            previous=0
+            for h in hs:
+                if not isinstance(h,dict) or any(not isinstance(h.get(k),int) or isinstance(h.get(k),bool) for k in ('start','end')):raise ValueError('Highlight offsets must be code-point integers')
+                start,end=h['start'],h['end']
+                if not 0<=start<end<=len(full) or start<previous:raise ValueError('Highlights must be in bounds, ordered and nonoverlapping')
+                if not isinstance(h.get('reason'),str) or not h['reason'].strip():raise ValueError('Highlight reason required')
+                if 'text' in h and h['text']!=full[start:end]:raise ValueError('Highlight text must equal exact source slice')
+                previous=end
+            parts=f.get(lang+'_segments',[f[lang+'_focus']]); ranges=f.get(lang+'_focus_ranges')
+            if ranges is not None:
+                if not isinstance(ranges,list) or len(ranges)!=len(parts):raise ValueError('Focus range/segment count mismatch')
+                previous=0
+                for r,part in zip(ranges,parts):
+                    if not isinstance(r,dict) or any(not isinstance(r.get(k),int) or isinstance(r.get(k),bool) for k in ('start','end')):raise ValueError('Invalid focus range')
+                    start,end=r['start'],r['end']
+                    if not 0<=start<=end<=len(full) or start<previous or full[start:end]!=part:raise ValueError('Focus range must anchor its exact source occurrence')
+                    previous=end
+            else:
+                previous=0
+                for part in parts:
+                    start=full.find(part)
+                    if part and full.find(part,start+1)!=-1:
+                        raise ValueError('Repeated focus text requires explicit focus_ranges; do not guess its occurrence')
+                    if start<previous:raise ValueError('Inferred focus ranges must preserve source order and not overlap')
+                    previous=start+len(part)
         for c in f.get('related_contexts',[]):
             if not all(isinstance(c.get(k),str) for k in ('label','original','translation')):raise ValueError('Bad related context')
             if c.get('url') and not c['url'].startswith('https://'):raise ValueError('Bad related URL')

@@ -125,6 +125,25 @@ def delta(old, new):
             'instruction': 'Re-review changed and related entries; changes do not prove resolution.'}
 
 
+def validate_highlights(text, ranges, require_reason=True):
+    """Half-open Unicode code-point ranges into the unchanged full source text."""
+    require(isinstance(ranges, list), 'Highlights must be a list')
+    previous_end = 0
+    for span in ranges:
+        require(isinstance(span, dict), 'Highlight must be an object')
+        start, end = span.get('start'), span.get('end')
+        require(type(start) is int and type(end) is int, 'Highlight offsets must be integers')
+        require(0 <= start <= end <= len(text) and (not require_reason or start < end),
+                'Highlight outside full text')
+        require(start >= previous_end, 'Highlights must be sorted and non-overlapping')
+        if require_reason:
+            require(isinstance(span.get('reason'), str) and bool(span['reason'].strip()),
+                    'Highlight needs an evidence-specific reason')
+        if 'text' in span:
+            require(span['text'] == text[start:end], 'Highlight text assertion does not match source')
+        previous_end = end
+
+
 def validate(data):
     require(data.get('schema_version') == 1, 'Unsupported audit schema')
     rows = index(data['snapshot'])
@@ -165,6 +184,16 @@ def validate(data):
         for field in ('finding_id', 'title', 'problem', 'suggestion', 'original', 'url'):
             require(isinstance(f.get(field), str) and bool(f[field]), 'Missing finding field: ' + field)
         require(isinstance(f.get('translation'), str), 'Missing translation (empty allowed)')
+        for side in ('original', 'translation'):
+            validate_highlights(f[side], f.get(side + '_highlights', []))
+            if side + '_focus_ranges' in f:
+                ranges = f[side + '_focus_ranges']
+                validate_highlights(f[side], ranges, require_reason=False)
+                pieces = [f[side][r['start']:r['end']] for r in ranges]
+                require(pieces == f.get(side + '_segments', [f.get(side + '_focus')]),
+                        'Focus ranges do not match selected segments')
+                require(f.get(side + '_focus') == '\n\n'.join(pieces),
+                        'Focus ranges do not reconstruct exact focus')
         if f['status'] != 'stale':
             require(f.get('snapshot_version') == rows[f['id']]['version'], 'Finding version is stale')
             require(f.get('record_sha256') == digest(rows[f['id']]), 'Finding record hash is stale')
