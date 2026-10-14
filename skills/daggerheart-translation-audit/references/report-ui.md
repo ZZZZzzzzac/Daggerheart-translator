@@ -4,7 +4,7 @@
 
 ## 输入 schemaVersion 1
 
-顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`findings` 数组（可为空）。可选 `notes`、`sourceDescription`（输入自带的说明）、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
+顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`findings` 数组（可为空）。可选 `progressNotice`（判断区常驻的简短进度边界提示）、`notes`、`sourceDescription`（输入自带的说明）、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
 
 每项字段（除注明可选者外均必需）：
 - `finding_id`：报告内唯一、跨版本稳定的字符串编号，不能按每次排序重编。

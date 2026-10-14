@@ -34,6 +34,7 @@ function paginateText(text,fit){const chars=Array.from(text);if(!chars.length)re
 if(typeof module!=='undefined'&&module.exports)module.exports={sourceAction,applySourceAction,createReview,paginateText,projectHighlights,pageHighlightRuns,focusRanges};
 if(typeof document!=='undefined'){
  const data=JSON.parse(document.getElementById('report-data').textContent);const el=id=>document.getElementById(id);const byId=new Map(data.findings.map(f=>[f.finding_id,f]));let storage=null,warning='',textPage=0,notePage=0,lastId=null;let enPages=[''],zhPages=[''],notePages=[''];let enHighlights=[],zhHighlights=[];
+ el('progressNotice').textContent=data.progressNotice?' · '+data.progressNotice:'';
  function warn(message){warning=message;el('storageWarning').hidden=false;el('storageWarning').textContent=message;el('moreButton').classList.add('warning');el('moreButton').textContent='保存警告';el('notice').textContent='本次进度可能未保存，请打开“保存警告”导出。'}
  try{storage=window.localStorage}catch(e){warn('浏览器存储不可用；当前页面进度仍有效，请导出JSON备份。')}
  const app=createReview(data.findings.map(f=>({id:f.finding_id,status:f.status,text:[f.finding_id,f.label,f.title,f.id,f.original,f.translation,f.problem,f.suggestion].join('\n')})),storage,warn,data);
@@ -52,7 +53,7 @@ if(typeof document!=='undefined'){
   pages();
  }
  el('sourceLink').onclick=event=>{if(el('sourceLink').getAttribute('aria-disabled')==='true')event.preventDefault()};
- el('previous').onclick=()=>{app.navigate(-1);render()};el('next').onclick=()=>{app.navigate(1);render()};el('complete').onclick=()=>{const s=app.snapshot();if(!s.current)return;app.setCompleted(s.current,!s.isCompleted);note(s.isCompleted?'已恢复待办':'已完成并从待办隐藏');render()};
+ el('previous').onclick=()=>{app.navigate(-1);render()};el('next').onclick=()=>{app.navigate(1);render()};el('complete').onclick=()=>{const s=app.snapshot();if(!s.current)return;app.setCompleted(s.current,!s.isCompleted);note(s.isCompleted?'已恢复待办':data.progressNotice||'已完成并从待办隐藏');render()};
  el('textPrev').onclick=()=>{textPage--;pages()};el('textNext').onclick=()=>{textPage++;pages()};el('notePrev').onclick=()=>{notePage--;pages()};el('noteNext').onclick=()=>{notePage++;pages()};el('contextMode').onchange=()=>{textPage=0;render()};
  el('moreButton').onclick=()=>{el('more').showModal();el('moreButton').setAttribute('aria-expanded','true')};el('closeMore').onclick=()=>el('more').close();el('more').addEventListener('close',()=>el('moreButton').setAttribute('aria-expanded','false'));
  el('view').onchange=()=>{app.filters({view:el('view').value});render()};el('status').onchange=()=>{app.filters({status:el('status').value});render()};el('query').oninput=()=>{app.filters({query:el('query').value});render()};el('clearFilters').onclick=()=>{el('query').value='';el('status').value='all';app.filters({query:'',status:'all'});render()};

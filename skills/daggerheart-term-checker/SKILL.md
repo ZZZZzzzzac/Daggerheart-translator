@@ -46,8 +46,9 @@ python ../Daggerheart-translator/skills/daggerheart-term-checker/scripts/strip_t
 ## 输出
 
 1. **stdout**：统计摘要。
-2. **`source/temp/_term_review_report.md`**：Markdown 表格。
-3. **`source/temp/_term_review_report.json`**：逐条 JSON 报告。
+2. **`source/temp/_term_review_report.html`**：默认人工审阅网页。
+3. **`source/temp/_term_review_report.md`**：保留兼容的 Markdown 表格。
+4. **`source/temp/_term_review_report.json`**：保留原字段的逐条 JSON 报告。
 
 默认表格列：
 
@@ -88,3 +89,25 @@ python strip_term_markers.py <项目目录>
 
 - 该报告的职责是把每个术语翻译决策显式列出来，供人工或 AI 逐条审阅。
 - 若 `_chunks/` 或 `_translated_chunks/` 目录不存在，脚本会报错退出。
+
+## HTML 人工审阅
+
+默认用 HTML 交给用户，不以纯文字表格代替。复用同仓库 `daggerheart-translation-audit` 的通用离线渲染器；此适配器只负责 main 现有术语报告的展示，不引入试验分支的术语机制或审批文件。
+
+- 每个术语出现位置仍独立保留，包括词面采用推荐者，不把其称为“语义正确”。
+- 并排展示完整 TARGET 原文/现译，标记只显示第一槽；精准高亮对应的实际出现位置，不做全局关键词替换。重复术语和相邻换序沿用现有 checker 对位，无法由脚本证明语义对齐。
+- 内容与判断区分别分页，全文保留；结构异常和缺失译文如实显示。TARGET 缺失时显示实际整个 chunk 文件，不编造上下文。
+- 底栏集中上一条、下一条、完成。当前输入是本地 chunk，没有网页来源时不显示虚构链接；出处显示实际相对文件路径。
+- “完成”仅记阅读进度，不修改译文，不批准术语，不代替手动模式的用户明确确认，也不触发清标记。检查与清标记的既有工作流不变。
+- 进度以当前全部 chunk 字节及报告内容绑定版本。内容变化后旧进度不沿用；生成时间和项目搬家不会单独改变内容身份。更多菜单可导入/导出相同报告版本的阅读进度；file:// 或存储不可用时须导出备份。
+
+```bash
+python check_terms.py <项目目录> --html-output <自定义路径.html>
+python -m unittest discover -s tests -v
+python -m unittest discover -s skills/daggerheart-translation-audit/tests -v
+node skills/daggerheart-translation-audit/tests/test_report_state.js
+node skills/daggerheart-translation-audit/tests/test_highlighting.js
+node skills/daggerheart-translation-audit/tests/test_source_action.js
+```
+
+HTML 输出不能覆盖源译文输入。结构异常时仍生成报告并保持原来的非零退出；没有术语不等于全文审校完成。自动化结构测试和模拟分页不能替代真实浏览器视觉验收。

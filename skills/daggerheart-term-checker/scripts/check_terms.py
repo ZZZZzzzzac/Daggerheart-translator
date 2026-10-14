@@ -1,7 +1,7 @@
 """Build a per-occurrence term review report from tagged chunks.
 
 Usage:
-    python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>]
+    python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>] [--html-output <report.html>]
 
 Reads:
     source/temp/_chunks/              -> source markers: 【原文｜推荐译文｜注释】
@@ -10,6 +10,7 @@ Reads:
 Writes:
     source/temp/_term_review_report.md
     source/temp/_term_review_report.json
+    source/temp/_term_review_report.html (reading progress only; no approval)
 
 Exit code:
     0 = report generated successfully
@@ -375,7 +376,7 @@ def _print_summary(report, md_path, json_path):
     print(f"JSON 报告已写入: {json_path}")
 
 
-def main(project_dir, output_path="", json_output_path=""):
+def main(project_dir, output_path="", json_output_path="", html_output_path=""):
     chunks_dir = os.path.join(project_dir, "source", "temp", "_chunks")
     trans_dir = os.path.join(project_dir, "source", "temp", "_translated_chunks")
 
@@ -392,6 +393,9 @@ def main(project_dir, output_path="", json_output_path=""):
     if not chunk_files:
         print("错误：_chunks/ 中没有 chunk 文件。")
         sys.exit(1)
+
+    from render_term_review import snapshot_inputs, write_html_report
+    html_snapshot = snapshot_inputs(project_dir)
 
     all_rows = []
     structural_anomalies = 0
@@ -442,6 +446,23 @@ def main(project_dir, output_path="", json_output_path=""):
     output_path = output_path or default_output_path(project_dir)
     json_output_path = json_output_path or default_json_output_path(project_dir)
 
+    if snapshot_inputs(project_dir) != html_snapshot:
+        raise ValueError("检查期间源译文变化，请重新生成报告")
+    html_output_path = html_output_path or os.path.join(project_dir, "source", "temp", "_term_review_report.html")
+    from pathlib import Path
+    html_path = Path(html_output_path)
+    destination = html_path.parent.resolve() / html_path.name
+    input_paths = set()
+    for name in html_snapshot:
+        input_path = Path(project_dir) / "source/temp" / name
+        # Protect both the input directory entry (which may be a symlink) and
+        # its target. The atomic HTML writer replaces the entry, not its target.
+        input_paths.add(input_path.parent.resolve() / input_path.name)
+        input_paths.add(input_path.resolve())
+    if destination in input_paths:
+        raise ValueError("HTML 输出不能覆盖原文或译文输入")
+    write_html_report(report, html_snapshot, html_output_path)
+    print(f"HTML 人工审阅报告已写入: {html_output_path}")
     write_md_report(report, output_path)
     write_json_report(report, json_output_path)
     _print_summary(report, output_path, json_output_path)
@@ -452,7 +473,7 @@ def main(project_dir, output_path="", json_output_path=""):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>]")
+        print("Usage: python check_terms.py <project_dir> [--output <report.md>] [--json-output <report.json>] [--html-output <report.html>]")
         sys.exit(1)
 
     project_dir = sys.argv[1]
@@ -466,4 +487,7 @@ if __name__ == "__main__":
         idx = sys.argv.index("--json-output")
         json_output_path = sys.argv[idx + 1]
 
-    main(project_dir, output_path=output_path, json_output_path=json_output_path)
+    html_output_path = ""
+    if "--html-output" in sys.argv:
+        html_output_path = sys.argv[sys.argv.index("--html-output") + 1]
+    main(project_dir, output_path=output_path, json_output_path=json_output_path, html_output_path=html_output_path)
