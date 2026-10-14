@@ -3034,19 +3034,11 @@
       "translation": "社群特性",
       "destination": "core",
       "source_ids": [
-        1052583481,
-        1052583480,
-        1052583485,
-        1052583477,
-        1052583276,
-        1052583277,
-        1052583405,
         1052583433,
-        1052583449,
-        1052583451
+        1052583434
       ],
       "finding_id": "A007",
-      "decision": "采用现行SRD2完整定义及中文惯例；不修改线上译文。"
+      "decision": "采用社群章节的community feature说明及COMMUNITY FEATURE标题，对应现译社群特性；不修改线上译文。"
     },
     {
       "term": "Specialization Feature",
