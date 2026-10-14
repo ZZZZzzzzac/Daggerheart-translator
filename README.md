@@ -35,6 +35,10 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 当前管线会在分块翻译后保留术语标记，先生成术语审阅报告，再批量清除标记并继续合并、校验、JSON 提取。
 
+## 现有译文审阅
+
+加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)，审阅已有 SRD、规则书或卡牌译文。工作流覆盖完整分页快照、范围去重、逐条语义检查、独立复核、官方源溯源、交付前增量回读和可保存进度的逐条报告。默认只读；报告与本地勾选不修改 ParaTranz。
+
 ## 注意事项
 
 1. 尽可能使用claude code或cli工具，codex会导致管线约束失效。
