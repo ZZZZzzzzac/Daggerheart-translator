@@ -14,3 +14,7 @@ project/<项目名>/
 1. 将待翻译的 PDF 或 MD 文件放入 `source/`
 2. 在项目根目录告诉 AI："加载 daggerheart-translation-pipeline skill，翻译 `source/<文件名>`"
 3. 管线产物全部在 `source/` 和 `source/temp/` 下
+
+## 项目术语
+
+项目独有的人名、地名、组织名及概念写入 `glossary/_glossary.json`，不要回填全局 `terms-core.json`。核心规则术语与六个官方战役框架名称沿用人工维护的核心表。`resources/scoped/` 中保留的历史条目可按本项目需要逐条选用，不默认导入。
