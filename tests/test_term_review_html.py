@@ -114,6 +114,31 @@ class TermHtmlTests(unittest.TestCase):
             self.run_report(html_output_path=str(source))
         self.assertEqual(source.read_bytes(), before)
 
+    def test_html_output_cannot_replace_an_input_symlink_or_its_target(self):
+        source = self.base / '_chunks/01.md'
+        target = self.project / 'actual-source.md'
+        source.rename(target)
+        source.symlink_to(target)
+        before = target.read_bytes()
+        for destination in (source, target):
+            with self.subTest(destination=destination), self.assertRaisesRegex(ValueError, '覆盖'):
+                self.run_report(html_output_path=str(destination))
+            self.assertTrue(source.is_symlink())
+            self.assertEqual(source.read_bytes(), before)
+            self.assertEqual(target.read_bytes(), before)
+        self.assertFalse((self.base / '_term_review_report.html').exists())
+
+    def test_existing_output_hardlink_is_replaced_without_changing_input(self):
+        source = self.base / '_chunks/01.md'
+        before = source.read_bytes()
+        target = self.base / '_term_review_report.html'
+        target.hardlink_to(source)
+        self.assertEqual(source.stat().st_ino, target.stat().st_ino)
+        self.run_report()
+        self.assertEqual(source.read_bytes(), before)
+        self.assertNotEqual(source.stat().st_ino, target.stat().st_ino)
+        self.assertTrue(target.read_text().startswith('<!doctype html>'))
+
     def test_changed_inputs_during_check_fail_before_new_output(self):
         original = snapshot_inputs
         calls = 0

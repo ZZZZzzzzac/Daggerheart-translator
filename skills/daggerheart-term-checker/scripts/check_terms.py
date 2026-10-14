@@ -452,7 +452,13 @@ def main(project_dir, output_path="", json_output_path="", html_output_path=""):
     from pathlib import Path
     html_path = Path(html_output_path)
     destination = html_path.parent.resolve() / html_path.name
-    input_paths = {(Path(project_dir) / "source/temp" / name).resolve() for name in html_snapshot}
+    input_paths = set()
+    for name in html_snapshot:
+        input_path = Path(project_dir) / "source/temp" / name
+        # Protect both the input directory entry (which may be a symlink) and
+        # its target. The atomic HTML writer replaces the entry, not its target.
+        input_paths.add(input_path.parent.resolve() / input_path.name)
+        input_paths.add(input_path.resolve())
     if destination in input_paths:
         raise ValueError("HTML 输出不能覆盖原文或译文输入")
     write_html_report(report, html_snapshot, html_output_path)
