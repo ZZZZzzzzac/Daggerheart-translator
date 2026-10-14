@@ -4,12 +4,12 @@
 
 ## 输入 schemaVersion 1
 
-顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`sourceCutoff`、非空 `findings` 数组。可选 `notes`、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
+顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`sourceCutoff`、`findings` 数组（可为空）。可选 `notes`、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
 
-每项必需字段：
+每项字段（除注明可选者外均必需）：
 - `finding_id`：报告内唯一、跨版本稳定的字符串编号，不能按每次排序重编。
 - `id`：原平台条目 ID，整数或字符串。
-- `url`：HTTPS 原条目链接。
+- `url`：可选HTTPS来源链接；本地输入可省略。`provider`可选来源名称。无链接隐藏跳转操作，有链接显示真实provider；兼容既有ParaTranz链接。
 - `label`：所属角色、能力或装备名；`title`：具体问题标题。
 - `status`：`confirmed` 或 `uncertain`；`severity`：字符串等级。
 - `problem`、`suggestion`：判断及建议。
@@ -19,7 +19,7 @@
 
 跨段选取时另给 `original_segments` / `translation_segments` 字符串数组，每段必须是全文连续子串；对应 focus 必须恰好为数组以两个换行连接的结果。选择范围须由语义审阅者确定，不用长度截断代替。
 
-可选 `related_contexts` 数组：`{label,original,translation,url?}`；可选 `official_evidence`：`{text,url}`，链接只能使用 HTTPS。完整关联通则和必要官方证据通过阅读区的“关联规则与官方依据”访问。
+可选 `related_contexts` 数组：`{label,original,translation,url?}`；可选 `reference_evidence`：`{text,url?}`，url可省略用于本地文档/页码依据，若有则只能使用 HTTPS；兼容旧键 `official_evidence`。完整关联上下文和必要参考依据通过阅读区的“关联上下文与依据”访问。
 
 ## 阅读与分页
 
@@ -44,3 +44,5 @@
 高亮先从全文映射到选段，再与当前页求交集；不执行全文关键词替换，不改变原文。漏译允许只有英文高亮；译文缺失仅作界面说明，不能捏造中文证据。使用安全文本节点和 mark 元素绘制，reason只作为提示文字。详细数据规则见 [data-contract.md](data-contract.md)。
 
 运行 `node tests/test_highlighting.js` 检查重复数字的特定出现位置、单侧遗漏、分段间隔、跨页范围、Unicode code point和逐字符还原；同时运行 `node tests/test_report_state.js` 保证保存/导入进度不受影响。这些模拟测试不替代真实浏览器视觉验收。
+
+空findings数组渲染为无待审问题视图，可用emptyMessage说明完整覆盖结果或未审缺口。空队列不等于自动审阅完成。原文与译文可以为任意语言，id可以为稳定字符串，不要求平台或数字ID。

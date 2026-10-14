@@ -2,7 +2,18 @@
 """Render a standalone, paginated translation-audit review report (standard library only)."""
 import argparse, html, json, pathlib
 
-REQUIRED = ('finding_id', 'id', 'url', 'title', 'label', 'status', 'severity', 'problem', 'suggestion', 'original', 'translation', 'original_focus', 'translation_focus', 'location')
+REQUIRED = ('finding_id', 'id', 'title', 'label', 'status', 'severity', 'problem', 'suggestion', 'original', 'translation', 'original_focus', 'translation_focus', 'location')
+
+def validate_link(value):
+    from urllib.parse import urlsplit
+    if not isinstance(value, str):raise ValueError('Source URL must be text')
+    if not value:return
+    try:
+        link = urlsplit(value)
+        valid = link.scheme == 'https' and link.hostname and not link.username and not link.password
+    except ValueError:
+        valid = False
+    if not valid:raise ValueError('Source links must be absolute HTTPS links without credentials')
 
 def render(data):
     if data.get('schemaVersion') != 1 or not isinstance(data.get('reportId'), str) or not data['reportId']:
@@ -10,9 +21,9 @@ def render(data):
     if not isinstance(data.get('title'), str) or not isinstance(data.get('sourceCutoff'), str):
         raise ValueError('title and sourceCutoff must be strings')
     rows=data.get('findings')
-    if not isinstance(rows,list) or not rows:
-        raise ValueError('findings must be a nonempty array')
-    for key in ('progressFormat','storagePrefix','notes'):
+    if not isinstance(rows,list):
+        raise ValueError('findings must be an array')
+    for key in ('progressFormat','storagePrefix','notes','emptyMessage'):
         if key in data and not isinstance(data[key],str):raise ValueError('Invalid optional text field')
     ids=set()
     for f in rows:
@@ -21,7 +32,9 @@ def render(data):
         ids.add(f['finding_id'])
         if f['status'] not in ('confirmed','uncertain'):raise ValueError('Invalid status')
         if any(not isinstance(f[k],str) for k in REQUIRED if k!='id'):raise ValueError('Finding fields must be strings except id')
-        if not f['url'].startswith('https://'):raise ValueError('Source links must use https')
+        for key in ('url', 'provider'):
+            if key in f and not isinstance(f[key], str):raise ValueError('Optional source fields must be strings')
+        if 'url' in f:validate_link(f['url'])
         if not isinstance(f['id'],(int,str)) or isinstance(f['id'],bool):raise ValueError('Invalid source id')
         for lang in ('original','translation'):
             pieces=f.get(lang+'_segments')
@@ -57,12 +70,16 @@ def render(data):
                         raise ValueError('Repeated focus text requires explicit focus_ranges; do not guess its occurrence')
                     if start<previous:raise ValueError('Inferred focus ranges must preserve source order and not overlap')
                     previous=start+len(part)
-        for c in f.get('related_contexts',[]):
-            if not all(isinstance(c.get(k),str) for k in ('label','original','translation')):raise ValueError('Bad related context')
-            if c.get('url') and not c['url'].startswith('https://'):raise ValueError('Bad related URL')
-        if f.get('official_evidence'):
-            c=f['official_evidence']
-            if not isinstance(c.get('text'),str) or not c.get('url','').startswith('https://'):raise ValueError('Bad official evidence')
+        contexts=f.get('related_contexts',[])
+        if not isinstance(contexts,list):raise ValueError('Related contexts must be an array')
+        for c in contexts:
+            if not isinstance(c,dict) or not all(isinstance(c.get(k),str) for k in ('label','original','translation')):raise ValueError('Bad related context')
+            if 'url' in c:validate_link(c['url'])
+        for field in ('reference_evidence', 'official_evidence'):
+            if f.get(field):
+                c=f[field]
+                if not isinstance(c,dict) or not isinstance(c.get('text'),str):raise ValueError('Bad reference evidence')
+                if 'url' in c:validate_link(c['url'])
     base=pathlib.Path(__file__).resolve().parents[1]/'assets'
     payload=json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('&','\\u0026').replace('<','\\u003c').replace('>','\\u003e').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
     values={'__TITLE__':html.escape(data['title']),'__CSS__':(base/'report.css').read_text(),'__JS__':(base/'report.js').read_text(),'__DATA__':payload}

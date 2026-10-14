@@ -1,4 +1,6 @@
-# 数据契约与命令
+# ParaTranz适配器数据契约（兼容既有流程）
+
+普通文本/文件输入请先使用 [paired-inputs.md](paired-inputs.md) 的通用入口；本文件仅适用于可选ParaTranz来源。以下旧命令、字段与审阅包继续兼容。
 
 所有示例 ID 仅作接口说明。真实工作数据不提交仓库。所有 JSON 为 UTF-8。
 

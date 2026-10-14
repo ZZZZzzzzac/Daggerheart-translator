@@ -34,4 +34,30 @@ class RendererTests(unittest.TestCase):
         d=sample();d['storagePrefix']={};self.assertRaises(ValueError,m.render,d)
     def test_compatible_storage_names_are_preserved(self):
         d=sample();d.update(reportId='stable-report',progressFormat='legacy-format',storagePrefix='legacy-format:stable-report:');s=m.render(d);self.assertIn('legacy-format:stable-report:',s)
+
+class GenericRendererTests(unittest.TestCase):
+    def test_local_pair_without_link_or_numeric_id(self):
+        d=sample();f=d['findings'][0];f.pop('url');f['id']='manual:section-a'
+        self.assertIn('manual:section-a',m.render(d))
+    def test_optional_provider(self):
+        d=sample();d['findings'][0]['provider']='Document portal'
+        self.assertIn('Document portal',m.render(d))
+    def test_zero_findings_is_not_a_fake_finding(self):
+        d=sample();d.update(findings=[],emptyMessage='All three source pairs reviewed; no findings.')
+        rendered=m.render(d)
+        body=re.search(r'<script id="report-data" type="application/json">(.*?)</script>',rendered,re.S).group(1)
+        self.assertEqual(json.loads(body)['findings'],[])
+        self.assertIn('All three source pairs reviewed',rendered)
+    def test_invalid_optional_links(self):
+        for url in ('https://','https://user:secret@example.org',None):
+            d=sample();d['findings'][0]['url']=url
+            self.assertRaises(ValueError,m.render,d)
+
+    def test_local_reference_without_public_url(self):
+        d=sample();d['findings'][0]['reference_evidence']={'text':'Local manual, page 2, revision 1'}
+        self.assertIn('Local manual, page 2',m.render(d))
+    def test_related_reference_rejects_unsafe_urls(self):
+        d=sample();d['findings'][0]['reference_evidence']={'text':'Context','url':'javascript:alert(1)'}
+        self.assertRaises(ValueError,m.render,d)
+
 if __name__=='__main__':unittest.main()

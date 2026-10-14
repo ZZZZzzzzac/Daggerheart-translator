@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "type": "paired-audit-review",
+  "snapshotSha256": "42f165dfa2a2eeb7f1f4e3a80ff80b7517ff0f7613ce7e1c50ecfa2696523672",
+  "coverage": [
+    {
+      "id": "cleaning-power",
+      "segmentSha256": "477be41f81d42a86ab71df19ffeac1a926f045e8430b03499f40a0ae577e79a5",
+      "status": "reviewed",
+      "alignment": "verified",
+      "reviewer": "AI semantic reviewer (synthetic example)",
+      "reviewedAt": "2026-10-14T07:10:52+00:00",
+      "assessment": "The source requires disconnecting power before cleaning. The translation explicitly says after cleaning, reversing the safety sequence.",
+      "conclusion": "findings",
+      "findingIds": [
+        "cleaning-order"
+      ]
+    },
+    {
+      "id": "pairing-button",
+      "segmentSha256": "5b8887f447f54dbeb76d7658b0d97cdd58e9e68e2b381038dd80e279946ec158",
+      "status": "reviewed",
+      "alignment": "verified",
+      "reviewer": "AI semantic reviewer (synthetic example)",
+      "reviewedAt": "2026-10-14T07:10:52+00:00",
+      "assessment": "Compared action, control, duration and result: press-and-hold is 按住, power button is 电源键, three seconds is 三秒, and pairing mode is 配对模式. No semantic issue found in this supplied instruction.",
+      "conclusion": "no_issue",
+      "findingIds": []
+    },
+    {
+      "id": "storage-safety",
+      "segmentSha256": "c54e09567fc69767917569db4080c5cd421a37af112f840e7112308fda002717",
+      "status": "reviewed",
+      "alignment": "verified",
+      "reviewer": "AI semantic reviewer (synthetic example)",
+      "reviewedAt": "2026-10-14T07:10:52+00:00",
+      "assessment": "The dry-storage instruction is preserved. The separate keep-away-from-children instruction is absent, so the second safety condition has been omitted.",
+      "conclusion": "findings",
+      "findingIds": [
+        "missing-child-safety"
+      ]
+    },
+    {
+      "id": "unsupported-service",
+      "segmentSha256": "e284e8f5aff359dd14f1a9a541c671f20e49cff63144dc4348ac467718e24635",
+      "status": "reviewed",
+      "alignment": "verified",
+      "reviewer": "AI semantic reviewer (synthetic example)",
+      "reviewedAt": "2026-10-14T07:10:52+00:00",
+      "assessment": "Checked the explicit unmatched target sentence against the complete synthetic source fixture. No source text supports lifetime free on-site repair; it is an unsupported added promise.",
+      "conclusion": "findings",
+      "findingIds": [
+        "added-service-promise"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "cleaning-order",
+      "id": "cleaning-power",
+      "segmentSha256": "477be41f81d42a86ab71df19ffeac1a926f045e8430b03499f40a0ae577e79a5",
+      "title": "清洁前后顺序被颠倒",
+      "status": "confirmed",
+      "severity": "high",
+      "category": "meaning",
+      "problem": "Before 要求先断电再清洁，译文“后”却要求清洁完再断电，反转了安全操作顺序。",
+      "suggestion": "将“清洁设备后”改为“清洁设备前”。",
+      "original_highlights": [
+        {
+          "start": 0,
+          "end": 6,
+          "text": "Before",
+          "reason": "The source makes disconnection a prerequisite to cleaning."
+        }
+      ],
+      "translation_highlights": [
+        {
+          "start": 4,
+          "end": 5,
+          "text": "后",
+          "reason": "This word changes before cleaning into after cleaning."
+        }
+      ],
+      "second_pass": {
+        "reviewer": "independent-consumer-audit-2026-10-14",
+        "decision": "support",
+        "reason": "独立先读配对文本核对：Before cleaning 译成“清洁设备后”，安全顺序反转；应在清洁前断电。"
+      }
+    },
+    {
+      "finding_id": "missing-child-safety",
+      "id": "storage-safety",
+      "segmentSha256": "c54e09567fc69767917569db4080c5cd421a37af112f840e7112308fda002717",
+      "title": "漏掉远离儿童的要求",
+      "status": "confirmed",
+      "severity": "high",
+      "category": "omission",
+      "problem": "原文的第二句要求将设备放在儿童接触不到的地方；译文只保留干燥存放要求。",
+      "suggestion": "补上“请将设备放在儿童接触不到的地方。”",
+      "original_highlights": [
+        {
+          "start": 33,
+          "end": 66,
+          "text": "Keep it out of reach of children.",
+          "reason": "This complete safety instruction has no translated counterpart."
+        }
+      ],
+      "translation_highlights": [],
+      "translation_absence_reason": "The error is an omitted sentence. The existing dry-storage translation is correct and should not be highlighted as wrong.",
+      "second_pass": {
+        "reviewer": "independent-consumer-audit-2026-10-14",
+        "decision": "support",
+        "reason": "独立先读配对文本核对：置于儿童接触不到处的整句要求被遗漏；干燥存放要求已保留。"
+      }
+    },
+    {
+      "finding_id": "added-service-promise",
+      "id": "unsupported-service",
+      "segmentSha256": "e284e8f5aff359dd14f1a9a541c671f20e49cff63144dc4348ac467718e24635",
+      "title": "增加了原文没有的维修承诺",
+      "status": "confirmed",
+      "severity": "high",
+      "category": "addition",
+      "problem": "完整的合成原文中没有终身免费上门维修承诺，译文却增加了这项服务保证。",
+      "suggestion": "删除这项无原文依据的服务承诺；若来自其他获准来源，应另行提供并核对依据。",
+      "original_highlights": [],
+      "translation_highlights": [
+        {
+          "start": 5,
+          "end": 15,
+          "text": "终身免费上门维修服务",
+          "reason": "The target adds a lifetime free on-site repair promise absent from the supplied source."
+        }
+      ],
+      "original_absence_reason": "This explicit unmatched translation has an empty original side; there is no source span to highlight.",
+      "second_pass": {
+        "reviewer": "independent-consumer-audit-2026-10-14",
+        "decision": "support",
+        "reason": "独立先读配对文本核对：原文显式为空，译文增加终身免费上门维修承诺，没有来源支持。"
+      }
+    }
+  ],
+  "fixtureNotice": "Synthetic demonstration only. Text is invented; review judgments were authored from the paired sentences, not generated by the validator."
+}

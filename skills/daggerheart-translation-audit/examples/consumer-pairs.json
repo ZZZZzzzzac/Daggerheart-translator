@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "title": "Synthetic consumer manual: English → Chinese",
+  "sourceLanguage": "en",
+  "targetLanguage": "zh-Hans",
+  "segments": [
+    {
+      "id": "cleaning-power",
+      "original": "Before cleaning the device, disconnect it from the power outlet.\n",
+      "translation": "清洁设备后，请拔下电源插头。\n",
+      "location": "Synthetic manual · Cleaning",
+      "alignmentNote": "The two sentences describe the same cleaning precaution."
+    },
+    {
+      "id": "pairing-button",
+      "original": "Press and hold the power button for three seconds to enter pairing mode.\n",
+      "translation": "按住电源键三秒，进入配对模式。\n",
+      "location": "Synthetic manual · Pairing",
+      "alignmentNote": "One source instruction corresponds to one translated instruction."
+    },
+    {
+      "id": "storage-safety",
+      "original": "Store the device in a dry place. Keep it out of reach of children.\n",
+      "translation": "将设备存放在干燥处。\n",
+      "location": "Synthetic manual · Storage",
+      "alignmentNote": "The whole source paragraph maps to the translated storage paragraph; the second sentence has no counterpart."
+    },
+    {
+      "id": "unsupported-service",
+      "original": "",
+      "translation": "本产品享有终身免费上门维修服务。\n",
+      "location": "Synthetic manual · Added service promise",
+      "alignmentNote": "Explicit unmatched translation. No corresponding source statement exists in this complete synthetic fixture."
+    }
+  ]
+}

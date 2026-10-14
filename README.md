@@ -35,9 +35,11 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 当前管线会在分块翻译后保留术语标记，先生成术语审阅报告，再批量清除标记并继续合并、校验、JSON 提取。
 
-## 现有译文审阅
+## 通用译文审阅
 
-加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)，审阅已有 SRD、规则书或卡牌译文。工作流覆盖完整分页快照、范围去重、逐条语义检查、独立复核、官方源溯源、交付前增量回读和可保存进度的逐条报告。默认只读；报告与本地勾选不修改 ParaTranz。
+加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)：拿到原文和译文，核对配对关系，逐段语义抓虫，再生成精准高亮、可保存进度的HTML供人审阅。接受普通文本、UTF-8文件或配对JSON，不需要ParaTranz账号、项目号或数字ID；平台适配和Daggerheart术语只是可选项目层。历史技能名保留兼容已有安装。
+
+脚本提供对齐/覆盖账本、证据与时效校验、HTML渲染，不会自动宣称完成语义审阅。默认只读，报告勾选不改源文档。见 [通用输入与端到端示例](skills/daggerheart-translation-audit/references/paired-inputs.md)。
 
 ## 术语表分层
 
