@@ -1,6 +1,8 @@
 # SRD2 新增术语来源（2026-10-14）
 
-仅补本次核实的 SRD2 新分类与机制：核心增加 36 条（326 → 362），另存 6 条仅供语义查阅的记录。旧核心 326 条、六个官方战役框架名称、两条框架机制、敌人专项表与匹配代码均保持原值。
+> 当前状态：后续独立清理后核心表为 338 条。下段计数描述首个新增提交；六个语境词现已确定条件译法，Ghost 的两个实体分开保留，详见文末及 `glossary-cleanup-decisions.json`。
+
+首个新增提交仅补本次核实的 SRD2 新分类与机制：核心增加 36 条（326 → 362），另存 6 条仅供语义查阅的记录。旧核心 326 条、六个官方战役框架名称、两条框架机制、敌人专项表与匹配代码均保持原值。
 
 中文逐项沿用本次 SRD2 快照中的当前译文，不代表官方中文定译，也不把外部平台导出当作核心表镜像。下表“现译”与原条目对齐；完整出处、短摘录、快照指纹和已出现的别名证据见 [来源索引](srd2-additions-source-map.json)。页码以官方 PDF 印刷页码为准。
 
@@ -8,10 +10,10 @@
 
 - 核心新增词全部区分大小写；复数与全大写别名只录已核实词形，不机械生成全部小写。独特的种族／社群名称保留原文已有的小写形式。
 - Dread、Juggernaut、Reanimated、Patron、Hexed 的普通小写裸词不自动标记。大小写仅收窄候选范围，不能判定实体；标题中的普通词、其他专名及正文含义仍须按语境核对。
-- [六条语境参考](srd2-context-only.json) 仅供翻译和语义审阅查阅，不是可合并术语数组；禁止作为默认、通配符或框架 scoped 输入。Hedge、Moon、Transformation、Focus、Favor 的实际用法待上下文确认；Ghost 的转变选项／敌人特性实体消歧尚未定案。
-- Ghost 转变选项现译“鬼魂”，既有 adversaries_features.json 的 Ghost → 幽灵形态不变。Favor 的资源现译“恩惠点”，同名特性标题为“恩惠”。
+- [六条语境参考](srd2-context-only.json) 仅供翻译和语义审阅查阅，不是可合并术语数组；禁止作为默认、通配符或框架 scoped 输入。Hedge、Moon、Transformation、Focus、Favor 按记录中的含义使用；Ghost 的转变选项／敌人特性分别使用鬼魂／幽灵形态。
+- Ghost 转变选项现译“鬼魂”，敌人特性“幽灵形态”保留于语境参考，不再由 adversaries_features.json 全局匹配。Favor 的资源现译“恩惠点”，同名特性标题为“恩惠”。
 - Vampire 与敌人表 VAMPIRE 同译“吸血鬼”，是明确保留的同译别名复用；不把转变规则套给敌人，不据此覆盖敌人表。
-- 本次不补旧版遗漏项，不改 reduce damage、旧译名分歧或替换器。未把带字面 X 的解释模板加入术语表。
+- 首个新增提交未补旧版遗漏项；后续清理已处理 25 个旧遗漏候选及 reduce damage 等歧义规则。替换器未改动。未把带字面 X 的解释模板加入术语表。
 
 ## 逐项来源
 
@@ -28,8 +30,8 @@
 | Martial Artist | 武艺达人 | 核心；按规则语境 | [12](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12) | [1052583292](https://paratranz.cn/projects/14448/strings?id=1052583292)（SRD2_SECTION_53） |
 | Pact of the Endless | 无尽之契 | 核心；按规则语境 | [27](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=27) | [1052583383](https://paratranz.cn/projects/14448/strings?id=1052583383)（SRD2_SECTION_144） |
 | Pact of the Wrathful | 愤怒之契 | 核心；按规则语境 | [27](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=27) | [1052583384](https://paratranz.cn/projects/14448/strings?id=1052583384)（SRD2_SECTION_145） |
-| Hedge | 树篱集会 | 语境参考；用法待定 | [29](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29) | [1052583395](https://paratranz.cn/projects/14448/strings?id=1052583395)（SRD2_SECTION_156） |
-| Moon | 月亮集会 | 语境参考；用法待定 | [30](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=30) | [1052583396](https://paratranz.cn/projects/14448/strings?id=1052583396)（SRD2_SECTION_157） |
+| Hedge | 树篱集会 | 语境参考；按含义使用 | [29](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29) | [1052583395](https://paratranz.cn/projects/14448/strings?id=1052583395)（SRD2_SECTION_156） |
+| Moon | 月亮集会 | 语境参考；按含义使用 | [30](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=30) | [1052583396](https://paratranz.cn/projects/14448/strings?id=1052583396)（SRD2_SECTION_157） |
 | Aetheris | 天辉族 | 核心；按规则语境 | [32](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=32) | [1052583406](https://paratranz.cn/projects/14448/strings?id=1052583406)（SRD2_SECTION_167） |
 | Elemental Kin | 元素裔 | 核心；按规则语境 | [33](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=33) | [1052583410](https://paratranz.cn/projects/14448/strings?id=1052583410)（SRD2_SECTION_171） |
 | Earthkin | 地裔 | 核心；按规则语境 | [33](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=33) | [1052583411](https://paratranz.cn/projects/14448/strings?id=1052583411)（SRD2_SECTION_172） |
@@ -43,19 +45,24 @@
 | Hearthborne | 炉火之民 | 核心；按规则语境 | [39](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=39) | [1052583437](https://paratranz.cn/projects/14448/strings?id=1052583437)（SRD2_SECTION_198） |
 | Reborne | 失乡之民 | 核心；按规则语境 | [40](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=40) | [1052583441](https://paratranz.cn/projects/14448/strings?id=1052583441)（SRD2_SECTION_202） |
 | Warborne | 战乱之民 | 核心；按规则语境 | [41](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=41) | [1052583447](https://paratranz.cn/projects/14448/strings?id=1052583447)（SRD2_SECTION_208） |
-| Transformation | 转变 | 语境参考；用法待定 | [42](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=42) | [1052583449](https://paratranz.cn/projects/14448/strings?id=1052583449)（SRD2_SECTION_210） |
+| Transformation | 转变 | 语境参考；按含义使用 | [42](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=42) | [1052583449](https://paratranz.cn/projects/14448/strings?id=1052583449)（SRD2_SECTION_210） |
 | Demigod | 半神 | 核心；按规则语境 | [43](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=43) | [1052583451](https://paratranz.cn/projects/14448/strings?id=1052583451)（SRD2_SECTION_212） |
-| Ghost | 鬼魂 | 语境参考；实体待定 | [43](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=43) | [1052583452](https://paratranz.cn/projects/14448/strings?id=1052583452)（SRD2_SECTION_213） |
+| Ghost | 鬼魂 | 语境参考；按实体使用 | [43](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=43) | [1052583452](https://paratranz.cn/projects/14448/strings?id=1052583452)（SRD2_SECTION_213） |
 | Reanimated | 复生者 | 核心；按规则语境 | [44](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=44) | [1052583453](https://paratranz.cn/projects/14448/strings?id=1052583453)（SRD2_SECTION_214） |
 | Shapeshifter | 变形者 | 核心；按规则语境 | [44](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=44) | [1052583454](https://paratranz.cn/projects/14448/strings?id=1052583454)（SRD2_SECTION_215） |
 | Vampire | 吸血鬼 | 核心；按规则语境 | [45](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=45) | [1052583455](https://paratranz.cn/projects/14448/strings?id=1052583455)（SRD2_SECTION_216） |
 | Werewolf | 狼人 | 核心；按规则语境 | [45](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=45) | [1052583456](https://paratranz.cn/projects/14448/strings?id=1052583456)（SRD2_SECTION_217） |
 | Combo Die | 连击骰 | 核心；按规则语境 | [12](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=12) | [1052583289](https://paratranz.cn/projects/14448/strings?id=1052583289)（SRD2_SECTION_50） |
 | Patron Die | 宗主骰 | 核心；按规则语境 | [26](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26) | [1052583380](https://paratranz.cn/projects/14448/strings?id=1052583380)（SRD2_SECTION_141） |
-| Focus | 专注点 | 语境参考；用法待定 | [13](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=13) | [1052583297](https://paratranz.cn/projects/14448/strings?id=1052583297)（SRD2_SECTION_58） |
-| Favor | 恩惠点 | 语境参考；用法待定 | [26](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26) | [1052583380](https://paratranz.cn/projects/14448/strings?id=1052583380)（SRD2_SECTION_141） |
+| Focus | 专注点 | 语境参考；按含义使用 | [13](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=13) | [1052583297](https://paratranz.cn/projects/14448/strings?id=1052583297)（SRD2_SECTION_58） |
+| Favor | 恩惠点 | 语境参考；按含义使用 | [26](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26) | [1052583380](https://paratranz.cn/projects/14448/strings?id=1052583380)（SRD2_SECTION_141） |
 | Patron | 宗主 | 核心；按规则语境 | [26](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26) | [1052583380](https://paratranz.cn/projects/14448/strings?id=1052583380)（SRD2_SECTION_141） |
 | Sphere of Influence | 权能领域 | 核心；按规则语境 | [26](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=26) | [1052583381](https://paratranz.cn/projects/14448/strings?id=1052583381)（SRD2_SECTION_142） |
 | Martial Stance | 武术架势 | 核心；按规则语境 | [13](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=13) | [1052583295](https://paratranz.cn/projects/14448/strings?id=1052583295)（SRD2_SECTION_56） |
 | Hexed | 诅咒 | 核心；按规则语境 | [29](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=29) | [1052583393](https://paratranz.cn/projects/14448/strings?id=1052583393)（SRD2_SECTION_154） |
 | Marked for Death | 死亡标记 | 核心；按规则语境 | [9](https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf#page=9) | [1052583277](https://paratranz.cn/projects/14448/strings?id=1052583277)（SRD2_SECTION_38） |
+
+
+## 2026-10-14 后续独立处理
+
+此前“待确认”的六个语境词现已按当前ParaTranz译法形成条件规则，不再要求用户逐项审阅：Hedge树篱集会、Moon月亮集会、Transformation转变、Focus专注点、Favor恩惠点；Ghost转变选项为鬼魂，敌人特性为幽灵形态。它们仍不进入全局字面匹配，原因是实体/词义不同，而不是中文尚未选择。详细清理记录见 `glossary-cleanup-decisions.json` 和 `contextual-usage.json`；早期362条计数及“旧326完全不变”只描述首个新增提交，不能作为后续清理状态。

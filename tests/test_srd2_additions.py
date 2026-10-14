@@ -72,13 +72,14 @@ class Srd2AdditionsTests(unittest.TestCase):
         cls.sources = {e['term']: e for e in cls.source_map['entries']}
         cls.context_doc = read_json(CONTEXT)
         cls.context = {e['term']: e for e in cls.context_doc['entries']}
-        cls.new = cls.core[326:]
+        cls.cleanup = read_json(REFERENCE / 'glossary-cleanup-decisions.json')
+        cls.new = [e for e in cls.core if e['term'] in set(EXPECTED) - CONTEXT_NAMES]
         spec = importlib.util.spec_from_file_location('srd2_replace_terms', PIPELINE / 'scripts/replace_terms.py')
         cls.matcher = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.matcher)
 
     def test_exact_counts_and_authorized_set(self):
-        self.assertEqual(len(self.core), 362)
+        self.assertEqual(len(self.core), self.cleanup['counts']['core_after'])
         self.assertEqual(len(self.new), 36)
         self.assertEqual(len(self.context), 6)
         self.assertEqual({e['term'] for e in self.new}, set(EXPECTED) - CONTEXT_NAMES)
@@ -90,25 +91,36 @@ class Srd2AdditionsTests(unittest.TestCase):
         self.assertEqual({e['finding_id'] for e in self.sources.values()},
                          {'A001', 'A002', 'A003', 'A004', 'A005', 'A006', 'A009'})
 
-    def test_every_legacy_record_and_raw_prefix_unchanged(self):
+    def test_every_legacy_record_has_authorized_traceable_disposition(self):
+        # First-addition immutability is historical. Owner subsequently authorized cleanup.
         self.assertEqual(len(self.baseline['legacy_records']), 326)
-        for old, current in zip(self.baseline['legacy_records'], self.core[:326]):
+        decisions = {e['term']: e for e in self.cleanup['legacy_decisions']}
+        active = {e['term']: e for e in self.core}
+        contextual = read_json(REFERENCE / 'contextual-usage.json')['entries']
+        for old in self.baseline['legacy_records']:
             with self.subTest(term=old['term']):
-                self.assertEqual(current['term'], old['term'])
-                self.assertEqual(digest(current), old['sha256'])
-        raw = CORE.read_text(encoding='utf-8')
-        decoder = json.JSONDecoder()
-        position = raw.index('[') + 1
-        for _ in range(326):
-            while raw[position] in ' \r\n\t,':
-                position += 1
-            _, position = decoder.raw_decode(raw, position)
-        self.assertEqual(hashlib.sha256(raw[:position].encode()).hexdigest(),
-                         self.baseline['legacy_json_prefix_sha256'])
+                d = decisions[old['term']]
+                self.assertEqual(d['before_sha256'], old['sha256'])
+                self.assertTrue(d['reason'])
+                if d['action'] in {'keep', 'normalize'}:
+                    self.assertEqual(digest(active[d['destination_term']]), d['after_sha256'])
+                    if d['action'] == 'keep':
+                        self.assertEqual(d['after_sha256'], old['sha256'])
+                elif d['action'] == 'context_reference':
+                    records = [x for x in contextual if x['term'] == old['term'] and x.get('usage') == 'context_required']
+                    self.assertEqual(len(records), 1)
+                    self.assertEqual(digest(records[0]['original_entry']), old['sha256'])
+                else:
+                    self.assertEqual(d['action'], 'merge_duplicate')
+                    self.assertIn(d['destination_term'], active)
 
     def test_existing_tables_and_matching_code_unchanged(self):
         for relative, expected_hash in self.baseline['protected_files'].items():
             with self.subTest(path=relative):
+                authorized = self.cleanup['authorized_protected_file_changes'].get(relative)
+                if authorized:
+                    self.assertEqual(authorized['before_sha256'], expected_hash)
+                    expected_hash = authorized['after_sha256']
                 self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected_hash)
 
     def test_all_six_official_framework_names_preserved(self):
@@ -141,7 +153,7 @@ class Srd2AdditionsTests(unittest.TestCase):
         self.assertEqual(favor['source_feature_title_translation'], '恩惠')
         self.assertEqual(favor['current_source_translation'], '恩惠点')
 
-    def test_context_reference_is_explicitly_provisional_and_not_matcher_schema(self):
+    def test_context_choices_are_resolved_and_not_matcher_schema(self):
         self.assertEqual(self.context_doc['usage'], 'read-only-context-reference')
         self.assertIs(self.context_doc['automatic_matching'], False)
         self.assertNotIsInstance(self.context_doc, list)
@@ -149,13 +161,13 @@ class Srd2AdditionsTests(unittest.TestCase):
             with self.subTest(term=term):
                 self.assertIs(entry['automatic_matching'], False)
                 self.assertNotIn('translation', entry)
-                self.assertIn(entry['status'], {'context_pending', 'entity_resolution_pending'})
+                self.assertIn(entry['status'], {'context_required'})
                 self.assertTrue(entry['domain'])
                 self.assertTrue(entry['context'])
-                self.assertEqual(entry['proposed_translation'], EXPECTED[term])
+                self.assertEqual(entry['resolved_translation'], EXPECTED[term])
                 self.assertEqual(entry['source_id'], self.sources[term]['source_id'])
         self.assertEqual(self.context['Ghost']['existing_mapping']['translation'], '幽灵形态')
-        self.assertEqual(self.context['Ghost']['status'], 'entity_resolution_pending')
+        self.assertEqual(self.context['Ghost']['status'], 'context_required')
 
     def test_context_reference_is_visible_to_writing_skill(self):
         writing = ROOT / 'skills/daggerheart-chinese-writing'
@@ -164,10 +176,10 @@ class Srd2AdditionsTests(unittest.TestCase):
         self.assertIn('REFERENCE.md', skill)
         self.assertIn('../daggerheart-translation-pipeline/resources/reference/srd2-context-only.json', reference)
         self.assertIn('不作为自动替换表', reference)
-        self.assertIn('实体选择仍待核对', reference)
+        self.assertIn('实体选择按已记录上下文执行', reference)
 
     def test_no_unhandled_active_alias_collision(self):
-        tables = [('terms-core.json', self.core[:326])]
+        tables = [('terms-core.json', [e for e in self.core if e not in self.new])]
         tables += [(p.name, read_json(p)) for p in RESOURCES.glob('adversaries_*.json')]
         overlaps = set()
         for entry in self.new:
@@ -209,7 +221,7 @@ class Srd2AdditionsTests(unittest.TestCase):
             entry = next(e for e in self.new if e['term'] == term)
             self.assertNotIn(term.lower(), forms(entry))
 
-    def test_default_pipeline_excludes_context_and_preserves_ghost_feature(self):
+    def test_default_pipeline_excludes_context_and_does_not_globally_override_ghost(self):
         skill = (PIPELINE / 'SKILL.md').read_text(encoding='utf-8')
         command = next(line for line in skill.splitlines() if line.startswith('python scripts/merge_terms.py'))
         self.assertNotIn('reference/', command)
@@ -238,11 +250,12 @@ class Srd2AdditionsTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             merged = read_json(output)
             names = {e['term']: e for e in merged}
-            self.assertFalse((CONTEXT_NAMES - {'Ghost'}) & names.keys())
-            self.assertEqual(names['Ghost']['translation'], '幽灵形态')
+            self.assertFalse(CONTEXT_NAMES & names.keys())
+            self.assertNotIn('Ghost', names)
             self.assertFalse(any(e['translation'] == '鬼魂' for e in merged))
             tagged = self.matcher.replace_terms('Ghost Patron Die Patron Dice VAMPIRE', str(output))
-            self.assertIn('【Ghost｜幽灵形态｜', tagged)
+            self.assertIn('Ghost ', tagged)
+            self.assertNotIn('【Ghost｜', tagged)
             self.assertIn('【Patron Die｜宗主骰｜', tagged)
             self.assertIn('【Patron Dice｜宗主骰｜', tagged)
             self.assertIn('【VAMPIRE｜吸血鬼', tagged)

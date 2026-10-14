@@ -2,87 +2,88 @@
   "schema_version": 1,
   "usage": "read-only-context-reference",
   "automatic_matching": false,
-  "status": "context_and_entity_choices_pending",
-  "instructions": "仅供翻译和语义审阅按所属规则上下文查阅；不是 merge_terms.py/replace_terms.py 输入，不加入默认命令、目录通配符或框架 scoped 表。",
+  "status": "resolved_contextual_usage",
+  "instructions": "按所列实体/机制语境选用已记录译法；非自动匹配输入，不加入默认命令或通配符。无需把这些正常语境选择逐条交给用户。",
   "entries": [
     {
       "term": "Hedge",
       "current_source_translation": "树篱集会",
-      "proposed_translation": "树篱集会",
-      "status": "context_pending",
+      "status": "context_required",
       "domain": "Witch 子职业",
       "context": "仅灵巫子职业标题或明确引用；普通树篱、树篱植物及其他名称不适用。",
       "automatic_matching": false,
       "source_id": 1052583395,
       "source_key": "SRD2_SECTION_156",
-      "pdf_page": 29
+      "pdf_page": 29,
+      "resolved_translation": "树篱集会"
     },
     {
       "term": "Moon",
       "current_source_translation": "月亮集会",
-      "proposed_translation": "月亮集会",
-      "status": "context_pending",
+      "status": "context_required",
       "domain": "Witch 子职业",
       "context": "仅灵巫子职业标题或明确引用；天体、月相、月光及其他专名不适用。",
       "automatic_matching": false,
       "source_id": 1052583396,
       "source_key": "SRD2_SECTION_157",
-      "pdf_page": 30
+      "pdf_page": 30,
+      "resolved_translation": "月亮集会"
     },
     {
       "term": "Transformation",
       "current_source_translation": "转变",
-      "proposed_translation": "转变",
-      "status": "context_pending",
+      "status": "context_required",
       "domain": "角色创建／转变分类",
       "context": "仅 SRD2 的角色转变分类及相关规则；普通变化、变形过程按上下文表达，不据此新增种族。",
       "automatic_matching": false,
       "source_id": 1052583449,
       "source_key": "SRD2_SECTION_210",
-      "pdf_page": 42
+      "pdf_page": 42,
+      "resolved_translation": "转变"
     },
     {
       "term": "Ghost",
       "current_source_translation": "鬼魂",
-      "proposed_translation": "鬼魂",
-      "status": "entity_resolution_pending",
+      "status": "context_required",
       "domain": "Transformation 选项",
-      "context": "转变选项当前源译为鬼魂；敌人特性 Ghost 仍沿既有表译幽灵形态。实体消歧方案尚未确定，不覆盖旧映射。",
+      "context": "转变选项和普通鬼魂实体译鬼魂；敌人同名Ghost被动特性译幽灵形态。二者规则分别遵循原文，不互相覆盖。",
       "automatic_matching": false,
       "source_id": 1052583452,
       "source_key": "SRD2_SECTION_213",
       "pdf_page": 43,
       "existing_mapping": {
-        "resource": "adversaries_features.json",
+        "resource": "reference/contextual-usage.json",
         "term": "Ghost",
         "translation": "幽灵形态",
-        "preserved": true
-      }
+        "preserved": true,
+        "automatic_matching": false
+      },
+      "resolved_translation": "鬼魂"
     },
     {
       "term": "Focus",
       "current_source_translation": "专注点",
-      "proposed_translation": "专注点",
-      "status": "context_pending",
+      "status": "context_required",
       "domain": "Brawler / Martial Artist 资源",
       "context": "仅格斗家武艺达人与武术架势规则中的可获得、花费资源；普通专注、焦点和其他特性名不适用。",
       "automatic_matching": false,
       "source_id": 1052583297,
       "source_key": "SRD2_SECTION_58",
-      "pdf_page": 13
+      "pdf_page": 13,
+      "resolved_translation": "专注点"
     },
     {
       "term": "Favor",
       "current_source_translation": "恩惠点",
-      "proposed_translation": "恩惠点",
-      "status": "context_pending",
+      "status": "context_required",
       "domain": "Warlock 资源",
       "context": "仅邪术师与宗主契约中的可获得、花费资源；源文同名特性标题译恩惠，资源译恩惠点；普通帮助、偏爱及其他实体不适用。",
       "automatic_matching": false,
       "source_id": 1052583380,
       "source_key": "SRD2_SECTION_141",
       "pdf_page": 26,
-      "source_feature_title_translation": "恩惠"
+      "source_feature_title_translation": "恩惠",
+      "resolved_translation": "恩惠点"
     }
   ]
 }

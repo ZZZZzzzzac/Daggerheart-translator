@@ -2,17 +2,17 @@
   "schema_version": 1,
   "baseline_commit": "eb21c181aca69fa8df78f35410d9de8781a1a6af",
   "snapshot": {
-    "name": "snapshot_latest.json",
-    "sha256": "5c8c95db9950a99fa876156d2498d4d4ba97e4595f0b8b582d231bea883536d0",
+    "name": "live_srd2.json",
+    "sha256": "7c106958a02e9da825f3cce600939e78656e8178d875c01fea13c592468f362a",
     "record_count": 1777,
-    "source": "ParaTranz 14448 SRD2 snapshot, reviewed 2026-10-14"
+    "source": "ParaTranz 14448 live read-only refresh 2026-10-14; no online writes"
   },
   "official_pdf": {
     "name": "DH_SRD_2_2026_08_25.pdf",
     "url": "https://www.daggerheart.com/wp-content/uploads/2026/08/DH_SRD_2_2026_08_25.pdf",
     "sha256": "55d8b92b7e58aa1da99a4a59aa77352483ef4fbda71baddb9af9bfc1f333bd2a"
   },
-  "scope": "42 SRD2 additions only: 36 active core records and 6 read-only contextual records. Existing glossary translations and matching code are unchanged. Current-source Chinese is not a declaration of official Chinese translation.",
+  "scope": "42 SRD2 concepts preserved: 36 active records, 6 resolved contextual references. Later glossary cleanup is separately recorded; Chinese follows current project practice, not an official Chinese edition.",
   "allowed_same_translation_alias_reuse": [
     {
       "new_term": "Vampire",
@@ -67,7 +67,7 @@
       "original_excerpt": "### ASSASSIN",
       "translation_excerpt": "### 刺客 ASSASSIN",
       "original_sha256": "f28e9c5af71b38dd7e974d50537faea4cb4814e1768417878af6b3219b1494db",
-      "translation_sha256": "73b13d0b53ba7eb8b4845d04014322351648630ff734508b0f065dbb83d05405",
+      "translation_sha256": "9cdd4ca7d6b6aabd01ba0848262cd1e23bca28452469d31b85e972d17bf32c9a",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -155,7 +155,7 @@
       "original_excerpt": "### WARLOCK",
       "translation_excerpt": "### 邪术师 WARLOCK",
       "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
-      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_sha256": "c19cfc06ca5df7dcebad82a7e48446bd43a650375fac313b7c8238696869860e",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -229,7 +229,7 @@
       "original_excerpt": "### EXECUTIONERS GUILD",
       "translation_excerpt": "### 执刑公会 EXECUTIONERS GUILD",
       "original_sha256": "94f6b3c65a631eb96b2b26e5c58b7e205441c1fe5d8b27d37dd0eed2ecd3608d",
-      "translation_sha256": "87a965901f9e4e10fd389ca1f3f498318809eabda3d345015ef6f89943726066",
+      "translation_sha256": "6bdd55f27d796a387a729e39f0a7c32893ca114250ff51be2f841a6cf26357b9",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -259,7 +259,7 @@
       "original_excerpt": "### POISONERS GUILD",
       "translation_excerpt": "### 毒师公会 POISONERS GUILD",
       "original_sha256": "195224cde42682efd5ac6b5cd5a4c014f4bcab4ac4e66a8229c6ca74cfb54a3d",
-      "translation_sha256": "e9176776a753c22b8786e3d2dcd3dd4559ad8ad9db3ded685f220b64a5e0e762",
+      "translation_sha256": "c86e19cd475cf5bb54afb12ca16a87f5198508ed39b438d02abd8db2bf32cfdd",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -319,7 +319,7 @@
       "original_excerpt": "### MARTIAL ARTIST",
       "translation_excerpt": "### 武艺达人 MARTIAL ARTIST",
       "original_sha256": "22f3b39c461fe7d025fecc82a7e4f1e0812fbe804fded3f3c49b8595310cd865",
-      "translation_sha256": "ea66dc0faff52d877f64c8dcee18d0d1283deb2d002e437171a02e7d66fc8737",
+      "translation_sha256": "d7b0641d1b3308ab3ba76b8648060d6880cc7d6cb98ffdf4f1089734fcc49cfc",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -418,7 +418,7 @@
       "original_sha256": "07c29c371364a3349c192b5ea4b6f2a3be031cdfd7ec17f97fc068321797709b",
       "translation_sha256": "79908b7d0c287a8f3b444401db694f6e96d0700945d3681eda05f69d75af9f0e",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Moon",
@@ -436,7 +436,7 @@
       "original_sha256": "1dd037ef23a941943cf21e1eaeb2917c85f30d6049fa3977031cc4b0b706a3d3",
       "translation_sha256": "288f3199870e8658daab8a86d677824fe08a137be8f767e7585a063567b19291",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Aetheris",
@@ -614,7 +614,7 @@
       "original_excerpt": "### SKYKIN",
       "translation_excerpt": "### 空裔  SKYKIN",
       "original_sha256": "cdcb50ee40e63d18a0974ac4d82c13fd2ce81ae45d41b4f1f84a5601517e16d6",
-      "translation_sha256": "6fed991147a85b24e286348c1596ee612726a05bd97c87238a3d1bafe478eeb9",
+      "translation_sha256": "23fa0c90aff6384914d710c11d2c9114b2cf4e264a4f739df7944ebd231b8562",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -806,7 +806,7 @@
       "original_excerpt": "### FROSTBORNE",
       "translation_excerpt": "### 霜雪之民 FROSTBORNE",
       "original_sha256": "666921fd8329aba60cb9c453c9746b99e784d508ec6b6e54db878ba713655a85",
-      "translation_sha256": "a5ca1ebeaf7d99d0a50510e7ec2ed032b3a0db682f3c426272cd970ee7311c0c",
+      "translation_sha256": "9473924158cd44d05efa62892fd4184682a7c5ba339ed850f64e27fe2adda759",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -956,7 +956,7 @@
       "original_sha256": "d01555f7209c83806cb0e49d75ce9bfd037c66bc25d29d07e7339ab6d7a77aa2",
       "translation_sha256": "ec4621d67ecc88a56b5d8fbd4a269a6d15cb1e972a8a003e7a47cf3437691300",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Demigod",
@@ -1018,7 +1018,7 @@
       "original_sha256": "923001e1b45286cfde79996f2b2c78cca24bda9afa29601b10590e0bd39edbac",
       "translation_sha256": "9e30859e3d6f19196930a4d83b3683bb3a0c53c3b487a649714853a591d67337",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Reanimated",
@@ -1108,7 +1108,7 @@
       "original_excerpt": "### VAMPIRE",
       "translation_excerpt": "### 吸血鬼 VAMPIRE",
       "original_sha256": "15bf35cdf96f2fbf77c46eb4be2e5d56ee9b108873b333178a68796910662353",
-      "translation_sha256": "239bd5a1ede84d606f39b854a16d9f104c8ef9b864eeeabc56b6799353b958fe",
+      "translation_sha256": "3c389bd64dfcdfe135942249d5256d653b995a55f6e5f6aae27ec321a7ba4515",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -1218,7 +1218,7 @@
       "original_excerpt": "relates to your patron’s sphere of influence, you can spend\na Favor to call upon their aid, rolling your Patron Die and\nadding its result to the total. Your Patron Die starts at a d6\nand increases to a d8  at level 5.",
       "translation_excerpt": "宗主契约 Patron’s Pact： 你向一个超自然实体——例如神祇、妖精或恶魔——献身以换取力量。将其名字写在角色卡上，然后与游戏主持人共同确定其权能领域（例如自然、混沌、智慧、恶作剧、爱、战争、正义或死亡）。在进行与宗主权能领域相关的动作掷骰前，你可以花费 1 恩惠点祈求其援助，掷出你的宗主骰并将其结果加入掷骰总值。你的宗主骰初始为 d6，并在 5 级时提升至 d8。",
       "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
-      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_sha256": "c19cfc06ca5df7dcebad82a7e48446bd43a650375fac313b7c8238696869860e",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -1250,7 +1250,7 @@
       "original_sha256": "8391dc95b531f437c003f012bb7b8f9abf319d40cfc46e5fe118bcf0c3b1bba7",
       "translation_sha256": "c35ef52e62dc4656d72711c30dd2ba334428e986b530cbf605be221b18bc0ad1",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Favor",
@@ -1266,9 +1266,9 @@
       "original_excerpt": "relates to your patron’s sphere of influence, you can spend\na Favor to call upon their aid, rolling your Patron Die and\nadding its result to the total. Your Patron Die starts at a d6\nand increases to a d8  at level 5.",
       "translation_excerpt": "宗主契约 Patron’s Pact： 你向一个超自然实体——例如神祇、妖精或恶魔——献身以换取力量。将其名字写在角色卡上，然后与游戏主持人共同确定其权能领域（例如自然、混沌、智慧、恶作剧、爱、战争、正义或死亡）。在进行与宗主权能领域相关的动作掷骰前，你可以花费 1 恩惠点祈求其援助，掷出你的宗主骰并将其结果加入掷骰总值。你的宗主骰初始为 d6，并在 5 级时提升至 d8。",
       "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
-      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_sha256": "c19cfc06ca5df7dcebad82a7e48446bd43a650375fac313b7c8238696869860e",
       "translation_status": "current_source_translation",
-      "semantic_status": "context_or_entity_pending"
+      "semantic_status": "resolved_by_context"
     },
     {
       "term": "Patron",
@@ -1284,7 +1284,7 @@
       "original_excerpt": "Those who’ve traded their lives—or perhaps even their\nsouls—to an otherworldly patron in exchange for incredible\npower are known as warlocks. Often, these mortals have\nreached a point of desperation that leads them to make this",
       "translation_excerpt": "那些以自身性命——甚至可能是灵魂——与异界宗主做交易，以换取非凡力量的人，被称为邪术师。这些凡人往往是走投无路之下才做出此等牺牲：他们希望保护自己或所爱之人、援助社群、寻求复仇、提升地位，或是进一步实现自己的野心。他们所恳求的强大存在与邪术师本身一样形形色色：神祇、精魂、恶魔，乃至连建立契约的凡人也未曾知晓的其他存在。每个存在都有其超凡力量的所能影响的领域，不过那些收集灵魂的宗主极少以仁慈著称。因此，邪术师的力量取决于他们与宗主之间维系的关系。尽管拥有骇人的魔法，邪术师仍可能发现自己不过是他人或他物手中的提线木偶。",
       "original_sha256": "03a869ab3b90bc618b668684cfd9b58eb175bd1f89059f0e27b23e2470108d16",
-      "translation_sha256": "20df94f7266ecdd665c898c13c77f385bbe9afc3d656e8e6157b5c4b847c2cf0",
+      "translation_sha256": "c19cfc06ca5df7dcebad82a7e48446bd43a650375fac313b7c8238696869860e",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
@@ -1416,7 +1416,7 @@
       "original_excerpt": "\nMarked for Death: On a successful weapon attack, you can\nmark a Stress to make the target Marked for Death. When\nyou deal damage to a target you’ve Marked for Death, add a",
       "translation_excerpt": "死亡标记 Marked for Death： 在使用武器成功进行攻击时，你可以标记 1 压力点令目标处于 *死亡标记*  状态。你对处于该状态的目标进行攻击时，在伤害掷骰中增加等同于你位阶数量的d4。",
       "original_sha256": "f28e9c5af71b38dd7e974d50537faea4cb4814e1768417878af6b3219b1494db",
-      "translation_sha256": "73b13d0b53ba7eb8b4845d04014322351648630ff734508b0f065dbb83d05405",
+      "translation_sha256": "9cdd4ca7d6b6aabd01ba0848262cd1e23bca28452469d31b85e972d17bf32c9a",
       "translation_status": "current_source_translation",
       "semantic_status": "named_rule_context_required",
       "active_forms": [
