@@ -190,7 +190,8 @@ python <term_checker_skill_root>/scripts/check_terms.py <项目目录>
 ```
 
 - 默认输出：
-  - `source/temp/_term_review_report.md`
+  - `source/temp/_term_review_report.html`（交给用户的审阅网页）
+  - `source/temp/_term_review_report.md`（兼容审计）
   - `source/temp/_term_review_report.json`
 - 报告逐条列出：`chunk`、`原文`、`推荐译文`、`当前译文`、`是否采用推荐`、`原文上下文`、`译文上下文`、`注释`、`异常`
 - `是否采用推荐` 仅是提示，不是硬规则；允许根据上下文保留非推荐译法
@@ -198,7 +199,7 @@ python <term_checker_skill_root>/scripts/check_terms.py <项目目录>
 - 若发现标记数量不一致、标记损坏、推荐译文槽位被改坏等结构异常，必须先修复再继续
 
 手动模式：
-- 向用户展示术语审阅报告
+- 向用户展示 HTML 术语审阅报告；网页“完成”只记阅读进度，不是译文批准或继续执行的确认
 - 用户人工审阅每条术语后，直接修改 `source/temp/_translated_chunks/` 中各标记的第一槽 `当前译文`
 - 用户确认审阅通过前，不得进入下一步
 

@@ -4,7 +4,7 @@
 
 ## 输入 schemaVersion 1
 
-顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`findings` 数组（可为空）。可选 `notes`、`sourceDescription`（输入自带的说明）、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
+顶层必需字段：`schemaVersion: 1`、稳定的 `reportId`、`title`、`findings` 数组（可为空）。可选 `progressNotice`（判断区常驻的简短进度边界提示）、`notes`、`sourceDescription`（输入自带的说明）、`progressFormat`、`storagePrefix` 均为字符串。既有报告升级时保持 reportId、进度格式及存储前缀不变，才能沿用旧进度。
 
 每项字段（除注明可选者外均必需）：
 - `finding_id`：报告内唯一、跨版本稳定的字符串编号，不能按每次排序重编。
@@ -21,9 +21,9 @@
 
 可选 `related_contexts` 数组：`{label,original,translation,url?}`；可选 `reference_evidence`：`{text,url?}`，url可省略用于本地文档/页码依据，若有则只能使用 HTTPS；兼容旧键 `official_evidence`。完整关联上下文和必要参考依据通过阅读区的“关联上下文与依据”访问。
 
-## 阅读与分页
+## 阅读与独立滚动
 
-默认桌面1366×768和1920×1080按视口高度分为紧凑标题、并列原文/译文、问题建议、固定操作四区。字号不随内容变小。每次用实际 DOM 字体、宽度和区域高度测量分页，完整字符按顺序保留；长段显示明确页数。完整条目和相关依据在原阅读区切换并分页，不通过裁切或省略隐藏原文。
+默认桌面1366×768和1920×1080按视口高度分为紧凑标题、并列原文/译文、问题建议、固定操作四区。字号不随内容变小。默认展示完整条目，原文与现译各自独立滚动；判断区同样滚动。不设框内上一页/下一页，不测量分页或缩短文本。相关选段、完整条目和关联依据仍可切换，所选内容完整保留。滚动框可键盘聚焦；切换卡片或内容范围时回到框顶，窗口缩放不重建正文或重置滚动。
 
 固定底部操作栏按顺序集中“上一条”“下一条”“完成，下一条”“转到来源”（仅输入自带链接时），不要把高频跳转分散到页头。来源链接随导航、筛选、完成、撤销及导入更新；无当前条目时移除href并设置aria-disabled与不可聚焦状态，避免跳转上一个词条。
 
@@ -33,16 +33,16 @@
 
 ## 验证要求
 
-运行 `python -m unittest discover -s tests`。还应对当前真实数据核对全部全文与focus来源，测试完成、撤销、刷新恢复、过滤搜索、空结果、全部完成及坏进度文件。分页测试必须确认页面拼接严格等于输入，包含Unicode和换行。
+运行 `python -m unittest discover -s tests`。还应对当前真实数据核对全部全文与focus来源，测试完成、撤销、刷新恢复、过滤搜索、空结果、全部完成及坏进度文件。正文渲染测试必须确认文本节点合并严格等于完整输入，包含长文、Unicode和换行，并核对两侧滚动相互独立。
 
-浏览器可用时，在1366×768与1920×1080测量 `document.documentElement.scrollHeight <= innerHeight`、所有当前文本区 `scrollHeight <= clientHeight`，逐页核验完整上下文可达。默认正常项不应需要滚轮。使用支持的浏览器工具；若被访问政策或环境限制阻断，不绕过，不把静态或模拟测试称作真实视觉验收，交付时明确局限。
+浏览器可用时，在1366×768与1920×1080测量 `document.documentElement.scrollHeight <= innerHeight`、文本框应保持视口内的有限高度且 `overflow:auto`；长文允许 `scrollHeight > clientHeight`，分别滚动到两侧末尾核验全文可达，一侧滚动不得带动另一侧。使用支持的浏览器工具；若被访问政策或环境限制阻断，不绕过，不把静态或模拟测试称作真实视觉验收，交付时明确局限。
 
 ## 精准高亮
 
 输入可带 original_highlights / translation_highlights，元素 `{start,end,reason,text?}`。偏移是完整原文/现译的 Unicode code point 半开区间，按序且不重叠；text 若提供须与原切片一致。可用 original_focus_ranges / translation_focus_ranges（每项 `{start,end}`）明确选中哪个原文片段，逐项对应 segments 或单个 focus。重叠出现的同一字符串也属于歧义，没有明确范围时应拒绝猜测。空译文允许空 focus 锚点，但不允许空高亮。
 
-高亮先从全文映射到选段，再与当前页求交集；不执行全文关键词替换，不改变原文。漏译允许只有原文高亮；译文缺失仅作界面说明，不能捏造译文证据。使用安全文本节点和 mark 元素绘制，reason只作为提示文字。详细数据规则见 [paired-inputs.md](paired-inputs.md)。
+高亮先从全文映射到选段，再映射到当前完整文本框；不执行全文关键词替换，不改变原文。漏译允许只有原文高亮；译文缺失仅作界面说明，不能捏造译文证据。使用安全文本节点和 mark 元素绘制，reason只作为提示文字。详细数据规则见 [paired-inputs.md](paired-inputs.md)。
 
-运行 `node tests/test_highlighting.js` 检查重复数字的特定出现位置、单侧遗漏、分段间隔、跨页范围、Unicode code point和逐字符还原；同时运行 `node tests/test_report_state.js` 保证保存/导入进度不受影响。这些模拟测试不替代真实浏览器视觉验收。
+运行 `node tests/test_highlighting.js` 检查重复数字的特定出现位置、单侧遗漏、分段间隔、完整正文范围、Unicode code point和逐字符还原；同时运行 `node tests/test_report_state.js` 保证保存/导入进度不受影响。另运行 `node tests/test_scroll_panes.js` 核验长文、全文默认显示、独立滚动状态及导航。上述模拟测试不替代真实浏览器视觉验收。
 
 空findings数组渲染为无待审问题视图，可用emptyMessage说明完整覆盖结果或未审缺口。空队列不等于自动审阅完成。原文与译文可以为任意语言，id可以为稳定字符串，不要求平台或数字ID。

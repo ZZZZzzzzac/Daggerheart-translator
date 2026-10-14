@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a standalone, paginated translation-audit review report (standard library only)."""
+"""Render a standalone, independently scrollable translation-audit review report (standard library only)."""
 import argparse, html, json, pathlib
 
 REQUIRED = ('finding_id', 'id', 'title', 'label', 'status', 'severity', 'problem', 'suggestion', 'original', 'translation', 'original_focus', 'translation_focus', 'location')
@@ -23,7 +23,7 @@ def render(data):
     rows=data.get('findings')
     if not isinstance(rows,list):
         raise ValueError('findings must be an array')
-    for key in ('progressFormat','storagePrefix','notes','emptyMessage','sourceDescription','sourceCutoff'):
+    for key in ('progressFormat','storagePrefix','notes','emptyMessage','sourceDescription','sourceCutoff','progressNotice'):
         if key in data and not isinstance(data[key],str):raise ValueError('Invalid optional text field')
     ids=set()
     for f in rows:

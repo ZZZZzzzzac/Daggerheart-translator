@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('node:assert/strict');
-const {projectHighlights, pageHighlightRuns, paginateText, focusRanges} = require('../assets/report.js');
+const {projectHighlights, pageHighlightRuns, focusRanges} = require('../assets/report.js');
 const full = '🙂 cost 2; cost 2.';
 const evidence = [{start:15,end:16,reason:'Only the second cost is wrong'}];
 const runs = pageHighlightRuns(full,evidence,0);
@@ -23,18 +23,10 @@ let cases = 0;
 for(let begin=0; begin<chars.length; begin++){
  for(let end=begin+1; end<=chars.length; end+=3){
   const hs=[{start:begin,end,reason:'synthetic evidence'}];
-  for(const capacity of [1,3,7,100]){
-   const pages=paginateText(text,t=>Array.from(t).length<=capacity);
-   let offset=0;const all=[];
-   for(const page of pages){
-    const rs=pageHighlightRuns(page,hs,offset);
-    assert.equal(rs.map(r=>r.text).join(''),page);
-    all.push(...rs);offset+=Array.from(page).length;
-   }
-   assert.equal(all.map(r=>r.text).join(''),text);
-   assert.equal(all.filter(r=>r.highlighted).map(r=>r.text).join(''),chars.slice(begin,end).join(''));
-   cases++;
-  }
+  const rs=pageHighlightRuns(text,hs,0);
+  assert.equal(rs.map(r=>r.text).join(''),text);
+  assert.equal(rs.filter(r=>r.highlighted).map(r=>r.text).join(''),chars.slice(begin,end).join(''));
+  cases++;
  }
 }
-console.log(`PASS evidence-specific occurrence, omission, focus projection and ${cases} lossless code-point pagination cases`);
+console.log(`PASS evidence-specific occurrence, omission, focus projection and ${cases} lossless full-text code-point highlight cases`);
