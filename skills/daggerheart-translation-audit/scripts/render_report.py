@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a standalone, paginated translation-audit review report (standard library only)."""
+"""Render a standalone, independently scrollable translation-audit review report (standard library only)."""
 import argparse, html, json, pathlib
 
 REQUIRED = ('finding_id', 'id', 'title', 'label', 'status', 'severity', 'problem', 'suggestion', 'original', 'translation', 'original_focus', 'translation_focus', 'location')
