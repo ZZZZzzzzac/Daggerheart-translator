@@ -3531,6 +3531,18 @@
     "skills/daggerheart-translation-pipeline/resources/scoped/beast-feast.json": {
       "before_sha256": "ed6b16433785b7cceb7d7ea19c57871d07cc56bbcf409bba9d17ea0d6ebe424d",
       "after_sha256": "f8eb61a1c743b718f0669dcd93bc739017e3fa62283fb27cba1ad797911e76ce"
+    },
+    "skills/daggerheart-term-checker/scripts/check_terms.py": {
+      "before_sha256": "efb9d17d1f31e7056e9974bef18b460730b0ec82426177efe4f030ecea89c270",
+      "after_sha256": "8b7480662f67b89f1fa99e02f847385ed9780131fa0d4189ce3fc7d9c90deedd",
+      "reason": "Already published owner-authorized HTML presentation/independent-scrolling changes, not glossary matching changes. Preserve upstream implementation.",
+      "source_commit": "496f4e5453a87dc6aa4a3b74de4c6633dad1630d"
+    },
+    "skills/daggerheart-translation-audit/scripts/render_report.py": {
+      "before_sha256": "0b17d0313cdf7b55f4140f94432adf54470ffe6ba5162e9f6123ddfc504647fe",
+      "after_sha256": "6490ce883cc7383e6c6af79d2bb2730d41571a813bf135f4ec70e646eb5c9175",
+      "reason": "Already published owner-authorized HTML presentation/independent-scrolling changes, not glossary matching changes. Preserve upstream implementation.",
+      "source_commit": "496f4e5453a87dc6aa4a3b74de4c6633dad1630d"
     }
   },
   "limits": [

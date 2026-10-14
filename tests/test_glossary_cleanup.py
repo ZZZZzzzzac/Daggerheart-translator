@@ -34,6 +34,9 @@ class CleanupTests(unittest.TestCase):
 
     def test_fixed_rest_phrase_is_preserved(self):
         self.assertEqual(self.by["Once per long rest"]["translation"], "每长休一次")
+        for source in ('Once per long rest', 'once per long rest'):
+            self.assertIn('【' + source + '｜每长休一次', self.tag(source))
+            self.assertNotIn('每次长休限一次', self.tag(source))
 
     def tag(self, text):
         return self.matcher.replace_terms(text, str(RES / 'terms-core.json'))
@@ -142,6 +145,13 @@ class CleanupTests(unittest.TestCase):
         baseline = read(ROOT / 'tests/fixtures/srd2-glossary-baseline.json')
         for relative, expected in baseline['protected_files'].items():
             if '/scripts/' in relative:
+                # The glossary base predates separately published HTML UI work.
+                # Keep its exact authorized upstream hashes without changing the
+                # matcher baseline or accepting unrecorded script edits.
+                authorized = self.decisions['authorized_protected_file_changes'].get(relative)
+                if authorized:
+                    self.assertEqual(authorized['before_sha256'], expected)
+                    expected = authorized['after_sha256']
                 self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected)
         # Known lexical limitations remain; this task does not claim a new matching mechanism.
         self.assertEqual(self.tag('_Hope_'), '_Hope_')
