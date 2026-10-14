@@ -1,0 +1,1338 @@
+{
+  "baseline_commit": "eb21c181aca69fa8df78f35410d9de8781a1a6af",
+  "legacy_record_count": 326,
+  "legacy_records": [
+    {
+      "term": "a group",
+      "sha256": "cb151421bf09d9b60bf12149ed126e923f7137a773716b2c2b448ff18d2c023b"
+    },
+    {
+      "term": "A session",
+      "sha256": "65d0cbd931b7368eac7a306755050c225e0f33db5c3392494ca772edc6a7b3ce"
+    },
+    {
+      "term": "a target",
+      "sha256": "598a846c34ed057f8316e81252426856a24e95ed09b3a898a9a173909b5e950b"
+    },
+    {
+      "term": "a target within",
+      "sha256": "6b705bfa123cc64c931e3c67f33d29dd18271c8a98e58456b112465a3902ee39"
+    },
+    {
+      "term": "Action",
+      "sha256": "f0bc8c02e47a806d60104bcf21dfb251fbe825a920b66201ca94f3cdd85544d5"
+    },
+    {
+      "term": "Action Roll",
+      "sha256": "bfb3c237c736a62f3ff55ba890f88ef9e4fcabc9dfc41bdd897624885bfe6b43"
+    },
+    {
+      "term": "advance",
+      "sha256": "e14db4da980195b753f5dc96d3ef60a4a603d31a6eb76cfa4a28c207a9cc4c75"
+    },
+    {
+      "term": "ADVANCEMENTS",
+      "sha256": "51f2489dd17285d76436e44c0400c4a4444df3dd6e138feff7d52438a4ba16de"
+    },
+    {
+      "term": "Advantage",
+      "sha256": "fab36314897298a6417098eeb62acb9e8dfb8b85b191c7869e4ba06c93dcfb27"
+    },
+    {
+      "term": "adversaries",
+      "sha256": "98d860f7c0f3e3e78d41780634d201baba0d0921793694c9cb76fc353ff1e67b"
+    },
+    {
+      "term": "Against",
+      "sha256": "27e828568fd5276d519489b21a14139cd49be8d59a8978433a4883e9df36749b"
+    },
+    {
+      "term": "Age of Umbra",
+      "sha256": "df9ed94c4e20cb4f9af4f18e9c67a302cd5654639808c08630c1b62c892730aa"
+    },
+    {
+      "term": "Agility",
+      "sha256": "4822f054db42d145e78ad2e94dd718e9bc4031d0016b330f8b4a2eb1e24d2a91"
+    },
+    {
+      "term": "Ally",
+      "sha256": "dd850cecf188fc19d8902c89c48d89d5871ae38ada4feb175a51704ef939a4b8"
+    },
+    {
+      "term": "ancestries",
+      "sha256": "4f069670312c4a660aa2b87a91b32ec5ada3d847704f091c3fffbefa95af9a99"
+    },
+    {
+      "term": "Answer any of the following background questions",
+      "sha256": "a953547314fcc8fdbdaed32905a4d84af803fb561e471826a83e06c1443a2be2"
+    },
+    {
+      "term": "Arc",
+      "sha256": "bfad0b2da4c6422fa957bd54c55982f5d6da9aae19dab1722fa60d5f7eba8b0c"
+    },
+    {
+      "term": "Arcana",
+      "sha256": "953cfd940ee3795785b3470f9f0c7dfe737bf0b47135b54d6b854c518e8a8037"
+    },
+    {
+      "term": "Archetypal Example",
+      "sha256": "f44238ef56aba336ca216aacb1ab4312d56b3b43a8a56ab55e1301666ca17d56"
+    },
+    {
+      "term": "Armor Score",
+      "sha256": "9fc9eb604946fb28431a575f70648209bc33f9e8b47f1d2174ad76b7405242df"
+    },
+    {
+      "term": "Armor Slot",
+      "sha256": "0a4ee81d84fd58d5471858c22b862522cf972d4d6f0d00cd35085a9b57deda84"
+    },
+    {
+      "term": "Armored",
+      "sha256": "2504512ec8ad3bd930154e6c9638f16730b8f43890257d027f4012c0f4642c0e"
+    },
+    {
+      "term": "Ask your fellow players one of the following",
+      "sha256": "2aa8fe2ae9b85a017c6c96352fef9ddc37b295fe3415c734521fcf287f02e08e"
+    },
+    {
+      "term": "Attack of Opportunity",
+      "sha256": "0c37276f222f27680e6e5b36c4b4c5e6c64787320e555efc28d7e75c19b99afc"
+    },
+    {
+      "term": "Attack Roll",
+      "sha256": "835eb379de97ddffdb6d3fd4032ce30d03c99c15d461620e8eef43c2838df457"
+    },
+    {
+      "term": "Background Questions",
+      "sha256": "3c0ee1276dfbd90d8b2c9151140fc31087153ee7cce6cbd836dcdebaa4dc4e2e"
+    },
+    {
+      "term": "bag",
+      "sha256": "21de0e3d30bf4707d0ba7e852c691c87aa49e6f6151b3afff354858c12c779e6"
+    },
+    {
+      "term": "Bard",
+      "sha256": "edf560c22baf0c5fb48101aa15c27d8a701d86254c7a791215b2ab1d966146b7"
+    },
+    {
+      "term": "Beast Feast",
+      "sha256": "d079eec15ccaa7406b2d7b9cf6fb3554cf89d93439102af4dca2ab7e0a163a1c"
+    },
+    {
+      "term": "Beastbound",
+      "sha256": "6111c6d33bbf2067a53cccf4310a2da7d81b42d67beafa7fa44ecfba50725eaf"
+    },
+    {
+      "term": "Beastform",
+      "sha256": "feedaf024600b8db2498cca73814221b45c4afc9c1a743a8b581bda9da78bdb7"
+    },
+    {
+      "term": "benefits",
+      "sha256": "cf248971c4e22a400e1bf389e9bacd33a0273fdb65cbf21a1a2baa9a1b70240b"
+    },
+    {
+      "term": "blade",
+      "sha256": "71421c3cf3c42d7032aaab53bd20d02ca59ab808480ed0d34bfd2ea0fdbdcb59"
+    },
+    {
+      "term": "Blaze of Glory",
+      "sha256": "ee43ef3c0e79c1b89f55166b5857744c1a5cc195d9e82788decb1e830166922a"
+    },
+    {
+      "term": "Blessed",
+      "sha256": "0216616a4757febb3d3c626b53b1a468f7e5ae43730fc2f395213481d2b1f161"
+    },
+    {
+      "term": "Bone",
+      "sha256": "f6dab5940528e182da81f2311cce63e7aa1adccd0062c69015192a92c6522b63"
+    },
+    {
+      "term": "bonus to",
+      "sha256": "049f4fd4ccbe99cf7e0624b760da4554862785bab71117ab46d57842f3a9f8fb"
+    },
+    {
+      "term": "Bruiser",
+      "sha256": "a8ac6fd2fab01733a43e7c0afbcf52507d72b1de4ac973ec3da09b77a74ccc4d"
+    },
+    {
+      "term": "BURDEN",
+      "sha256": "67da1dd312bcfc4d0f3f980e4382a7188ba9859b05af231f260da38a0a01a6bd"
+    },
+    {
+      "term": "Burning",
+      "sha256": "df4f8adfd587181cc57d12b8dcc0a4c8d7ad340c609727280047bd98469086b9"
+    },
+    {
+      "term": "Call of the Brave",
+      "sha256": "e92cd958df51f41218f9f6c47a9fcafb1f9b1c6f5cffdc82a563bc2f8186d689"
+    },
+    {
+      "term": "Call of the Slayer",
+      "sha256": "f3b27a43b49c8af56d9e99dbf12a546dd5eefbb6ddb78c8cafc97c7f731bcda5"
+    },
+    {
+      "term": "Campaign",
+      "sha256": "7f9dbb0b073bb2068b312e641aac07e97d368aaf39e6afe68e50a827c7219cab"
+    },
+    {
+      "term": "Campanion sheet",
+      "sha256": "d130fe54248f437543f9c5c4dc48ab2219e9fb78c1e723c7cccad839e19d7e5a"
+    },
+    {
+      "term": "card",
+      "sha256": "d738c741992a1ad33acb1be9539c1b5f079256294190a6f7277b621254a50e43"
+    },
+    {
+      "term": "CHAOS REALM",
+      "sha256": "75946f3fd0f685fa19754059f0dcedeb15b22866f19eaa17a6c077f1e0a6eb1b"
+    },
+    {
+      "term": "Character creation",
+      "sha256": "d84b24ead8c0adad3136bc6b4355d1d729c947daae61d29ac892991ad43e90b1"
+    },
+    {
+      "term": "Character guide",
+      "sha256": "9a917755d51db68cb5a05f471376627c6798124267e37978edf6372b61d30b68"
+    },
+    {
+      "term": "Character sheet",
+      "sha256": "2fc19040bd6e8b29d1d276a0b98a1a4b075021a7b6df8f95edf7510e0307d45e"
+    },
+    {
+      "term": "chest",
+      "sha256": "d24858d7a60000ab03ed4e7cdf208faac632ccfbdc0491ae144ab3361f9a9687"
+    },
+    {
+      "term": "CIRCLES BELOW",
+      "sha256": "27e99d3b40abf3d6edb6a789b59d0fa1160a54d54a574a594efdf5c4cea9585d"
+    },
+    {
+      "term": "Clank",
+      "sha256": "61c295aeba52dfa4c84011b6db510ef6c36e65b638cb1d725c45e562b8a9f376"
+    },
+    {
+      "term": "class",
+      "sha256": "959ab5a29a1b192c23972ccf4c22b4b4d6c6eed586f1815ca51c1e195e11293f"
+    },
+    {
+      "term": "Clear",
+      "sha256": "4740454398a9a9b11aa3812a498ee3e280ffbac89b7f5bacf819dc639c27928c"
+    },
+    {
+      "term": "Cloaked",
+      "sha256": "34ef28b3bf8ec4822954d09b154635c9927065e2cfdc659087f36ccb4e2a5524"
+    },
+    {
+      "term": "Close",
+      "sha256": "f4d724ae26786ae3e7af3afc0d9755acdca1112cbc664cc2354d0874a6157598"
+    },
+    {
+      "term": "Close Range",
+      "sha256": "d996beeec36d92a9aecd49a083cbd35af9ebdad6014784c63d4717fc3dbdc714"
+    },
+    {
+      "term": "Codex",
+      "sha256": "0facb1a78258f77a254fc1a71b42a781d8ffcc3a60189a47365a0b7138d730e5"
+    },
+    {
+      "term": "collateral damage",
+      "sha256": "217c7e1777053cf2cd2dadd07481d3dfc1b4078b9e99c272a09e4586476134ac"
+    },
+    {
+      "term": "Colossus of the Drylands",
+      "sha256": "0ff0d6bd7ab375cd038d1bb6c27a3a4df8c1f65926f13df26493a3172f834de2"
+    },
+    {
+      "term": "community",
+      "sha256": "3c67a4880f4fc2afacab658848d11a12c698de92c904aeb8d81b222c07c3aaab"
+    },
+    {
+      "term": "Companion",
+      "sha256": "79a4e5a62079b29a663143ffbda666cce4a437a83926d9a901c9b4b2054f2c72"
+    },
+    {
+      "term": "complication",
+      "sha256": "2c6f2fd0dc0aca2c4fb59611dd0a83859cd79e072b48ab8464e6ce5f084be039"
+    },
+    {
+      "term": "CONNECTIONS",
+      "sha256": "0f94bce24a7f3cb923379ade988ee8d46ab93fcca29423da44927dc7201ebe73"
+    },
+    {
+      "term": "consequence",
+      "sha256": "56f78af8a98fc0dbb23c959f27c807a5038522f47f090ac7d6d98fb693aac4f5"
+    },
+    {
+      "term": "core realms",
+      "sha256": "814661409f0d19f1eef5cc62855d382dd84b4c401ba18e513b0e7c9b8b82edb7"
+    },
+    {
+      "term": "Countdown",
+      "sha256": "d8e408fedf20986c776fa14e73553e5315ed6d700d9b14c66a5b2e2637f0e366"
+    },
+    {
+      "term": "Create",
+      "sha256": "ec540066a4ac39199efdeb7fd1b0b621e3ef4bc85f60c8478d52f134226e802d"
+    },
+    {
+      "term": "Creature",
+      "sha256": "a9ccdc9cd4bfb8208381d929f9a2e8b21c8c836cd2b9abdfd6d561f2c6490856"
+    },
+    {
+      "term": "Critical Success",
+      "sha256": "a618d9d31e3f244e5c9153f4b0ec796beb97716bff9cf5a60e322029dc086c6f"
+    },
+    {
+      "term": "Daggerheart",
+      "sha256": "d961a4c01de055105d479c5e88d2ae8672bf533abe54775a5d5d981f8d20ebd9"
+    },
+    {
+      "term": "Damage Die",
+      "sha256": "b77111ebe06432136c30b2e79257d191f3dd0c5b9a524dd5762213912f1370ec"
+    },
+    {
+      "term": "Damage Roll",
+      "sha256": "cae72e124412db4a78c53b3d129056f1c5ae1796bcb2c2d9b5435b27b84bf6f9"
+    },
+    {
+      "term": "Damage Threshold",
+      "sha256": "d5fc5a4029f80938d81206d2b7b4fd51b8bb7ad18c4e9a0d88a162309eacb19e"
+    },
+    {
+      "term": "Dazed",
+      "sha256": "ce4c2e8d287bf7724c1a05bfd755eac9a2a9397a16014f338e54ee59ad402226"
+    },
+    {
+      "term": "Death Move",
+      "sha256": "8418a61539d703092ef352d005369d23c0e544791370e43b35e2b9a9db8837e9"
+    },
+    {
+      "term": "Defeated Adversaries",
+      "sha256": "86b18e8249ec597da8663b9e8dd810a686880d620f7d0415790984ca02032876"
+    },
+    {
+      "term": "Difficulty",
+      "sha256": "a815bbca6fd1a8aca1a4d372fd27706ed7e25a1d3d07cb6786e7dc923d55f2d0"
+    },
+    {
+      "term": "direct damage",
+      "sha256": "e234da3451027c2fa8dd51d198c89aa1f516a5235a3916714ac47749e677c0a5"
+    },
+    {
+      "term": "Disadvantage",
+      "sha256": "1134780073f8852b33ac7dd5f5eb15b21bf4806f15a734801765e7088665fb95"
+    },
+    {
+      "term": "DISTINCTIONS",
+      "sha256": "708d9d540a6d7626aee0ca296519c088c9d0647f049085916f7bc987463045ed"
+    },
+    {
+      "term": "Divine Wielder",
+      "sha256": "faf9ca6700ef436dee87a106de4d89cd6c03dec121888d8f633008f967b2b3fa"
+    },
+    {
+      "term": "Domain",
+      "sha256": "dad71c392771fa90b07abcc6cf407ee4056ca80a98116e1f38f12d2456266375"
+    },
+    {
+      "term": "Domain Card",
+      "sha256": "67d0b089d5e4c987fdd2e06456e0cf0da3fa2d20eb9281cf8d65f98d801bc23b"
+    },
+    {
+      "term": "downtime",
+      "sha256": "8403ecad1820a36194f1cc586a91d04d8cf49598a9748be0cc0a7954302196bc"
+    },
+    {
+      "term": "Downtime Action",
+      "sha256": "fca887e58fa0fd2aab89949651fe351c849fc02656b86d61a545737ad8694531"
+    },
+    {
+      "term": "Downtime Move",
+      "sha256": "e6f8aaf92656d890ce8014427e09e0cd600643837e7db6e8c829308c595de0a2"
+    },
+    {
+      "term": "Drakona",
+      "sha256": "739cfe40b20255c9e2878574ade507c34379f1f6dfb8b453566b875225c80b73"
+    },
+    {
+      "term": "Druid",
+      "sha256": "86b95badccaf4698cc7a55811ca01fde2df4e62cb5d2137d968bde7976fd6ef4"
+    },
+    {
+      "term": "Duality Dice",
+      "sha256": "22269a8f8464f0677c8f457902033d6b6147d483e85c868eeb75828d2ba50be7"
+    },
+    {
+      "term": "Dwarf",
+      "sha256": "57de62f5aa138522b4b701b9cd4828a9dae9972b1a91f545042ce5a174429995"
+    },
+    {
+      "term": "Elemental Origin",
+      "sha256": "afded38c8d80fc351e372f75018ffcf8683c3c5a195433d1207fe68c0faacb82"
+    },
+    {
+      "term": "Elf",
+      "sha256": "1ecf8d214b0934c11fee77cd3de88725788eddd54a53625f493e458e885f14df"
+    },
+    {
+      "term": "Enraged",
+      "sha256": "e56c87f563b6fb17a4c3b13a3ba2c91be73aadedcc3f5a16a89493b5ef07cd9f"
+    },
+    {
+      "term": "environments",
+      "sha256": "758b84d07e10f8d2e402d84cf2018ebb27b054e606cc589b43c9224b2a845c85"
+    },
+    {
+      "term": "Evasion",
+      "sha256": "eb910790df7da50b8e68bf490dc2274f55d8fd13c3f9b66624880777cade3c1b"
+    },
+    {
+      "term": "Experience",
+      "sha256": "3ef2d20558ea863436f172883de8bc2be0b7374e19db85ee6da50c764c26fcd4"
+    },
+    {
+      "term": "Explorations",
+      "sha256": "933f9c0ee57789ae86a58704ca07b0a098c2c43bc86efa809e73a12da1cf2cfa"
+    },
+    {
+      "term": "Faeire",
+      "sha256": "446aea47bc0f8b5b79453beb3139f58df161801aac990778236b9bce985cc12a"
+    },
+    {
+      "term": "Failure with Fear",
+      "sha256": "7820ef6b64ac73b20ee3727e16e19c3c59b8d374842e779881bbf68baa7a112d"
+    },
+    {
+      "term": "Failure with Hope",
+      "sha256": "c805042438b64f2711ffa4142b13fb290828049d635a85e0cc0ea8156d553790"
+    },
+    {
+      "term": "Far",
+      "sha256": "3b8496c2f31c6d14611fdf688d1ab9d896e6849c3352d7abc7e8108f3136febb"
+    },
+    {
+      "term": "Far Range",
+      "sha256": "57f8080b2cfa9c8381a643da5fa353c850c950d1e9d7bfe602f2814e99548fc2"
+    },
+    {
+      "term": "Faun",
+      "sha256": "879edd03ef6d927d0182e04a83e4dcbc53602cf014fd356257e07b9c2ab3b18f"
+    },
+    {
+      "term": "Fear",
+      "sha256": "16d25e61ef141d82b9419680d4020ca4d80c5d3acbe30d20a10ef171dcd76d4a"
+    },
+    {
+      "term": "Fear Die",
+      "sha256": "7fa5c0ee51c16817e2c9b62d7b4b2eb5ce8a5882653bc41a15222c8f269d464e"
+    },
+    {
+      "term": "fear pool",
+      "sha256": "44f7a3074a3ae1b72805f1860cd5cc6894ee5dfa6689e806918ba271ff4efd23"
+    },
+    {
+      "term": "Features",
+      "sha256": "897068811295457d2d8325f58b90a6bdd92d19811db7ba1cf6d3dc5469e24bc7"
+    },
+    {
+      "term": "Finesse",
+      "sha256": "d5c5a6ffed2914d6f941e59690d592c574816b5a086a884e22ac33fbae5075a9"
+    },
+    {
+      "term": "firbolg",
+      "sha256": "a2cad9ec168cb5610e284a5cc5e48adcfecd4b7a6680d30a2319e74b705c026d"
+    },
+    {
+      "term": "Five Banners Burning",
+      "sha256": "ea7b95b03cf2f7f884518b1f4618d09ed90c477fc02d475883038a006ae861f3"
+    },
+    {
+      "term": "flavoring",
+      "sha256": "5c9249121849eb130d5a57d3734d23a84d49b5187c8ea4ae0eabca20f72fe677"
+    },
+    {
+      "term": "Floating",
+      "sha256": "2eb095280cfb227c16f7f4ac9bef2a9ad961da7717a4fc74f9315b9ec6bd3219"
+    },
+    {
+      "term": "force",
+      "sha256": "0f8b53760eba2c64ae599d9b4c21ea7c113658eb920bc9c3671f87f943ce8547"
+    },
+    {
+      "term": "Foundation Feature",
+      "sha256": "f3d64943492b4ff8d63303fbafa78aa32d7730131abfec79feee00dfaee9b687"
+    },
+    {
+      "term": "Frightened",
+      "sha256": "58e975c79841ec12dc042aca4211e082865ba1620485f8e5281802ee21caedbc"
+    },
+    {
+      "term": "Fungril",
+      "sha256": "c8d5d0efb6ea19112ff7669fb8e9213339c84b5b7876ea82f2a94d3b4aca1713"
+    },
+    {
+      "term": "Fungril Network",
+      "sha256": "41d1b69be51335bee1402b676632912d5828b700ca4d7e84c5d2f3f5e5f091b3"
+    },
+    {
+      "term": "Gain",
+      "sha256": "0d9f339af77a5b4709ba27c63a2b318ca7ce075f9dc01c6683cb33d082a8a27d"
+    },
+    {
+      "term": "Gain advantage on",
+      "sha256": "ab6a33d0d38adbcd289af141d854239ee6a25f20e14964674596d60b98029204"
+    },
+    {
+      "term": "Galapa",
+      "sha256": "23bff37ef8f7020efd21ea9ac45b971565db6b20b7177864c38f5e9d743fed41"
+    },
+    {
+      "term": "Giant",
+      "sha256": "96b66ba103e7b87f891343f2b83ad68dfb52a97aedca6ae6a29620a47a5f3df3"
+    },
+    {
+      "term": "GM",
+      "sha256": "96a3d330eb72a89422a67d084bed58e26b704791486e8fe1581509e357f1c99e"
+    },
+    {
+      "term": "GM Move",
+      "sha256": "9ed12eb15a45da4def2414ef82727d3c63cd0444559b37a10a18d696a3741d43"
+    },
+    {
+      "term": "GM turn",
+      "sha256": "b3afcf52d5dbd78b06e08797c024ede481cc4d95a0aa2a543236b2f5ac2740c3"
+    },
+    {
+      "term": "Goblin",
+      "sha256": "f7b4c59c0c58d60e6f88084caaadcb9a635a3305597e30e9cdf8d4553404a7a4"
+    },
+    {
+      "term": "Gold field",
+      "sha256": "9a921ab2a22e6a5415ce485fe8581c8af0985349901ffd994025288d16434067"
+    },
+    {
+      "term": "Grace",
+      "sha256": "bea34d15a2e07f5f3fc24e9bad631d4cdf4db3a96f07d1aed034ddd3bb40d217"
+    },
+    {
+      "term": "Grimoire",
+      "sha256": "10dbc0b2e586c1c7b59e0dbd6a187c3adaf3c99ec2e10003f05b5f0cc900d4f4"
+    },
+    {
+      "term": "group action roll",
+      "sha256": "92da6186462241ce3e9a1ba029e25e77d763489e7ffb5b218c24ce5becd34ed6"
+    },
+    {
+      "term": "Group Attack",
+      "sha256": "875eda1ea91b0dafaf694cd2e7631bd4f815a27bd773a12f8d66d7d3c1b3b13a"
+    },
+    {
+      "term": "Guardian",
+      "sha256": "28b0df931366eb83149bbab3879e6b446399ab9af384f062a75944e2e8bfb628"
+    },
+    {
+      "term": "Halfing",
+      "sha256": "85439fbd4916f2e6ad7d32b84f65894e108cb4c798cf93d8e0e88a88ead6874a"
+    },
+    {
+      "term": "Halfling",
+      "sha256": "0a6785ccd0705f73b0c0fada28fad50af945387a39d8a1172f870fbbe1ab726a"
+    },
+    {
+      "term": "handful",
+      "sha256": "fd3e854bd42204ab062aa0a69294e317364752d2d5a5421f65235cb8e1c08057"
+    },
+    {
+      "term": "heritage",
+      "sha256": "c844eacfa6f8974b9ce711ef528b1b6e0c0a99e70bd4e79b4c1598a29dcdb725"
+    },
+    {
+      "term": "Hidden",
+      "sha256": "51b61d0b22b3879a9279524077075dc5d637aabed24af63ae85dfd5fdb95b2c4"
+    },
+    {
+      "term": "Highborne",
+      "sha256": "a53aacee1ce3ebf7832d1b7dd3efc44f37447d9de9cfc5bbf418191d48292271"
+    },
+    {
+      "term": "Hit Point",
+      "sha256": "9cef908c4b6e68adf934ac768e738d9eb2a34f67689376630942fbb118bf4083"
+    },
+    {
+      "term": "Hope",
+      "sha256": "e6cbbab3b4b77c04bda6ffc0b846cd367e353b36e2af489beb1f886a9b391437"
+    },
+    {
+      "term": "Hope Die",
+      "sha256": "63262d7d4a9ecdf544ee5e632455645a84e94f767fbf123b07ac7d1d5bbaaaf6"
+    },
+    {
+      "term": "Hope Feature",
+      "sha256": "af142093fb29add3b4068f685468448a8f1b2f54215a3d5ccb6918b773240f56"
+    },
+    {
+      "term": "Hope Slot",
+      "sha256": "4a733657187b7f6adec27f0102e7c4be718ad83f4ae5c62ac54adfea773939af"
+    },
+    {
+      "term": "Horde",
+      "sha256": "a519c6da1fd3bdab0628eb13966772b090f04af108aa5dc19e3c00f45ca33cf2"
+    },
+    {
+      "term": "HP",
+      "sha256": "d845d408e8474e8ca20e85b43128fc98c95d34c15ee2006c2c8e0ec6426a3f51"
+    },
+    {
+      "term": "HP Slot",
+      "sha256": "35d815815e471bb8afeae9cc899dae776c363c97d6022a602171191d5ebc0e51"
+    },
+    {
+      "term": "Human",
+      "sha256": "5389380dbd7207e8a011454bd0eec5cc21f3c1a0b1e58b019d08045aca2bf674"
+    },
+    {
+      "term": "Immunity",
+      "sha256": "0b3487ac581d6b82e3c76dc18c051bfe6f0dc61442f27fc1bc25e4042aff153f"
+    },
+    {
+      "term": "Impulses",
+      "sha256": "b6d7c9850024226285c85e474da5822e4cabb704e997f16f619ac916eb3417d1"
+    },
+    {
+      "term": "Inferis",
+      "sha256": "7b40d524539e227e0249f4d0e6170d7e5c60179f59fdbff0f7b26527bd58b54e"
+    },
+    {
+      "term": "instead of their standard damage",
+      "sha256": "80a87cac470c32c49f60bcf05614ce045e0458c8f1d43dc6dffd15762c1c57e7"
+    },
+    {
+      "term": "Instinct",
+      "sha256": "29ec5a0b2e39147cf58832cd44d96f2ed9dfbcf6c73f70a3e0e6ec4f6e206cdc"
+    },
+    {
+      "term": "inventory",
+      "sha256": "4af70afb03223e29f5923c293a2b271a23c8dcaa4c298405cc4613128cb23df5"
+    },
+    {
+      "term": "Katari",
+      "sha256": "4d0c764b80aa51c36243ba1960edc25e0a771bc7869e9d76a8e23f579b15a683"
+    },
+    {
+      "term": "Knowledge",
+      "sha256": "31a1a66bf0abb35443ea6262a8e90e08ed7ead8498abe336491fb28ccb3d0c65"
+    },
+    {
+      "term": "kohd",
+      "sha256": "1bfb1a2fc24cab30f61224406516660223e7d8a5ae98245b3135d8678a1e1065"
+    },
+    {
+      "term": "Leader",
+      "sha256": "618d4e6e0deb9307892f0c726f1f7d742489bd41f23ffb948ab9f31ced9d928b"
+    },
+    {
+      "term": "Leaders",
+      "sha256": "c2bf0c4aa58d66af62326a384afbc73ce281fea6ba197c01c79dd6b8a76e517d"
+    },
+    {
+      "term": "Loadout",
+      "sha256": "27e403fef09534296667f6123d8a68762e49177ec32de479973e6a71cf2a5484"
+    },
+    {
+      "term": "Locked",
+      "sha256": "9df8a31745bde843b708d03d0898c89bf40ae3d932803e1032eb5ed23b992858"
+    },
+    {
+      "term": "long rest",
+      "sha256": "4ea0a80c074f37391c130f9d8fc19c356eba5e5418c3a7aac29ee32f970a044f"
+    },
+    {
+      "term": "Loreborne",
+      "sha256": "e9e146255929c5f5fe5b349db5e8d84da073ee04d9e224e3ff485ef7093c2b4d"
+    },
+    {
+      "term": "Magic Damage",
+      "sha256": "21f187aad7981516a2b09d637bea121f992960fccfe2247a77682d18bd9de58f"
+    },
+    {
+      "term": "Major Damage",
+      "sha256": "6e9e5b35f3d11f3f90d3ffd003776de48f9d7b683188ff4cf2dfd3ae867fcaf3"
+    },
+    {
+      "term": "Major threshold",
+      "sha256": "82f1475b7f31ad7169d47e566cbe61fefed94ea92c65d4fe37c9ee66ca285ee2"
+    },
+    {
+      "term": "Mark",
+      "sha256": "9df973915cd0992046ede40c25c7216d4f058fd74165f45d62f26a4f53cb4a31"
+    },
+    {
+      "term": "mark a stress",
+      "sha256": "c31012bd98c998144b0b28f8c0e8708b2b46b92953f1be84cdd4e478cd186748"
+    },
+    {
+      "term": "MASTERY",
+      "sha256": "81a6c1c1ee12d47d33200553c29c767c35c5225583fc6f975b33a333fdf8d9da"
+    },
+    {
+      "term": "Melee",
+      "sha256": "30e6081205b4e33cbe9c50a6fe17f6c3071b99dfa471582a567a1c89fe5d41d5"
+    },
+    {
+      "term": "Melee Range",
+      "sha256": "fd37fcd9136c0a6dd034fdd406357976a9fc0baf13c3911d0a6256b194e13693"
+    },
+    {
+      "term": "Midnight",
+      "sha256": "b5f6d73dd1bb241616f2e506ed3974fdfd8c99cb91aa3c9741d385ac3f9e1c82"
+    },
+    {
+      "term": "MINIATURES",
+      "sha256": "15b72015b545ee9e9b857a1d65337b4bd056123b4234110ae5b52b6dbea1f73e"
+    },
+    {
+      "term": "Minion",
+      "sha256": "59ce6f5f0fb441b585b7d9d70963733305f8b07346ac2cc68fd6e38d57fae216"
+    },
+    {
+      "term": "Minor Damage",
+      "sha256": "6705eae657208ac8a5a34a2811fc5f4d6dd0c9e2586d38c3759c9fba27507910"
+    },
+    {
+      "term": "Minor Threshold",
+      "sha256": "8d379d9ac5d9ac847627723bd31f5c78f66b1187185445ac3f143916a770aaf5"
+    },
+    {
+      "term": "Modifier",
+      "sha256": "50253d80c92216917d6c16d7129747e02a92c84712d82745b931aa9401e0065e"
+    },
+    {
+      "term": "Momentum",
+      "sha256": "b4cb4eb0c1b223c27251367a7dd5a59f407a48d580f262524e1e15778c4b6c39"
+    },
+    {
+      "term": "Motherboard",
+      "sha256": "94d3e110a981629c1bc83c2abf6238dd0ce9eee28bf3eb054f9d6d682ac8e190"
+    },
+    {
+      "term": "Motives & Tactics",
+      "sha256": "296fdd5c3d2dd5a417b41ef4b543b4130d2556b125b1823e86e456be8df5ddc4"
+    },
+    {
+      "term": "Move",
+      "sha256": "1f77d76fb7055175a5b3e96944e2d907ca43adc494a45b456552c5605168182d"
+    },
+    {
+      "term": "move up to",
+      "sha256": "a441c52f05668f4709e24786074ab6fcf43a09bae978feb0725e2d41c9126702"
+    },
+    {
+      "term": "Multiclass",
+      "sha256": "6eeb33c0ce6d8354eeb5be672b0cf80eae7e1d409d41d4ca112aa779e2041b0c"
+    },
+    {
+      "term": "Nightwalker",
+      "sha256": "526ed9fae50e54353b9db64ec6a6ff9a0ec43a80d182b5f5069a3a9f3c112250"
+    },
+    {
+      "term": "NPC",
+      "sha256": "29d208d87c613fb7ef31908f3b1fc8e652feb7013c7b32e1be26f0d5679ce7cf"
+    },
+    {
+      "term": "On a success",
+      "sha256": "906f388a24b1a607089cf724a0324887f5efc81ae9d557c3e743faf3d14ab8f4"
+    },
+    {
+      "term": "Once per long rest",
+      "sha256": "18dafbb020124c668dc840c46aa8dd2fdb3c1ab06b4c29209a252744355c37cb"
+    },
+    {
+      "term": "Once per rest",
+      "sha256": "cfb9325a35564b7af90db344abfb791b6376cdaeb34440ada007222d3997ddb9"
+    },
+    {
+      "term": "Once per scene",
+      "sha256": "c8533565365da842afe75be9056d54e4677c920cb62a647b17b4fe2fcdcc1bdd"
+    },
+    {
+      "term": "Once Per Session",
+      "sha256": "c94f2df3ccf144744b15e01324a7121f7a63dc927e2ead250682095993144f69"
+    },
+    {
+      "term": "once per short rest",
+      "sha256": "9c63a4413cb053222da94e999ccdef2aaddefb209c00921f2b9237fcb6d2cc08"
+    },
+    {
+      "term": "One-shot",
+      "sha256": "62b5179bec0c0c7227c0cf6e735b5c729ef468a8b6b51b87b44ddde60b067aa2"
+    },
+    {
+      "term": "Orc",
+      "sha256": "61a124270050ffa3214944dab6050ab0af4661f8465345a1d3b618ae39e3ce53"
+    },
+    {
+      "term": "Orderborne",
+      "sha256": "3ff6cab3c7351d85af2bd4d8c59f50e678a54187ec8cba19b8e51397a4d3188f"
+    },
+    {
+      "term": "Pack Tactics",
+      "sha256": "27ed0904f8c11e54632c3fd3c652751137b619ce14b5f1548fd8e673f0eee8a0"
+    },
+    {
+      "term": "Passive",
+      "sha256": "319e0b3ea972a6457ec86835720ddd3fef88b304e1e8a95b94e17a7d786eabf8"
+    },
+    {
+      "term": "PC",
+      "sha256": "ef47cd9574cf421f098b8ddefc7d8fb5394de9f540e26b86587252a669c93d10"
+    },
+    {
+      "term": "Phase Change",
+      "sha256": "b448f6f2a7d6b29de66470d6d2a93c5138a9a63f45958db27ee760dc8715290b"
+    },
+    {
+      "term": "Physical Damage",
+      "sha256": "7149e08ea7c45fa095984092efe07a2a64fde7802e47b25e927a4a354512b0ca"
+    },
+    {
+      "term": "Player Character (PC)",
+      "sha256": "2255b70c13dbbe644aed95f432c33794c03e5b79e228e6336af2a55f93a7393b"
+    },
+    {
+      "term": "PLAYER PRINCIPLES",
+      "sha256": "b7d67d99b208faf3504c32070b3d4bd30ca98cf36cc341ead865702cd6132438"
+    },
+    {
+      "term": "Poisoned",
+      "sha256": "792e98b70b9de8ba9163523e7d1e0aa21c61a34b132898c9243d97e2e5dad16b"
+    },
+    {
+      "term": "Prayer Dice",
+      "sha256": "cd0c68dcf46799f9b76a6276a24559966330bbbd8f07b375648ddde566383f97"
+    },
+    {
+      "term": "Presence",
+      "sha256": "0d71f946523236b32bd385eeaabba553a27e61dc9bd202ee345e0811b1c2bde2"
+    },
+    {
+      "term": "Primal Origin",
+      "sha256": "086cf11da4afa4631e766a39b61ae66b98bb836ffd735e7b10cc21b3ac1a66f8"
+    },
+    {
+      "term": "Primary Weapon",
+      "sha256": "283a767451c22e208f29a061c87d847a27e62d764d6afc120098e171b31c0587"
+    },
+    {
+      "term": "PRINCIPLE",
+      "sha256": "8cbf181b159a67d021c82774fe0ca5ecba3e454446827a5ea87766aaa6fd32f4"
+    },
+    {
+      "term": "Proficiency",
+      "sha256": "004ec39f5ee8233869d6a6fcf6eead0383effb233e724334b61df726025a9ead"
+    },
+    {
+      "term": "Progress Countdown",
+      "sha256": "fa4fb5ff006034dde396e6259a8c2a1c6a188348b8bc962addfaa4e4ad19f8fc"
+    },
+    {
+      "term": "Rally Die",
+      "sha256": "718d99c65ebd09d17e7f9497f43edd81ed216aa8b5f73c7cf60a9c7de7e6157b"
+    },
+    {
+      "term": "Ramp Up",
+      "sha256": "0d12abda19bae1a2679bd72463b972e75af736e67c1e8e997d136acfcb256d06"
+    },
+    {
+      "term": "Ranged",
+      "sha256": "f7b2a83fc9fcc27e35407874f8f845379b21fff137749c38cbd89e7dfd4bf8f0"
+    },
+    {
+      "term": "Ranger",
+      "sha256": "22e049bdc60a553bd06126c48a6dc0ddc752d51fa47837897d4756a80097740b"
+    },
+    {
+      "term": "Reaction",
+      "sha256": "6b75055e8b3beecdcf2dc95d345f66c0fc0dc857e7f966c9b89fab750c72d604"
+    },
+    {
+      "term": "Reaction Roll",
+      "sha256": "f5929ed5d272b58d6ac1fa50637a0f691eaa84419b34cb5584e5eaff5a75e3e6"
+    },
+    {
+      "term": "realms",
+      "sha256": "e5979eb7b3e92e9052ddb88107fbd9db25cbcfdeef7b1fda85229a195ee71964"
+    },
+    {
+      "term": "Recall Cost",
+      "sha256": "dcedfdfe44afd0cf6fd8a460eac72fdbf42046bd27a54615745d8e9c24ca4f0d"
+    },
+    {
+      "term": "reduce the severity by",
+      "sha256": "ef9763957ead8147ea3cec2d4b69364cdc4e90c8f9d5addecd3dc1ba6c04cddf"
+    },
+    {
+      "term": "reduce the damage by",
+      "sha256": "651ca5d57b451016d0a01e18f62350e1f160aafe45ae9a06bd46005eb7e54023"
+    },
+    {
+      "term": "Relative Strength",
+      "sha256": "77e25a50acd3c2ba0580b171c791ae0c9b0763b1b53a97296465ab0bb35d6fe2"
+    },
+    {
+      "term": "Relentless",
+      "sha256": "06e8d875df6e5449e51683b4e5d4034b6a0866b5e81f7d0da91c94e03ebdafba"
+    },
+    {
+      "term": "Resistance",
+      "sha256": "738e4110e207c6090a78e3ec90a575811dac74543dca9541b1b0f6f9d007b9c8"
+    },
+    {
+      "term": "Restrained",
+      "sha256": "84827a9cb1f7182355706d9bcf3efe3e90eef9aa7592ffd9478c1ed5a5b2b577"
+    },
+    {
+      "term": "result to",
+      "sha256": "6428b54f6b0c2ab44da21d7ef9bb6a8ed399de08c70bda19242c5fc6b8b0b9a4"
+    },
+    {
+      "term": "Ribbet",
+      "sha256": "753df8264d75052a9c33c423f91c0ea018c059aa49cd81d5c2c23acd86d72c1e"
+    },
+    {
+      "term": "Ridgeborne",
+      "sha256": "20df54de07f220390a6fb99ff458dd2b59cba87104e24ca31f193537b24b130b"
+    },
+    {
+      "term": "Rogue",
+      "sha256": "d79047856b0603770f60ba7a409ce0187f4a643b2b11ce9e34fc366f4f0b7e72"
+    },
+    {
+      "term": "Roll",
+      "sha256": "30dae6e826e2c49dfd93167ff4fcd35d609c229654a54d22d4a2fdce378df91d"
+    },
+    {
+      "term": "Roll with Fear",
+      "sha256": "97f25833b9bfc13239f9b794d3b69c36162b587dadd8d7f46f29edd0651e0e6d"
+    },
+    {
+      "term": "Roll with Hope",
+      "sha256": "4f24e980ffa44e6b73a112d002f67460c8a4b5053a93d092affbec4c109da054"
+    },
+    {
+      "term": "Rounding Up",
+      "sha256": "fa4d7d6b3c9c80c8e5f321a8ec7bcb84d983b3af114511454e3a081ad62abceb"
+    },
+    {
+      "term": "running",
+      "sha256": "fa62d799f9b08873d40772267ee13d488e25dc640f9610edbd5fd175a6e57c96"
+    },
+    {
+      "term": "Sage",
+      "sha256": "409a4018e7b44e514c571833dbc30e6ff2927fb73d8498a63c787871c9017bb3"
+    },
+    {
+      "term": "Scar",
+      "sha256": "491eeebbef19f9f8081f74a32250154ca630f3cffafbe7b5b393b8443ed7f577"
+    },
+    {
+      "term": "School of Knowledge",
+      "sha256": "21cbe7fa272001652a97d53f029aeaeb3692ec3a36b007e85d8ec4dc0a45ef9d"
+    },
+    {
+      "term": "School of War",
+      "sha256": "72663cdcea845e35f280800151550ad290d0f514558dbf1ebe0e13e60f9f7482"
+    },
+    {
+      "term": "Seaborne",
+      "sha256": "3c77cb5074e00be018ba15f1c9eca35b8e13a5ad30c927c60c8c2b044bf01891"
+    },
+    {
+      "term": "Secondary Weapon",
+      "sha256": "7e2a16268cf58a3778dc1c6b83d6790454fb5a330cc6c179b2bbd56a65435275"
+    },
+    {
+      "term": "Segment",
+      "sha256": "3d3c90382f5120d35c2bf96b9fbddd87f822394c8b966d4555d81d77ef4e8451"
+    },
+    {
+      "term": "Seraph",
+      "sha256": "0660cf9536ad7a6ae0df7e1c397c487379c4bf29a49215284688ac0fb6f7f932"
+    },
+    {
+      "term": "session",
+      "sha256": "b05e202db12de631d4077c52dce49ec9760ac1ecdc143b9688cbe1f473144a2b"
+    },
+    {
+      "term": "session zero",
+      "sha256": "04bf28d3211f4c636be8c53e2a0f5f794972447a9165780623be03fb632c353d"
+    },
+    {
+      "term": "Severe Damage",
+      "sha256": "804ba058ddaa78cc58de55951ee24d8c8d000fd3be408845454dc89f7dae87c2"
+    },
+    {
+      "term": "Severe Threshold",
+      "sha256": "86c135d3e44911ea95d9b22897f8323b18a296958c85755ee05376feae5c9497"
+    },
+    {
+      "term": "severity",
+      "sha256": "5a985b85bf2bd8158dd0dc95e4ad0c8272c21d1de50633045d4b950ac785c7b4"
+    },
+    {
+      "term": "Shrouded",
+      "sha256": "13ab9a1a411cf35fa078a1d5b685c59af2dc331dfaccaffa82e4cb505995a87c"
+    },
+    {
+      "term": "Simiah",
+      "sha256": "5eaf656dfc4e641736410034a69a280a7415f2a0fa91df3754c546f51dee8171"
+    },
+    {
+      "term": "Skulk",
+      "sha256": "dd91653dc2bc98dea55e2846e5e4e0783d127f54b3f2fc69138abc290b694c23"
+    },
+    {
+      "term": "Slayer Dice",
+      "sha256": "37ff9ea8ab3659b948f4e7d9e257f6375cfae7fbe8b22283d3e4aae725b6dd90"
+    },
+    {
+      "term": "slot",
+      "sha256": "4374b0f87a51e5c83e5229be87e6cd413eb8de7b263de7466b752518b10c89b2"
+    },
+    {
+      "term": "Slow",
+      "sha256": "671c1cafffc65d794e0afd4df1ff851d1e9e1f0287b77256d3a3720231dc6329"
+    },
+    {
+      "term": "Slyborne",
+      "sha256": "93b990ee741d3980aed1ca2b2055f441067ffa0859928d5ae8c2c6765222bd5d"
+    },
+    {
+      "term": "Social",
+      "sha256": "eecaa9f0a14bae4b25635e60d720f3ea0b5b89cc8b1bad55ed0e35e6554fb760"
+    },
+    {
+      "term": "Solo",
+      "sha256": "0ca029b0d0a93f0fdae5a6423979d83699f3af2c10a1805c29ac2a1f9c21790d"
+    },
+    {
+      "term": "Sorcerer",
+      "sha256": "ae3c724559d8ba3fb593e84e64cfb9c81fb4983e9104df7c8936d5e285f35fe3"
+    },
+    {
+      "term": "SPECIALIZATION",
+      "sha256": "0f2ae7edb1c4f818d0b0e789de7104ec41d67fd1271824c357b16c6dc91a351c"
+    },
+    {
+      "term": "Spellcast Roll",
+      "sha256": "56ffc14383af185b69c23e797562d62832978d06790b5a4d635a4e527e1159b4"
+    },
+    {
+      "term": "Spend",
+      "sha256": "ff3fcfc05feb97221214e067dca9782cf7fa4896f5a7d2290c54fe85411da35f"
+    },
+    {
+      "term": "spend a Hope",
+      "sha256": "887538c75ed72e2af85337d27c0f71a2a244a26340af24ea68d350a555443416"
+    },
+    {
+      "term": "Spend Fear",
+      "sha256": "638c0e0968a7be925d48889abb3be4cba2edbf88b94983b26e98206e8e607d7b"
+    },
+    {
+      "term": "spends a Fear",
+      "sha256": "916556566c13aef8fb6a1bfe400bb8606f67f9a5bc272251b7f3d2539beb27ca"
+    },
+    {
+      "term": "SPLENDOR",
+      "sha256": "93f0a7d1b799b5a9975d56fc0a7747ae9997bba0ccbf16d173d0323d724e4a55"
+    },
+    {
+      "term": "spotlight",
+      "sha256": "3751c0ab6a618d1540fc715baa8a766980c3c3f339d92734e6e4cb41379c0891"
+    },
+    {
+      "term": "Stalwart",
+      "sha256": "5d7ec399d9d9820ad7dd30adc1015bb0ec5e3a921302497b0a5508479654d431"
+    },
+    {
+      "term": "Standard",
+      "sha256": "d9a2fb2b661d9a319bbb0ddd8e6c43d48a602c8dd5343ef9e26696647f2b1884"
+    },
+    {
+      "term": "standard attack",
+      "sha256": "ef9a72b27c971c0863a820c9a33bd38fa4a13a9de602dec2eaab726c0d8ebc39"
+    },
+    {
+      "term": "Standards",
+      "sha256": "ad7a9c33344648d7737870254988baf9843f3dcc9da45ef206d9fe2b3f5daaaf"
+    },
+    {
+      "term": "Stat blocks",
+      "sha256": "33b23874d629a966e45acbfacc6c56894e86a98d09b8540a8bd73e0e98a6efc5"
+    },
+    {
+      "term": "Strength",
+      "sha256": "4465b4b00f30f6e724597038f11e9b0ff03797a4b23579129dc8f48a8c9e8ddf"
+    },
+    {
+      "term": "Stress",
+      "sha256": "581bdbb576a12d6b1920e71922781b36fa12cdebcfff986c00dec4498e48ca94"
+    },
+    {
+      "term": "Stress Point",
+      "sha256": "dc3d75c1372e7ebdd933ca6cb857ab97fbdb08088429d595dc950a84e90cfa9d"
+    },
+    {
+      "term": "Stress Slot",
+      "sha256": "d6d966e7327c8393558c653d7cd0177e7459d8d1bda4bb8ad92b4e03c0e5e026"
+    },
+    {
+      "term": "stunned",
+      "sha256": "93880af222f1693281ff3b7e838059a87a603e0e682b8275f9a3b359a624f241"
+    },
+    {
+      "term": "subclass",
+      "sha256": "96659c930497802ba8d03717a00ad8010b94b9e55867900b94a703b52da45445"
+    },
+    {
+      "term": "Success with Fear",
+      "sha256": "ab222c387e3e24c74e30ebb9800af887daa5c0e32b93ec8ab62dd8366f7363f9"
+    },
+    {
+      "term": "Success with Hope",
+      "sha256": "5935cdb3ba4e26f6cda3f8337103836354abc93f70ab49b096bdaf5ed925088e"
+    },
+    {
+      "term": "Support",
+      "sha256": "f2a0b62b1f1059c30c42c3677a0a96ecf7a6863d63621eeb86936860fcb31092"
+    },
+    {
+      "term": "Supports",
+      "sha256": "1fe584d751597226ed4c550e5e8587f62e3c7cc3f51a8aca90a587ef1a76dd2d"
+    },
+    {
+      "term": "swarm",
+      "sha256": "79d266fc0451ca80ce6b03f690d0a99a0a23544cab051f1d991f698cbbb06e30"
+    },
+    {
+      "term": "Syndicate",
+      "sha256": "6a0a532c68104f46924829ffdaf2c2d2c46f7602b10c1060bfbfc39ffcca8554"
+    },
+    {
+      "term": "SPOTLIGHT",
+      "sha256": "d5d080b61813106e06cfc30e4ca6d6f28bf4d2100acbb597219e2304a28274d2"
+    },
+    {
+      "term": "Tag Team Roll",
+      "sha256": "ad9901438494ea72ce8cdf07a94996734e6efef978d8779a05f63bbb546a2832"
+    },
+    {
+      "term": "Target",
+      "sha256": "e06fd1411c3e4c7a7eb8d583fef4bdbfbf93c7b7d60ce617ec2216fd5178f6d9"
+    },
+    {
+      "term": "target a group within",
+      "sha256": "09ee5dcf28a8393eae4bd74f0d17a8310854117fedc211606619c63c3f7958d0"
+    },
+    {
+      "term": "temporary",
+      "sha256": "7aceadbc227dff17d0a76f1dbe12622f19fd9e987c5628e8afc8f4c7faa82a00"
+    },
+    {
+      "term": "Tend to Wounds",
+      "sha256": "cc60c0505703c928be82ea3674fc79e3aadf38196a5e6b82d09d64330fa29682"
+    },
+    {
+      "term": "terrifying",
+      "sha256": "1695a9a8ac094957b3d6f3f1088b8d98e3e6b40d0d3719bc79a562f1234e15d7"
+    },
+    {
+      "term": "the Astral Realm",
+      "sha256": "82bfc7a207c61f407c174e6babc212ac537ec24f509ca9f467d9c501aebe4135"
+    },
+    {
+      "term": "THE INCITING INCIDENT",
+      "sha256": "e814d00320de378e78d4a6aae8a8dd35d467aef517a7d2ed0f0b952bd6249b0e"
+    },
+    {
+      "term": "THE PITCH",
+      "sha256": "9f1d63d4ffa04a867552452230f7433be53b5887454d3362f9f8f0d35641ed55"
+    },
+    {
+      "term": "Thresholds",
+      "sha256": "1970c252f83b6a7acf4595d1fc552af830b536323c3dbd86a280082aba8329f9"
+    },
+    {
+      "term": "tick down",
+      "sha256": "bed2090e0c991a7cd669c4f243f338b2acf2d1b601dee44171fbe52b8fcdf234"
+    },
+    {
+      "term": "tick up",
+      "sha256": "f99fecd14e122258f8fe6c01eabe17a94a88c165b0137cd7864c3f432a2d4808"
+    },
+    {
+      "term": "Tier",
+      "sha256": "2326306825acc3f9a21ddfb69ec1a666f1e091d5c8e802121e3ca3fc458ebd02"
+    },
+    {
+      "term": "Token",
+      "sha256": "0f4e803d27095240bffc6701d56ac3ad26ee05018bc04993a8dee32198841fa0"
+    },
+    {
+      "term": "TOUCHSTONES",
+      "sha256": "88a4e65a464d6b37330d62f790405f88782e12595b402335a68d6adad7086904"
+    },
+    {
+      "term": "Trait",
+      "sha256": "abf88bc20663e098e77de4903b10c74aa4726b942899ae89a038d4970321def0"
+    },
+    {
+      "term": "Traversals",
+      "sha256": "3dc5f891ed2ff21634551e872e5ec293e274c122ef92d035497ad4f7a5110f01"
+    },
+    {
+      "term": "Troubadour",
+      "sha256": "071dddd1e3ba7e9279f5729c7cd07a9b5a733829e50329d235bbe4e8bf604b9b"
+    },
+    {
+      "term": "UNARMED ATTACK ROLLS",
+      "sha256": "7ebeee6382514c0aa6c8d60b2e4df7bc7b264654b4a4d4e70a3d7a0e9b09caef"
+    },
+    {
+      "term": "UNARMORED",
+      "sha256": "9bbfe2330ebf9ec4309e19cc26344f669243e107cd3ff520eba4c559c7ef47ff"
+    },
+    {
+      "term": "Underborne",
+      "sha256": "800f4fe8292ea10c64d42285d8709570d6adf5ca4c85bc6fe23f53285b58c661"
+    },
+    {
+      "term": "Unstoppable Die",
+      "sha256": "be1c72bd3ebfff93962036904edea83464e9b8a99f74372932ac952db1962605"
+    },
+    {
+      "term": "using your Proficiency",
+      "sha256": "add8078ed80002880eb6e37f2f87c2e54e9d1aa20edf3a8cd77c9b8cd15b3723"
+    },
+    {
+      "term": "valor",
+      "sha256": "dcef207f5809b690231a54267dda0a94d5862a54d76d21760c071e21e96c95e1"
+    },
+    {
+      "term": "Vault",
+      "sha256": "be7bebe0a20b971dc9b18578627eb013d08133caf1d64f6dfaf77a64b26c1a02"
+    },
+    {
+      "term": "Vengeance",
+      "sha256": "665bae5842cb19d281acd871756bd6f95be72f46d35ba4ae8806a3b2704a98bf"
+    },
+    {
+      "term": "Very Close",
+      "sha256": "deb992dc4d7bcf8b5d3a92ed28f778f5b06ea2728204396ff64093ee90a81627"
+    },
+    {
+      "term": "Very Close Range",
+      "sha256": "3939246b2e2360998836bbfc5bdc99de1e76b762ab77ba44a520138d50eb0686"
+    },
+    {
+      "term": "Very Far",
+      "sha256": "6210b830e961cfc7038636b1ba58a1eb32d635b487c94de399a52aaa93283e0e"
+    },
+    {
+      "term": "Very Far Range",
+      "sha256": "1b009b2414aba9e918bf25ef33002f9880a664f5d43f6707d95057ce0c4f48a7"
+    },
+    {
+      "term": "Vulnerable",
+      "sha256": "812d09c5524db544c436dc9f0fbf0fdc6e342ca5f15b6bbc88387a088677d938"
+    },
+    {
+      "term": "Wanderborne",
+      "sha256": "47741b9c9039304a6ba529651a80729b2a02f1898a8330533de7cd9d3500ae0f"
+    },
+    {
+      "term": "Warden of Renewal",
+      "sha256": "eb6c4902eaad3c27ab948ae173a6f8ab53adce1d9de24bd87d43f4a9e91dba8b"
+    },
+    {
+      "term": "Warden of the Elements",
+      "sha256": "9439cfa3a7666fe6f54351127473b810b65be21dc11c52ea013d1031064ce784"
+    },
+    {
+      "term": "Warrior",
+      "sha256": "aa9ebf263df26a3fd2eac07a8f4ec7368caaa23d929eea861810c97d8636c491"
+    },
+    {
+      "term": "Wayfinder",
+      "sha256": "8a4422fe3d03156ce07be66dcd16411fdd0ba0249e3378b9d0ffa207a087b2fe"
+    },
+    {
+      "term": "Weak Point",
+      "sha256": "d886c3092efe7913da87d8f934c5385eecaf5be134061b89f6b09ce5454b3bfa"
+    },
+    {
+      "term": "Weakened",
+      "sha256": "4a9f566da0ece26e5b551373fdab1089a75da924539d758ba7f8a5484b7a95b9"
+    },
+    {
+      "term": "When you do",
+      "sha256": "143a0a9bf324955ec785cb499a3f1ae0f6a3a237170f94b3647e1713e19d68e0"
+    },
+    {
+      "term": "Wildborne",
+      "sha256": "0c28642be8079a6292dc76a03e3f0a55fa1fd77a8f770eb428892ff2a702cc97"
+    },
+    {
+      "term": "Wildtouch",
+      "sha256": "d62f44ba10ff667e85c963989375fd56bb983a569624312ff742afcef9b8b64c"
+    },
+    {
+      "term": "Winged Sentinel",
+      "sha256": "35453dc08f4f8b9a218f6db4dd7748eca3a0255c33c791d2058537b1a7e75165"
+    },
+    {
+      "term": "Witherwild",
+      "sha256": "5473eb5d73d45321e565c6ca1a4e5fcd0086a8a4f96f89f66046c4c9dd01a7c3"
+    },
+    {
+      "term": "Wizard",
+      "sha256": "55b82cb8f7c3b63e9a74fa733cff2712360b22de2711bdd17b57abad11933b36"
+    },
+    {
+      "term": "Wordsmith",
+      "sha256": "4c9f8ae8e10836c5598a33710a1d678e63f48e4413dcb48f0530a0e5c9aad098"
+    },
+    {
+      "term": "Work on a Project",
+      "sha256": "326f8f914e44fae3c9410da8e89a6f32a1efc263f6919431b474b9c7cf95bab3"
+    }
+  ],
+  "legacy_json_prefix_sha256": "a86a04e88d1b0eea78f1edfe6ffe93d33ed94d86c1332f9238e402bb6172d11a",
+  "protected_files": {
+    "skills/daggerheart-json-formatter/scripts/zzz2keyword.py": "2f972430caf9a8e4fdad24b3ff520139eebf5d7a00c7ff5e9dd4541d8a78e9a9",
+    "skills/daggerheart-json-formatter/scripts/zzz2rrr.py": "4f211deddd30ad0f313f71b3ad545652b4feffa77564fb4097299a44d24d1095",
+    "skills/daggerheart-term-checker/scripts/check_terms.py": "efb9d17d1f31e7056e9974bef18b460730b0ec82426177efe4f030ecea89c270",
+    "skills/daggerheart-term-checker/scripts/strip_term_markers.py": "9d5ac19c7d95db23ead321774979c9e74e2012a831db81a9e4fb3cf1a408f316",
+    "skills/daggerheart-translation-audit/scripts/paired_audit.py": "d6afedb56818565b11c161220581e472fb103e3bbb51db23a5539ab0937fa1a2",
+    "skills/daggerheart-translation-audit/scripts/render_report.py": "0b17d0313cdf7b55f4140f94432adf54470ffe6ba5162e9f6123ddfc504647fe",
+    "skills/daggerheart-translation-pipeline/resources/adversaries_features.json": "46e0b684412ab42442907560f472007eb19a4637ce54dddad37a725b88f76778",
+    "skills/daggerheart-translation-pipeline/resources/adversaries_motivation.json": "17344351f1b94997f550486b52d3a35a7a269af9ac2a28e56faa3c1399b89c47",
+    "skills/daggerheart-translation-pipeline/resources/adversaries_name.json": "3c5765077c1e7c631abbfff206ca58b7fe2f52c5387fdcdd61903d0328c6fa05",
+    "skills/daggerheart-translation-pipeline/resources/scoped/beast-feast.json": "ed6b16433785b7cceb7d7ea19c57871d07cc56bbcf409bba9d17ea0d6ebe424d",
+    "skills/daggerheart-translation-pipeline/resources/scoped/colossus-of-the-drylands.json": "6fa30a3c755d8e7527ba09bfe07f80ee8f9a2520e0ed709d0b1f9f26e207ecb7",
+    "skills/daggerheart-translation-pipeline/scripts/fixer_prompt.py": "d6f76b408fa45ff4a96bba50e76fa3223e9dc8d4eacdf87e9be2fa4aeb1d93b7",
+    "skills/daggerheart-translation-pipeline/scripts/global_review_prompt.py": "43f6666a6effded21f2efd5edbe95e3a14e3e74a4261409b7fa0c18350eb0ade",
+    "skills/daggerheart-translation-pipeline/scripts/loop_prompt_utils.py": "e2344240007da458296516cf66e0a3f06faecca1fcc6967b507e580eec09cc4f",
+    "skills/daggerheart-translation-pipeline/scripts/makeup.py": "bcf66675b943b9ffd8b5b133dad3c3dae4efec007cbfbb1452b0f4bcd9e11908",
+    "skills/daggerheart-translation-pipeline/scripts/merge_terms.py": "fb76b73c0b5c26000a0e708934f0b01ce89e3e9d91776c629bc7f1b6dd4d340d",
+    "skills/daggerheart-translation-pipeline/scripts/paddle_postprocess.py": "7b328cf50d9dde07137acadbe8c87c7aa4b10fb4de2d1849531e4bd2298a9344",
+    "skills/daggerheart-translation-pipeline/scripts/replace_terms.py": "006c31c05ddbb8cb37b3af8acfe098ed09234841c155cd5a9dac600292c2e239",
+    "skills/daggerheart-translation-pipeline/scripts/review_issues.py": "bfcae35e055ff83f53aecbb0051925d1439557e2b508d9117836133e07776f99",
+    "skills/daggerheart-translation-pipeline/scripts/reviewer_prompt.py": "ebc0ea3f1d8ade8a07838b5bb2d456a0b59990480defcf7a16cc74e5bf15ae3c",
+    "skills/daggerheart-translation-pipeline/scripts/setup_project.py": "879086f9f16284d53c410d7160d2e282ccf5bdff8aca5eed92a668921d6f265e",
+    "skills/daggerheart-translation-pipeline/scripts/split_chunks.py": "003cef0b472f79cc8a95b15c369afad121e170556d24b663858e50b9534ce6dd",
+    "skills/daggerheart-translation-pipeline/scripts/translation_prompt.py": "9b9094342f6bca43fc5c106dfea43b203de2684ed40e28376c52547d80eea4a8",
+    "skills/daggerheart-translation-pipeline/scripts/validate_translation.py": "9873dbc992c51ebc6f3c201964bb2e5873486bedbe8023ac35ce2f1c092746ca",
+    "skills/paratranz-ops/scripts/para.py": "803b18a61d7b09589301fba168a5b90e253ba82db95deb511c1bfe17cd447f2b"
+  }
+}

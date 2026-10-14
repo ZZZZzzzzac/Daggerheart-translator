@@ -1,0 +1,835 @@
+{
+  "schema_version": 1,
+  "usage": "read-only-context-reference",
+  "automatic_matching": false,
+  "instructions": "此表记录已决定的条件译法和句式，不是自动替换词表。译者须结合所属实体、完整句子和关联规则自行选择；保留原文的行动者、条件、数值、对象和例外。没有来源不发明新机制，也不把普通歧义逐条交给用户。",
+  "entries": [
+    {
+      "term": "a group",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "a group",
+        "translation": "一个群体",
+        "note": "仅在特性中描述AOE范围是使用"
+      },
+      "default_translation": "一个群体",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583444",
+        "https://paratranz.cn/projects/14448/strings?id=1052583503",
+        "https://paratranz.cn/projects/14448/strings?id=1052583544",
+        "https://paratranz.cn/projects/14448/strings?id=1052583563",
+        "https://paratranz.cn/projects/14448/strings?id=1052583630",
+        "https://paratranz.cn/projects/14448/strings?id=1052583713"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "a target within",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "a target within",
+        "translation": "内的一个目标",
+        "note": "XXX范围内的一个目标"
+      },
+      "default_translation": "内的一个目标",
+      "reason": "不能先把半句倒置再补未匹配范围。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583285",
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583311",
+        "https://paratranz.cn/projects/14448/strings?id=1052583320",
+        "https://paratranz.cn/projects/14448/strings?id=1052583393",
+        "https://paratranz.cn/projects/14448/strings?id=1052583418"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "advance",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "advance",
+        "translation": "推进",
+        "note": "仅在倒计时时译作推进",
+        "variants": [
+          "advanced",
+          "advancement"
+        ]
+      },
+      "default_translation": "推进",
+      "reason": "倒计时推进/升级选项/普通进步不可共用裸词；词面不判语境。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583276",
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583348",
+        "https://paratranz.cn/projects/14448/strings?id=1052583424",
+        "https://paratranz.cn/projects/14448/strings?id=1052583439",
+        "https://paratranz.cn/projects/14448/strings?id=1052583467"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Against",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Against",
+        "translation": "对抗"
+      },
+      "default_translation": "对抗",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583250",
+        "https://paratranz.cn/projects/14448/strings?id=1052583279",
+        "https://paratranz.cn/projects/14448/strings?id=1052583291",
+        "https://paratranz.cn/projects/14448/strings?id=1052583292",
+        "https://paratranz.cn/projects/14448/strings?id=1052583293",
+        "https://paratranz.cn/projects/14448/strings?id=1052583302"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Answer any of the following background questions",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Answer any of the following background questions",
+        "translation": "回答以下任意背景问题。你也可以自己创作问题。"
+      },
+      "default_translation": "回答以下任意背景问题。你也可以自己创作问题。",
+      "reason": "中文含原文未匹配后续整句，易重译；转完整模板。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583281",
+        "https://paratranz.cn/projects/14448/strings?id=1052583287",
+        "https://paratranz.cn/projects/14448/strings?id=1052583293",
+        "https://paratranz.cn/projects/14448/strings?id=1052583309",
+        "https://paratranz.cn/projects/14448/strings?id=1052583344",
+        "https://paratranz.cn/projects/14448/strings?id=1052583350"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Ask your fellow players one of the following",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Ask your fellow players one of the following",
+        "translation": "询问你的其他玩家下列任一问题，让他们的角色回答，或者你自己创作问题。"
+      },
+      "default_translation": "询问你的其他玩家下列任一问题，让他们的角色回答，或者你自己创作问题。",
+      "reason": "中文提前加入后续角色作答和自创问题，转完整模板。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583282",
+        "https://paratranz.cn/projects/14448/strings?id=1052583288",
+        "https://paratranz.cn/projects/14448/strings?id=1052583294",
+        "https://paratranz.cn/projects/14448/strings?id=1052583310",
+        "https://paratranz.cn/projects/14448/strings?id=1052583345",
+        "https://paratranz.cn/projects/14448/strings?id=1052583351"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "benefits",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "benefits",
+        "translation": "增益",
+        "note": "仅用与数值与机制",
+        "variants": [
+          "benefit"
+        ]
+      },
+      "default_translation": "增益",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583254",
+        "https://paratranz.cn/projects/14448/strings?id=1052583271",
+        "https://paratranz.cn/projects/14448/strings?id=1052583285",
+        "https://paratranz.cn/projects/14448/strings?id=1052583292",
+        "https://paratranz.cn/projects/14448/strings?id=1052583299",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Blessed",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Blessed",
+        "translation": "祝福",
+        "note": "状态",
+        "case_sensitive": true
+      },
+      "default_translation": "祝福",
+      "reason": "官方Hallowed Heroplate中是护甲特性，不能无条件标为状态。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583560",
+        "https://paratranz.cn/projects/14448/strings?id=1052583975",
+        "https://paratranz.cn/projects/14448/strings?id=1052584097",
+        "https://paratranz.cn/projects/14448/strings?id=1068978165",
+        "https://paratranz.cn/projects/14448/strings?id=1068978450"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "bonus to",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "bonus to",
+        "translation": "获得XX加值",
+        "note": "+XX bonus to YY -> YY获得+XX加值"
+      },
+      "default_translation": "获得XX加值",
+      "reason": "占位XX不是词面匹配参数，整句保留数值、符号与受益对象。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583279",
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583291",
+        "https://paratranz.cn/projects/14448/strings?id=1052583292",
+        "https://paratranz.cn/projects/14448/strings?id=1052583301",
+        "https://paratranz.cn/projects/14448/strings?id=1052583302"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Burning",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Burning",
+        "translation": "点燃",
+        "note": "状态",
+        "variants": [
+          "Ignited"
+        ],
+        "case_sensitive": true
+      },
+      "default_translation": "点燃",
+      "reason": "武器特性与Ignited自定义状态不能无条件合并；各按来源定义。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583544",
+        "https://paratranz.cn/projects/14448/strings?id=1052583560",
+        "https://paratranz.cn/projects/14448/strings?id=1052583563",
+        "https://paratranz.cn/projects/14448/strings?id=1052583700",
+        "https://paratranz.cn/projects/14448/strings?id=1052583701",
+        "https://paratranz.cn/projects/14448/strings?id=1052583713"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Clear",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Clear",
+        "translation": "清除",
+        "note": "用于生命点时译作恢复",
+        "variants": [
+          "clears"
+        ],
+        "case_sensitive": true
+      },
+      "default_translation": "清除",
+      "reason": "生命点恢复、压力/护甲槽清除、指示物移除，按宾语选择；线上讨论22991已有明确约定。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583246",
+        "https://paratranz.cn/projects/14448/strings?id=1052583252",
+        "https://paratranz.cn/projects/14448/strings?id=1052583277",
+        "https://paratranz.cn/projects/14448/strings?id=1052583280",
+        "https://paratranz.cn/projects/14448/strings?id=1052583283",
+        "https://paratranz.cn/projects/14448/strings?id=1052583285"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Cloaked",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Cloaked",
+        "translation": "隐匿"
+      },
+      "default_translation": "隐匿",
+      "reason": "线上术语677699明确状态隐匿与特性隐匿无踪两义，不让核心覆盖特性或反向覆盖状态。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583362",
+        "https://paratranz.cn/projects/14448/strings?id=1052583364",
+        "https://paratranz.cn/projects/14448/strings?id=1052583686",
+        "https://paratranz.cn/projects/14448/strings?id=1052583828",
+        "https://paratranz.cn/projects/14448/strings?id=1052583829",
+        "https://paratranz.cn/projects/14448/strings?id=1052584137"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Close",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Close",
+        "translation": "近距离范围",
+        "case_sensitive": true
+      },
+      "default_translation": "近距离范围",
+      "reason": "距离等级与亲近/关闭同词。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583246",
+        "https://paratranz.cn/projects/14448/strings?id=1052583281",
+        "https://paratranz.cn/projects/14448/strings?id=1052583283",
+        "https://paratranz.cn/projects/14448/strings?id=1052583285",
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583291"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Companion",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Companion",
+        "translation": "动物伙伴",
+        "note": "特指游侠的伙伴"
+      },
+      "default_translation": "动物伙伴",
+      "reason": "游侠动物伙伴与Household Friend的同伴特性不同实体。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583314",
+        "https://paratranz.cn/projects/14448/strings?id=1052583346",
+        "https://paratranz.cn/projects/14448/strings?id=1052583348",
+        "https://paratranz.cn/projects/14448/strings?id=1052583352",
+        "https://paratranz.cn/projects/14448/strings?id=1052583353",
+        "https://paratranz.cn/projects/14448/strings?id=1052583355"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Create",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Create",
+        "translation": "创作",
+        "note": "创作角色、创作问题，此类搭配时使用创作而非创建。"
+      },
+      "default_translation": "创作",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583243",
+        "https://paratranz.cn/projects/14448/strings?id=1052583249",
+        "https://paratranz.cn/projects/14448/strings?id=1052583253",
+        "https://paratranz.cn/projects/14448/strings?id=1052583254",
+        "https://paratranz.cn/projects/14448/strings?id=1052583257",
+        "https://paratranz.cn/projects/14448/strings?id=1052583266"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Far",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Far",
+        "translation": "远距离范围",
+        "case_sensitive": true
+      },
+      "default_translation": "远距离范围",
+      "reason": "距离等级与普通远近叙述同词。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583286",
+        "https://paratranz.cn/projects/14448/strings?id=1052583292",
+        "https://paratranz.cn/projects/14448/strings?id=1052583313",
+        "https://paratranz.cn/projects/14448/strings?id=1052583324",
+        "https://paratranz.cn/projects/14448/strings?id=1052583334",
+        "https://paratranz.cn/projects/14448/strings?id=1052583335"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "flavoring",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "flavoring",
+        "translation": "风味化调整"
+      },
+      "default_translation": "风味化调整",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [],
+      "automatic_matching": false
+    },
+    {
+      "term": "Floating",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Floating",
+        "translation": "悬浮",
+        "note": "状态",
+        "variants": [
+          "Hovering"
+        ],
+        "case_sensitive": true
+      },
+      "default_translation": "悬浮",
+      "reason": "普通漂浮叙述、Hovering特性与状态用法需按来源分开。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583241",
+        "https://paratranz.cn/projects/14448/strings?id=1052583413",
+        "https://paratranz.cn/projects/14448/strings?id=1052583551",
+        "https://paratranz.cn/projects/14448/strings?id=1052583559",
+        "https://paratranz.cn/projects/14448/strings?id=1052583690",
+        "https://paratranz.cn/projects/14448/strings?id=1052583733"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "force",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "force",
+        "translation": "迫使",
+        "note": "仅在特性中使用, 迫使XX做XX"
+      },
+      "default_translation": "迫使",
+      "reason": "特性动词迫使与普通名词力量不是同一译法。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583250",
+        "https://paratranz.cn/projects/14448/strings?id=1052583279",
+        "https://paratranz.cn/projects/14448/strings?id=1052583291",
+        "https://paratranz.cn/projects/14448/strings?id=1052583304",
+        "https://paratranz.cn/projects/14448/strings?id=1052583323",
+        "https://paratranz.cn/projects/14448/strings?id=1052583335"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "handful",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "handful",
+        "translation": "把",
+        "note": "金币量词术语"
+      },
+      "default_translation": "把",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583252",
+        "https://paratranz.cn/projects/14448/strings?id=1052583365",
+        "https://paratranz.cn/projects/14448/strings?id=1052583551",
+        "https://paratranz.cn/projects/14448/strings?id=1052583562",
+        "https://paratranz.cn/projects/14448/strings?id=1052583563",
+        "https://paratranz.cn/projects/14448/strings?id=1052583564"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "instead of their standard damage",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "instead of their standard damage",
+        "translation": "而非普通伤害。"
+      },
+      "default_translation": "而非普通伤害。",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583668",
+        "https://paratranz.cn/projects/14448/strings?id=1052583679",
+        "https://paratranz.cn/projects/14448/strings?id=1052583686",
+        "https://paratranz.cn/projects/14448/strings?id=1052583687",
+        "https://paratranz.cn/projects/14448/strings?id=1052583726",
+        "https://paratranz.cn/projects/14448/strings?id=1052583778"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "kohd",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "kohd",
+        "translation": "科德码"
+      },
+      "default_translation": "科德码",
+      "reason": "线上术语688710保留科德码，但本次未找到明确规则/单位出处；留可追溯参考，不作核心默认强约束。",
+      "sources": [],
+      "automatic_matching": false
+    },
+    {
+      "term": "Locked",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Locked",
+        "translation": "锁定",
+        "note": "状态术语表；原表写作 \"Locked (on)\"",
+        "variants": [
+          "Locked on"
+        ],
+        "case_sensitive": true
+      },
+      "default_translation": "锁定",
+      "reason": "Locked/Locked on 需判断锁定状态与普通锁闭含义。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583553",
+        "https://paratranz.cn/projects/14448/strings?id=1052583562",
+        "https://paratranz.cn/projects/14448/strings?id=1052583955",
+        "https://paratranz.cn/projects/14448/strings?id=1068978085",
+        "https://paratranz.cn/projects/14448/strings?id=1068978183"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Melee",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Melee",
+        "translation": "近战范围",
+        "case_sensitive": true
+      },
+      "default_translation": "近战范围",
+      "reason": "范围字段与近战攻击描述需要不同句法。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583291",
+        "https://paratranz.cn/projects/14448/strings?id=1052583302",
+        "https://paratranz.cn/projects/14448/strings?id=1052583303",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307",
+        "https://paratranz.cn/projects/14448/strings?id=1052583311"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Minor Threshold",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Minor Threshold",
+        "translation": "轻度伤害阈值"
+      },
+      "default_translation": "轻度伤害阈值",
+      "reason": "当前官方SRD2只定义重度/严重伤害阈值；不从轻度伤害档次推导第三阈值。",
+      "sources": [],
+      "automatic_matching": false
+    },
+    {
+      "term": "Move",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Move",
+        "translation": "行动",
+        "case_sensitive": true
+      },
+      "default_translation": "行动",
+      "reason": "叙事行动与位移动词移动须区分。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583254",
+        "https://paratranz.cn/projects/14448/strings?id=1052583273",
+        "https://paratranz.cn/projects/14448/strings?id=1052583286",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307",
+        "https://paratranz.cn/projects/14448/strings?id=1052583313",
+        "https://paratranz.cn/projects/14448/strings?id=1052583317"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "move up to",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "move up to",
+        "translation": "在XX范围内移动",
+        "note": "move up to XX range"
+      },
+      "default_translation": "在XX范围内移动",
+      "reason": "距离上限和参数不在匹配范围内，整句处理。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583313",
+        "https://paratranz.cn/projects/14448/strings?id=1052583322",
+        "https://paratranz.cn/projects/14448/strings?id=1052583324",
+        "https://paratranz.cn/projects/14448/strings?id=1052583334",
+        "https://paratranz.cn/projects/14448/strings?id=1052583335",
+        "https://paratranz.cn/projects/14448/strings?id=1052583336"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "reduce the severity by",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "reduce the severity by",
+        "translation": "伤害等级降低",
+        "note": "后通常接 ‘X级’"
+      },
+      "default_translation": "伤害等级降低",
+      "reason": "降级表达保留完整对象、数量、threshold(s)语义；不是截断的一对一译名。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583337",
+        "https://paratranz.cn/projects/14448/strings?id=1052583559",
+        "https://paratranz.cn/projects/14448/strings?id=1052583562",
+        "https://paratranz.cn/projects/14448/strings?id=1052583696",
+        "https://paratranz.cn/projects/14448/strings?id=1052583823",
+        "https://paratranz.cn/projects/14448/strings?id=1052584145"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "reduce the damage by",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "reduce the damage by",
+        "translation": "伤害等级降低",
+        "note": "后通常接 ‘X级’"
+      },
+      "default_translation": "伤害等级降低",
+      "reason": "裸前缀同时覆盖点数减伤和threshold(s)降级；转完整句式，字面X不是当前匹配器变量。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583307",
+        "https://paratranz.cn/projects/14448/strings?id=1052584226"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "result to",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "result to",
+        "translation": "将骰值加入",
+        "note": "适用于add xxx result to yyy roll的句式"
+      },
+      "default_translation": "将骰值加入",
+      "reason": "只匹配半个加值句式不能确定加数、被加对象和语序。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583283",
+        "https://paratranz.cn/projects/14448/strings?id=1052583315",
+        "https://paratranz.cn/projects/14448/strings?id=1052583321",
+        "https://paratranz.cn/projects/14448/strings?id=1052583376",
+        "https://paratranz.cn/projects/14448/strings?id=1052583380",
+        "https://paratranz.cn/projects/14448/strings?id=1052583390"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "running",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "running",
+        "translation": "运作",
+        "note": "仅在running game/session/campaign/NPC时译作‘运作’"
+      },
+      "default_translation": "运作",
+      "reason": "运作游戏与助跑/奔跑等普通动词须区分。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583241",
+        "https://paratranz.cn/projects/14448/strings?id=1052583292",
+        "https://paratranz.cn/projects/14448/strings?id=1052583565",
+        "https://paratranz.cn/projects/14448/strings?id=1052583566",
+        "https://paratranz.cn/projects/14448/strings?id=1052583599",
+        "https://paratranz.cn/projects/14448/strings?id=1052583604"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Segment",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Segment",
+        "translation": "部位"
+      },
+      "default_translation": "部位",
+      "reason": "巨像部位与普通分段需区分。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583915",
+        "https://paratranz.cn/projects/14448/strings?id=1052584079",
+        "https://paratranz.cn/projects/14448/strings?id=1052584080",
+        "https://paratranz.cn/projects/14448/strings?id=1052584081",
+        "https://paratranz.cn/projects/14448/strings?id=1052584084",
+        "https://paratranz.cn/projects/14448/strings?id=1052584086"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "severity",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "severity",
+        "translation": "伤害等级",
+        "note": "reduce the severity by one threshold ：伤害等级降低一级"
+      },
+      "default_translation": "伤害等级",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583337",
+        "https://paratranz.cn/projects/14448/strings?id=1052583340",
+        "https://paratranz.cn/projects/14448/strings?id=1052583342",
+        "https://paratranz.cn/projects/14448/strings?id=1052583556",
+        "https://paratranz.cn/projects/14448/strings?id=1052583559",
+        "https://paratranz.cn/projects/14448/strings?id=1052583560"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "swarm",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "swarm",
+        "translation": "集群"
+      },
+      "default_translation": "集群",
+      "reason": "自然虫群/兽群并不等于Horde敌人类型。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583563",
+        "https://paratranz.cn/projects/14448/strings?id=1052583652",
+        "https://paratranz.cn/projects/14448/strings?id=1052583667",
+        "https://paratranz.cn/projects/14448/strings?id=1052583725",
+        "https://paratranz.cn/projects/14448/strings?id=1052583727",
+        "https://paratranz.cn/projects/14448/strings?id=1052583728"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "target a group within",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "target a group within",
+        "translation": "选择XX范围内的一组目标"
+      },
+      "default_translation": "选择XX范围内的一组目标",
+      "reason": "片段含XX占位，保留真正目标范围与群体规则。",
+      "sources": [],
+      "automatic_matching": false
+    },
+    {
+      "term": "temporary",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "temporary",
+        "translation": "暂时",
+        "note": "暂时+动词/状态, 临时+名称",
+        "variants": [
+          "temporarily"
+        ]
+      },
+      "default_translation": "暂时",
+      "reason": "普通词义或句式搭配依上下文变化；已有译法仅在原备注语境成立，不作全局固定推荐。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583280",
+        "https://paratranz.cn/projects/14448/strings?id=1052583283",
+        "https://paratranz.cn/projects/14448/strings?id=1052583285",
+        "https://paratranz.cn/projects/14448/strings?id=1052583289",
+        "https://paratranz.cn/projects/14448/strings?id=1052583303",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Thresholds",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Thresholds",
+        "translation": "阈值",
+        "case_sensitive": true
+      },
+      "default_translation": "阈值",
+      "reason": "伤害字段译伤害阈值；门槛等普通意义不得套伤害术语。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583252",
+        "https://paratranz.cn/projects/14448/strings?id=1052583280",
+        "https://paratranz.cn/projects/14448/strings?id=1052583302",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307",
+        "https://paratranz.cn/projects/14448/strings?id=1052583321",
+        "https://paratranz.cn/projects/14448/strings?id=1052583325"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Very Close",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Very Close",
+        "translation": "邻近范围",
+        "case_sensitive": true
+      },
+      "default_translation": "邻近范围",
+      "reason": "固定邻近范围与普通十分亲近同文。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583304",
+        "https://paratranz.cn/projects/14448/strings?id=1052583307",
+        "https://paratranz.cn/projects/14448/strings?id=1052583320",
+        "https://paratranz.cn/projects/14448/strings?id=1052583323",
+        "https://paratranz.cn/projects/14448/strings?id=1052583342",
+        "https://paratranz.cn/projects/14448/strings?id=1052583370"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Very Far",
+      "usage": "context_required",
+      "original_entry": {
+        "term": "Very Far",
+        "translation": "极远范围",
+        "case_sensitive": true
+      },
+      "default_translation": "极远范围",
+      "reason": "固定极远范围与普通遥远描述同文。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583364",
+        "https://paratranz.cn/projects/14448/strings?id=1052583384",
+        "https://paratranz.cn/projects/14448/strings?id=1052583396",
+        "https://paratranz.cn/projects/14448/strings?id=1052583413",
+        "https://paratranz.cn/projects/14448/strings?id=1052583419",
+        "https://paratranz.cn/projects/14448/strings?id=1052583478"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Clear Stress",
+      "usage": "context_required",
+      "default_translation": "缓解压力",
+      "reason": "休整行动标题：缓解压力；资源操作：清除压力点。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583511"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Prepare",
+      "usage": "context_required",
+      "default_translation": "做好准备",
+      "reason": "休整行动标题及明确引用：做好准备；普通筹备/准备依语境。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583511"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Incoming damage",
+      "usage": "context_required",
+      "default_translation": "即将受到的伤害",
+      "reason": "规则小节标题沿现译“承受伤害”；正文可写“即将受到的伤害”，指单次来源、标记护甲槽之前的总伤害。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/strings?id=1052583517",
+        "https://paratranz.cn/projects/14448/strings?id=1052583503",
+        "https://paratranz.cn/projects/14448/strings?id=1052583504",
+        "https://paratranz.cn/projects/14448/strings?id=1052583494"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Cloaked",
+      "usage": "adversary_feature",
+      "default_translation": "隐匿无踪",
+      "original_entry": {
+        "term": "Cloaked",
+        "translation": "隐匿无踪",
+        "note": "隐匿无踪 Cloaked - 动作：进入 隐藏 状态直至下次攻击。通过此特性在处于 隐藏 状态下发动的攻击具有优势。",
+        "case_sensitive": true
+      },
+      "reason": "仅对应敌人特性标题及定义；普通描述、游荡者状态或Ghost转变选项不得使用该特性译名。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/issues/23387"
+      ],
+      "automatic_matching": false
+    },
+    {
+      "term": "Ghost",
+      "usage": "adversary_feature",
+      "default_translation": "幽灵形态",
+      "original_entry": {
+        "term": "Ghost",
+        "translation": "幽灵形态",
+        "note": "幽灵形态 Ghost - 被动：<敌人名称>具有物理伤害抗性。标记 1 压力点可穿越固体移动至近距离范围。",
+        "case_sensitive": true
+      },
+      "reason": "仅对应敌人特性标题及定义；普通描述、游荡者状态或Ghost转变选项不得使用该特性译名。",
+      "sources": [
+        "https://paratranz.cn/projects/14448/issues/23387"
+      ],
+      "automatic_matching": false
+    }
+  ]
+}

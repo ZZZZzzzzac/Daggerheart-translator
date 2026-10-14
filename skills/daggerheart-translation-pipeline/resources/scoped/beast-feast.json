@@ -1,6 +1,9 @@
 [
   {
     "term": "flavor profile",
-    "translation": "风味组合"
+    "translation": "风味组合",
+    "variants": [
+      "flavor profiles"
+    ]
   }
 ]

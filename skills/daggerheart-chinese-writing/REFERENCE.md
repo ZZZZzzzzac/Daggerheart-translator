@@ -3,6 +3,10 @@
 **不是术语表**——所有 1:1 的译名见 `terms-core.json`。
 这里只放术语表解决不了的：上下文相关选择、格式规范、句式模板。
 
+## SRD2 语境参考
+
+遇到 Hedge、Moon、Transformation、Ghost、Focus、Favor，按所属子职业、转变或资源规则查阅 [SRD2 语境参考](../daggerheart-translation-pipeline/resources/reference/srd2-context-only.json)，仅用于语义选择，不作为自动替换表。记录中的中文沿当前源译，语境／实体选择按已记录上下文执行；Ghost 的转变选项“鬼魂”不得覆盖敌人特性“幽灵形态”。新增核心词的大小写标记也不能代替实体判断；来源与边界见 [新增说明](../daggerheart-translation-pipeline/resources/reference/srd2-additions.md)。
+
 ## 点 / 值 / 槽 分类原则
 
 - **点**：频繁增减的资源。希望点、恐惧点、压力点、生命点。
@@ -105,3 +109,32 @@
 - `Grace-Touched` → `优雅恩泽`（领域 Grace = 优雅）
 
 注意：`xx` 的译名严格复用术语表中该领域的已有译法，不得自创。
+
+
+## 按语境选词：已决定的项目口径
+
+除核心固定名词外，翻译与语义审校必须同时查阅 [语境用法](../daggerheart-translation-pipeline/resources/reference/contextual-usage.json) 和 [SRD2 六项语境用法](../daggerheart-translation-pipeline/resources/reference/srd2-context-only.json)。这两份是人工/AI阅读的条件规则，**不作为自动替换表**，不交给 merge_terms.py，不按目录通配符加载。正常的语境选择由译者自行完成，不把它们逐条交给用户审。
+
+- **完整固定句式沿用项目定译。** 例如 Once per long rest 固定为“每长休一次”，不得仅因语义相近改成“每次长休限一次”；其他已确定的完整模板同样保留。下列半句或多义词的语境规则不授权改写完整固定术语。
+- **Dazed = 恍惚；Stunned = 眩晕。** 沿线上术语和现译区分，不因为中文相近合并效果。
+- **Support / Supports 敌人类型 = 辅助。** 普通 support 仍可译支持、帮助、支援。
+- **spotlight 统一用聚焦。** 按句子写“聚焦敌人”“转移聚焦”“获得聚焦”；叙事句可意译，不保留“聚光灯”作为另一个互相覆盖的术语。
+- **Cloaked：**游荡者的特殊状态译“隐匿”；同名特性标题译“隐匿无踪”。**Ghost：**角色转变选项/鬼魂实体译“鬼魂”；敌人同名被动特性译“幽灵形态”。先确认实体，不把两套效果拼在一起；这两个裸词不参加默认全局标记。
+- **Blaze of Glory = 光荣就义。** 沿当前项目词库和死亡规则；不使用同资料里残留的“荣光就义”。
+- **徒手攻击 / 徒手攻击掷骰。** Unarmed Attack 与 Unarmed Attack Roll 分别保留攻击行为和掷骰含义。
+- **Clear Stress：**作为休整行动标题是“缓解压力”；普通资源操作是“清除压力点”。Prepare 休整行动名为“做好准备”，普通准备/筹备自行按句子处理。
+- **距离：**Close / Far / Very Close / Very Far / Melee 在距离字段或明确规则引用中分别用既有范围译名；亲近、关闭、遥远及近战行为等普通含义不能套范围名。完整 `... Range` 词条可匹配；裸词由上下文判断。
+- **Threshold(s)：**伤害数据块可写“伤害阈值”；普通门槛不套伤害词。SRD2的轻度伤害是档次，不据此新增“轻度伤害阈值”。
+- **advance / advancement：**倒计时是推进，升级章节是升级选项，普通进步/先进含义另译。标题 ADVANCEMENTS 可用固定词条；裸 advancement 不凭匹配顺序裁定。
+- **模板只约束表达，不替代源文效果。** a target within、bonus to、result to、move up to 等片段改按完整句处理。保留单个目标、加减值、被加对象、距离上限和例外；在范围内移动本身可表达上限，不强求每次加“至多”。同名敌人特性的示例数值、对象与效果必须重新核对原文。
+
+### 减伤：读完整表达，不匹配裸前缀
+
+`reduce the damage by`、`reduce the severity by` 已退出直接术语表。X只是下列规范中的说明变量，不是可以放进当前字面匹配器的参数，也不新增正则捕获机制。
+
+1. 原文是减少**伤害数值**（例如 `reduce the damage by 1d8`）：写“伤害减少 1d8 点”，保留原文伤害类型和触发条件；不能改成降低伤害等级。
+2. 完整原文通过 `threshold / thresholds` 表达**按伤害档次降级**：写“伤害等级降低 X 级”，X取原文真实数量。例如 `reduce the severity by one threshold` 为“伤害等级降低一级”。`reduce the damage by X threshold(s)` 同样先看完整机制语境，不因damage一词就改成数值减伤。
+3. 原文直接规定**少标记生命点**：照原文写“少标记 X 生命点”，不擅改成减去伤害阈值的数值；也不反过来把所有降级表达都改写成少标记生命点，须核其适用档次与例外。
+4. Incoming damage 正文可写“即将受到的伤害”，指单次攻击/来源在标记护甲槽之前的总伤害；当前项目小节标题“承受伤害”可保留，但定义和处理时点不可丢。
+
+对kohd等目前只有历史词库记录、尚无明确规则出处的词，只在原文确有该词且语境吻合时采用参考译名，不凭词条补造机制。没有词面标记不是不需要翻译；大小写、下划线、跨行及中英相邻可能导致现有匹配器漏标，仍须全文语义检查。
