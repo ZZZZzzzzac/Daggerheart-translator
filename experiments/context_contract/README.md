@@ -120,6 +120,64 @@ python experiments/context_contract/pbres_names.py prepare cases.json resources.
 
 试验生成与冻结路径只交付 Markdown，故 `prepare --bindings` **不支持 `field`**，会在创建运行目录前明确拒绝。结构化字段绑定仅供已有明确 `name_fields` 载荷的独立 `check` 使用，不会虚构字段或悄悄改写交付结构。
 
+## 可选：显式范围内的机制数量风险
+
+这是数量表面核对，不是语义抓虫或译错判定。只在调用者已经核对原译文对应关系、并明确选择短规则范围时启用。没有 `--quantity-scopes` 时，原有输入、结果字段和门禁行为保持不变；不会自动扫描全文数字。
+
+例如，原文单元 `s` 是 `Mark 2 Stress.`，译文是 `标记3压力点。`：
+
+```json
+{
+  "version": "mechanic-quantity-scopes-v1",
+  "scopes": [
+    {
+      "id": "stress-cost",
+      "unit_id": "s",
+      "source": {"kind": "unit"},
+      "translation": {"kind": "unit"}
+    }
+  ]
+}
+```
+
+保存为 `quantity-scopes.json`，对已有译文检查：
+
+```bash
+python experiments/context_contract/delivery_gate.py scan sources.json translations.json --quantity-scopes quantity-scopes.json --output quantity-review.json
+python experiments/context_contract/pbres_names.py check resources.json original-names.json sources.json translations.json --quantity-scopes quantity-scopes.json
+```
+
+上例返回 `quantity_risk_check.status: "needs_review"`、带原文 `2` / 译文 `3` 证据的 `quantity_sequence_difference`，总 `release_allowed` 为 false、CLI 退出码 2。这表示需审阅，不表示已经确认译错；不会自动改数字、替换译文或删句。`risk_count` 是风险条数，配置错误单独放在 `configuration_errors`，两者都不是语义错误计数。
+
+### 范围与证据
+
+- `unit`：显式选择该单元的完整 Markdown。推荐短规则单元，不能代替人工核对范围。
+- `block`：`{"kind":"block","block":1}` 选择各自 CommonMark AST 的一个顶层块。原文与译文可以使用不同索引；不会自动按行或词面配对。支持普通段落、Plain 和标题，以及其中的加粗、斜体和链接可见文字。列表、引用、代码、图片、原始 HTML 等未支持结构返回范围不可核对，不能提供或隐藏数量证据。链接目标、标题、引用定义和裸 URL 不参与数量比较。可用 `pandoc --from=commonmark --to=json` 检查索引。
+- `field`：已有结构化记录可用 `{"kind":"field","pointer":"/quantity_fields/cost"}` 选择纯文本字段。原文单元和译文单元分别显式提供 `quantity_fields`，例如 `{"cost":"2"}` / `{"cost":"二"}`。支持 RFC 6901 转义和规范零起始数组下标；不支持通配符、非字符串值或 `00` 数组下标。这只核对该字段，不证明正文也保留数量。两侧依旧必须提供正常 `source` / `translation` 记录。字段不按 Markdown 渲染。
+- 选择器缺失、对应单元缺失/重复、解析器不可用、空文本及未找到受支持数量均需审阅，不视为相等。未知单元、配置结构错误、重复 scope ID 或同侧端点重复属于配置错误。显式空 `scopes: []` 合法，状态为 `no_scopes_configured`；显式 `null`、空文件参数、重复 JSON 键都不是省略选项。
+
+每条范围及其风险保留两侧 `unit_id`、选择器、输入记录的 `field_pointer`、提取全文和数量引文。Markdown 还保存完整原始字段及 `ast_paths`。token 的 `start/end` 是 `extracted_text` 内 Unicode 码点的半开区间，**不是原始 Markdown 偏移**。某侧无法提取时仍保存其定位与原因，并保留另一侧已有证据。
+
+### 有意收窄的数字支持
+
+- 支持无符号阿拉伯整数及全角数字；中文常规整数 0–9999（含两/兩/〇的等价写法）；英文 0–99 的常见基数写法及 once/twice。
+- 骰式作为一个整体：`d6` 与 `1d6`、大小写和空格等可归一化，支持一个可选整数加减修正，不把 `2d6` 拆成 `2` 和 `6`。既有交付门禁仍另行要求保留原始骰式，因此数量表面相同的 `d6` → `1d6` 仍可能被原门禁拦住，本选项不放宽旧规则。
+- 多个数量按原顺序、类型和重复次数比较，不只比较集合。合法调序也可能产生待审风险；数量对应的主体、资源、单位、条件、范围与正负语义仍须实际阅读确认。
+- 小数、分数、百分比、范围、符号整数、分组数字、序数、复杂骰式、额外算式和未支持的 Unicode 数字等保留为不确定线索，不把已识别的复杂形式拆成普通整数后宣称相等。`负二`、`two-thirds`、`two point five`、`1 000` 等均需审阅。`一百二` 等简写及 `一旦/一起/统一/两者` 等可能不是数量的中文词汇也不会直接认作已确认数字。
+- 这不是完整自然语言数字解析器，有限词法不能识别所有数量概念、习语或特殊写法。人工范围选择、未检测到的表达和文本语义仍需复核。即使 `quantity_surface_match`、没有风险或显式空配置，报告始终 `semantic_verified: false`；相同数字绝不证明译文正确。
+
+### 在新运行中启用
+
+```bash
+python experiments/context_contract/delivery_gate.py prepare cases.json ../translation-trial-runs/new-quantity-run --quantity-scopes quantity-scopes.json
+# 或与 PBRES 名称绑定同时启用：
+python experiments/context_contract/pbres_names.py prepare cases.json resources.json ../translation-trial-runs/new-quantity-run --bindings name-bindings.json --quantity-scopes quantity-scopes.json
+```
+
+后续沿用对应入口的 `polish` 以及 `delivery_gate.py release`。配置和指引进入两个生成分支、候选精修及基线审阅；release 对实际冻结交付再次核对，单独输出 `quantity_risk_checks`，不混入术语/名称 findings 或语义错误计数。任一启用范围需审阅，都会阻止作为干净成稿通过。配置、实现和输入包内的配置哈希一同锁定；删改配置或注册信息、改写已冻结输出会阻止重新通过，并先撤销旧的通过状态。
+
+`prepare` 的最终交付结构只有 Markdown，所以任一侧 `field` 选择器都会在创建运行目录前拒绝；字段检查仅用于独立 `scan` / PBRES `check`。API 为 `scan_records(..., quantity_scopes=配置)`、`prepare(..., quantity_scopes=配置)`，PBRES 的 `prepare/check` 接受同名可选参数；省略与显式 `None` 不等价。
+
 ## 已知边界
 
 - 校验表与资源一致、绑定与父资源一致，不代表人工资源归属正确。若调用者把同名单元的父资源和绑定一起填错，工具不能从字面证明这种错误；资源边界、父子归属、名称译法和所选位置仍须人工确认。

@@ -126,13 +126,14 @@ def validate_bindings(resources, sidecar, sources, bindings, *, markdown_only=Fa
     binding_module().validate_config(resources, sidecar, sources, bindings, markdown_only=markdown_only)
 
 
-def prepare(cases, resources, out, bindings=_UNSET):
+def prepare(cases, resources, out, bindings=_UNSET, *, quantity_scopes=_UNSET):
     """Bind sidecar and policy to both drafting arms and later refinement."""
     sidecar = extract(resources)  # Validate before creating a run.
     if bindings is not _UNSET:
         validate_bindings(resources, sidecar, cases, bindings, markdown_only=True)
     gate = gate_module()
-    gate.prepare(cases, out, {'allowed_latin': []})
+    options = {} if quantity_scopes is _UNSET else {'quantity_scopes': quantity_scopes}
+    gate.prepare(cases, out, {'allowed_latin': []}, **options)
     run = Path(out)
     write(run / 'original-name-resources.json', resources)
     write(run / 'original-names.json', sidecar)
@@ -180,11 +181,12 @@ def polish(run, development=False):
         write(run / 'stage-input-hashes.json', hashes)
 
 
-def check(resources, sidecar, sources, translations, bindings=_UNSET):
+def check(resources, sidecar, sources, translations, bindings=_UNSET, *, quantity_scopes=_UNSET):
     validate(resources, sidecar)
     # Sidecar English never grants a prose exemption. Dice/links remain protected.
     gate = gate_module()
-    result = gate.scan_records(sources, translations, {'allowed_latin': []})
+    options = {} if quantity_scopes is _UNSET else {'quantity_scopes': quantity_scopes}
+    result = gate.scan_records(sources, translations, {'allowed_latin': []}, **options)
     if bindings is not _UNSET:
         module = binding_module()
         try:
@@ -202,19 +204,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('extract'); p.add_argument('resources'); p.add_argument('out')
-    p = sub.add_parser('prepare'); p.add_argument('cases'); p.add_argument('resources'); p.add_argument('out'); p.add_argument('--bindings')
-    p = sub.add_parser('check'); p.add_argument('resources'); p.add_argument('sidecar'); p.add_argument('sources'); p.add_argument('translations'); p.add_argument('--bindings')
+    p = sub.add_parser('prepare'); p.add_argument('cases'); p.add_argument('resources'); p.add_argument('out'); p.add_argument('--bindings'); p.add_argument('--quantity-scopes')
+    p = sub.add_parser('check'); p.add_argument('resources'); p.add_argument('sidecar'); p.add_argument('sources'); p.add_argument('translations'); p.add_argument('--bindings'); p.add_argument('--quantity-scopes')
     p = sub.add_parser('polish'); p.add_argument('run'); p.add_argument('--development', action='store_true')
     args = parser.parse_args()
     if args.command == 'extract':
         write(args.out, extract(read(args.resources)))
     elif args.command == 'prepare':
-        prepare(read(args.cases), read(args.resources), args.out, read(args.bindings) if args.bindings else _UNSET)
+        prepare(read(args.cases), read(args.resources), args.out, read(args.bindings) if args.bindings else _UNSET,
+                quantity_scopes=read(args.quantity_scopes) if args.quantity_scopes is not None else _UNSET)
     elif args.command == 'polish':
         polish(args.run, args.development)
     else:
         result = check(read(args.resources), read(args.sidecar), read(args.sources), read(args.translations),
-                       read(args.bindings) if args.bindings else _UNSET)
+                       read(args.bindings) if args.bindings else _UNSET,
+                       quantity_scopes=read(args.quantity_scopes) if args.quantity_scopes is not None else _UNSET)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         if not result['release_allowed']:
             raise SystemExit(2)

@@ -4,6 +4,11 @@ Never rewrites translation text; old frozen experiments remain unchanged.
 import argparse,collections,importlib.util,json,re,subprocess,shutil
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('delivery_tp',Path(__file__).with_name('two_pass.py'));tp=importlib.util.module_from_spec(spec);spec.loader.exec_module(tp);v=tp.v1
+_UNSET=object()
+
+def quantity_module():
+ spec=importlib.util.spec_from_file_location('delivery_quantity_risks',Path(__file__).with_name('quantity_risks.py'));module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+
 POLICY='''最新交付要求优先于旧REFERENCE的双语保留规则：成稿为中文。已经译出的职业、种族、领域、资源、特性等，不附加无必要英文（例如“守护者 Guardian”不合格）。正文和标题统一受此约束。
 仅保留原始骰式、链接目标及交付profile逐项列明确有必要保留的原名；不能因为原文出现英文就默认全部保留。遇到旧规范要求“译名 原名”时按本条覆盖，不把规范冲突交给用户。
 固定模板保护的是机制正文与明确中文定式（如每长休一次）；模板示例中的英文标题或原名补注不因此成为必保留内容。中文固定表达与规则不得删改，原名仍按本profile决定。
@@ -77,7 +82,7 @@ def inspect(text,profile=None,source=None):
    if name.get('required',False) and re.search(pattern,original['visible']) and not re.search(pattern,visible):findings.append({'kind':'missing_required_original_name','text':name['text']})
  return findings
 
-def scan_records(sources,translations,profile=None):
+def _scan_records(sources,translations,profile=None):
  errors=[]
  if not isinstance(sources,list) or not sources or any(not isinstance(u,dict) or not isinstance(u.get('id'),str) or not isinstance(u.get('source'),str) for u in sources):return {'release_allowed':False,'identity_errors':['invalid sources'],'units':[]}
  units=translations.get('units') if isinstance(translations,dict) else None
@@ -87,6 +92,13 @@ def scan_records(sources,translations,profile=None):
  lookup={u['id']:u['source'] for u in sources};rows=[{'id':u['id'],'findings':inspect(u['translation'],profile,lookup[u['id']])} for u in units if u['id'] in lookup]
  return {'release_allowed':not errors and all(not r['findings'] for r in rows),'identity_errors':errors,'units':rows}
 
+def scan_records(sources,translations,profile=None,*,quantity_scopes=_UNSET):
+ result=_scan_records(sources,translations,profile)
+ if quantity_scopes is not _UNSET:
+  result['quantity_risk_check']=quantity_module().scan(sources,translations,quantity_scopes,parse_commonmark_ast)
+  result['release_allowed']=result['release_allowed'] and result['quantity_risk_check']['release_allowed']
+ return result
+
 def policy_text(profile):return POLICY+'\n明确允许原名清单：'+json.dumps(profile.get('allowed_latin',[]),ensure_ascii=False)
 def update_manifest(run):
  manifest=v.read_json(run/'manifest.json');manifest['rules'][str(Path(__file__).relative_to(v.ROOT))]=v.digest(Path(__file__).read_bytes());manifest['prepared_files'].update({n:v.digest((run/n).read_bytes()) for n in ['delivery-profile.json','phase1-generate.txt','baseline-generate.txt','two-pass-packet.json']});manifest['release_gate_required']=True;v.dump(run/'manifest.json',manifest)
@@ -94,15 +106,25 @@ def parser_identity():
  if not shutil.which('pandoc'):raise RuntimeError('pandoc required for delivery gate')
  r=subprocess.run(['pandoc','--version'],capture_output=True,text=True,check=True,timeout=15)
  return {'engine':'pandoc','format':'commonmark','version':r.stdout.splitlines()[0]}
-def prepare(cases,out,profile):
+def prepare(cases,out,profile,*,quantity_scopes=_UNSET):
+ if quantity_scopes is not _UNSET:quantity_module().validate_config(cases,quantity_scopes,markdown_only=True)
  profile_validate(profile);parser=parser_identity();tp.prepare(cases,out);run=Path(out);v.dump(run/'delivery-profile.json',profile);policy=policy_text(profile)
+ if quantity_scopes is not _UNSET:
+  v.dump(run/'quantity-scopes.json',quantity_scopes);policy+='\n\n'+quantity_module().policy(quantity_scopes)
  for name in ['phase1-generate.txt','baseline-generate.txt']:
   f=run/name;f.write_text(policy+'\n\n'+f.read_text(),encoding='utf-8')
- packet=v.read_json(run/'two-pass-packet.json');packet['guidance']=policy+'\n\n'+packet['guidance'];v.dump(run/'two-pass-packet.json',packet);update_manifest(run);manifest=v.read_json(run/'manifest.json');manifest['delivery_parser']=parser;v.dump(run/'manifest.json',manifest)
+ packet=v.read_json(run/'two-pass-packet.json');packet['guidance']=policy+'\n\n'+packet['guidance']
+ if quantity_scopes is not _UNSET:packet['quantity_scope_contract']={'file':'quantity-scopes.json','sha256':v.digest((run/'quantity-scopes.json').read_bytes())}
+ v.dump(run/'two-pass-packet.json',packet);update_manifest(run);manifest=v.read_json(run/'manifest.json');manifest['delivery_parser']=parser
+ if quantity_scopes is not _UNSET:
+  manifest['quantity_scopes']='quantity-scopes.json';manifest['prepared_files']['quantity-scopes.json']=v.digest((run/'quantity-scopes.json').read_bytes());manifest['rules']['experiments/context_contract/quantity_risks.py']=v.digest(Path(__file__).with_name('quantity_risks.py').read_bytes())
+ v.dump(run/'manifest.json',manifest)
 def polish(run,development=False):
  run=Path(run);tp.polish_packet(run,not development)
  if not development:
-  f=run/'baseline-review.txt';f.write_text(policy_text(v.read_json(run/'delivery-profile.json'))+'\n\n'+f.read_text(),encoding='utf-8');h=v.read_json(run/'stage-input-hashes.json');h['baseline-review.txt']=v.digest(f.read_bytes());v.dump(run/'stage-input-hashes.json',h)
+  policy=policy_text(v.read_json(run/'delivery-profile.json'))
+  if v.read_json(run/'manifest.json').get('quantity_scopes'):policy+='\n\n'+quantity_module().policy(v.read_json(run/'quantity-scopes.json'))
+  f=run/'baseline-review.txt';f.write_text(policy+'\n\n'+f.read_text(),encoding='utf-8');h=v.read_json(run/'stage-input-hashes.json');h['baseline-review.txt']=v.digest(f.read_bytes());v.dump(run/'stage-input-hashes.json',h)
 def release(run,development=False):
  run=Path(run);v.dump(run/'delivery-gate.json',{'release_allowed':False,'status':'REVALIDATING_OR_BLOCKED','note':'Prior success invalidated before checking current bytes.'});manifest=v.read_json(run/'manifest.json')
  for n,h in manifest['rules'].items():
@@ -113,6 +135,12 @@ def release(run,development=False):
  profile=v.read_json(run/'delivery-profile.json')
  # Cross-check the hash-pinned packet and rule registration, not just the optional marker.
  bindings=None;names=None;packet=v.read_json(run/'two-pass-packet.json')
+ quantity_scopes=_UNSET;quantity_rule='experiments/context_contract/quantity_risks.py'
+ if 'quantity_scopes' in manifest or 'quantity-scopes.json' in manifest['prepared_files'] or (run/'quantity-scopes.json').exists() or quantity_rule in manifest['rules'] or 'quantity_scope_contract' in packet:
+  if manifest.get('quantity_scopes')!='quantity-scopes.json' or 'quantity-scopes.json' not in manifest['prepared_files']:raise ValueError('prepared quantity scope registration missing or invalid')
+  if quantity_rule not in manifest['rules']:raise ValueError('prepared quantity scope rule registration missing')
+  if packet.get('quantity_scope_contract')!={'file':'quantity-scopes.json','sha256':v.digest((run/'quantity-scopes.json').read_bytes())}:raise ValueError('prepared quantity scope packet contract missing or changed')
+  quantity_scopes=quantity_module().read(run/'quantity-scopes.json');quantity_module().validate_config(v.read_json(run/'sources.json'),quantity_scopes,markdown_only=True)
  binding_rule='experiments/context_contract/pbres_bindings.py'
  if 'name_bindings' in manifest or 'name-bindings.json' in manifest['prepared_files'] or (run/'name-bindings.json').exists() or binding_rule in manifest['rules'] or 'name_binding_contract' in packet:
   if manifest.get('name_bindings')!='name-bindings.json' or 'name-bindings.json' not in manifest['prepared_files']:raise ValueError('prepared name binding registration missing or invalid')
@@ -128,29 +156,35 @@ def release(run,development=False):
  frozen=v.read_json(run/'frozen.json')
  for n,h in frozen['output_hashes'].items():
   if v.digest((run/n).read_bytes())!=h:raise ValueError('frozen output changed: '+n)
- sources={u['id']:u['source'] for u in v.read_json(run/'sources.json')};arms=['candidate'] if development else ['baseline','candidate'];results={}
+ sources={u['id']:u['source'] for u in v.read_json(run/'sources.json')};arms=['candidate'] if development else ['baseline','candidate'];results={};quantity_results={}
  for arm in arms:
   path=run/(arm+'-delivery.json')
   if not path.exists():results[arm]=[{'kind':'missing_valid_delivery'}];continue
-  checked=scan_records(v.read_json(run/'sources.json'),v.read_json(path),profile)
+  checked=scan_records(v.read_json(run/'sources.json'),v.read_json(path),profile,quantity_scopes=quantity_scopes)
+  if quantity_scopes is not _UNSET:quantity_results[arm]=checked['quantity_risk_check']
   if names is not None:
    bound=names.check(resources,sidecar,v.read_json(run/'sources.json'),v.read_json(path),bindings)['name_binding_check']
    checked['units']+=bound['bindings']+[{'kind':'name_binding_configuration_error','detail':e} for e in bound['configuration_errors']]
   results[arm]=checked['units']+[{'kind':'identity_error','detail':e} for e in checked['identity_errors']]
  allowed=not frozen.get('structural_errors') and all(all(not row.get('findings') and 'kind' not in row for row in rows) for rows in results.values())
- out={'release_allowed':allowed,'status':'ready-for-semantic-review' if allowed else 'BLOCKED','parser':manifest['delivery_parser'],'checked_output_hashes':frozen['output_hashes'],'profile_sha256':v.digest((run/'delivery-profile.json').read_bytes()),'findings':results,'gate_scope':'Basic delivery only; true does not authorize automatic publication or replace semantic review.','note':'No text changed. Passing basic gate is not semantic/fluency proof. A blocked result cannot be automatically delivered as clean final.'};v.dump(run/'delivery-gate.json',out);return out
+ if quantity_scopes is not _UNSET:allowed=allowed and len(quantity_results)==len(arms) and all(r['release_allowed'] for r in quantity_results.values())
+ out={'release_allowed':allowed,'status':'ready-for-semantic-review' if allowed else 'BLOCKED','parser':manifest['delivery_parser'],'checked_output_hashes':frozen['output_hashes'],'profile_sha256':v.digest((run/'delivery-profile.json').read_bytes()),'findings':results,'gate_scope':'Basic delivery only; true does not authorize automatic publication or replace semantic review.','note':'No text changed. Passing basic gate is not semantic/fluency proof. A blocked result cannot be automatically delivered as clean final.'}
+ if quantity_scopes is not _UNSET:
+  out['quantity_risk_checks']=quantity_results;out['semantic_verified']=False;out['quantity_scopes_sha256']=v.digest((run/'quantity-scopes.json').read_bytes());out['gate_scope']='Basic delivery plus explicitly scoped quantity risks; neither proves semantics or authorizes publication.'
+ v.dump(run/'delivery-gate.json',out);return out
 
 def main():
- p=argparse.ArgumentParser();s=p.add_subparsers(dest='command',required=True);q=s.add_parser('scan');q.add_argument('sources');q.add_argument('translations');q.add_argument('--profile');q.add_argument('--output');q=s.add_parser('prepare');q.add_argument('cases');q.add_argument('out');q.add_argument('--profile');
+ p=argparse.ArgumentParser();s=p.add_subparsers(dest='command',required=True);q=s.add_parser('scan');q.add_argument('sources');q.add_argument('translations');q.add_argument('--profile');q.add_argument('--output');q.add_argument('--quantity-scopes');q=s.add_parser('prepare');q.add_argument('cases');q.add_argument('out');q.add_argument('--profile');q.add_argument('--quantity-scopes');
  for name in ['polish','release']:
   q=s.add_parser(name);q.add_argument('run');q.add_argument('--development',action='store_true')
  a=p.parse_args()
  if a.command=='scan':
-  profile=v.read_json(a.profile) if a.profile else {'allowed_latin':[]};result=scan_records(v.read_json(a.sources),v.read_json(a.translations),profile);result['policy']='Latest Chinese-delivery gate; findings are blockers, not automatic semantic error counts'
+  profile=v.read_json(a.profile) if a.profile else {'allowed_latin':[]};read=quantity_module().read if a.quantity_scopes is not None else v.read_json;result=scan_records(read(a.sources),read(a.translations),profile,quantity_scopes=read(a.quantity_scopes) if a.quantity_scopes is not None else _UNSET);result['policy']='Latest Chinese-delivery gate; findings are blockers, not automatic semantic error counts'
   if a.output:v.dump(a.output,result)
   print(json.dumps(result,ensure_ascii=False,indent=2))
   if not result['release_allowed']:raise SystemExit(2)
- elif a.command=='prepare':prepare(v.read_json(a.cases),a.out,v.read_json(a.profile) if a.profile else {'allowed_latin':[]})
+ elif a.command=='prepare':
+  read=quantity_module().read if a.quantity_scopes is not None else v.read_json;prepare(read(a.cases),a.out,v.read_json(a.profile) if a.profile else {'allowed_latin':[]},quantity_scopes=read(a.quantity_scopes) if a.quantity_scopes is not None else _UNSET)
  elif a.command=='polish':polish(a.run,a.development)
  else:
   result=release(a.run,a.development);print(json.dumps(result,ensure_ascii=False,indent=2))
