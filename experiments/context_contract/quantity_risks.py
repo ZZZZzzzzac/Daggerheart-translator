@@ -269,6 +269,43 @@ def _english_integer(text):
     return None
 
 
+def _signed_integer(raw, context, start, end):
+    """An isolated signed literal, not an operand rescued from an expression."""
+    if not re.fullmatch(r'[+−-][0-9]+', raw):
+        return None
+    # Label punctuation and parentheses may introduce a literal. A contiguous
+    # identifier, doubled sign, or operator must not supply a safe boundary.
+    opening, closing = '([{（【:：', ')]}）】'
+    if start and not (context[start - 1].isspace() or context[start - 1] in opening):
+        return None
+    prefix = context[:start].rstrip()
+    while prefix and prefix[-1] in opening:
+        prefix = prefix[:-1].rstrip()
+    operators = '+−-*/×÷·⋅^⁄–—~～=<>±∓%‰.,\\|&_\ufffc'
+    if prefix and (prefix[-1] in operators or prefix[-1].isnumeric()):
+        return None
+    word_operators = (r'negative|positive|minus|plus|times|over|point|to|through|'
+                      r'divided\s+by|multiplied\s+by')
+    if re.search(r'(?:\b(?:' + word_operators + r')|[负負正到至乘除加减減])\s*$', prefix, re.I):
+        return None
+    if re.search(r'(?<!\w)[^\W\d_]\s*$', prefix):  # e.g. x -3 or α -3
+        return None
+    if end < len(context) and context[end].isalpha() and not UNIT_SUFFIX.match(context[end:]):
+        return None  # Unicode identifiers must not be silently truncated either.
+    suffix = context[end:].lstrip()
+    while suffix and suffix[0] in closing:
+        suffix = suffix[1:]
+        if suffix and suffix[0].isalpha() and not UNIT_SUFFIX.match(suffix):
+            return None  # e.g. (+3)foo, rather than a separate following word
+        suffix = suffix.lstrip()
+    if (suffix and (suffix[0] in operators.replace('.', '').replace(',', '') + "'’" or
+                    suffix[0].isnumeric()) or
+            re.match(r'[.,]\s*[0-9]|[xX]\b|(?:' + word_operators + r')\b|[到至乘除加减減]', suffix, re.I)):
+        return None
+    sign = '-' if raw[0] in {'−', '-'} else '+'
+    return sign + str(int(raw[1:]))
+
+
 def tokenize(text):
     """Offsets always refer to the supplied extracted text, including full width."""
     normalized = text.translate(FULLWIDTH)
@@ -299,6 +336,11 @@ def tokenize(text):
                     value += ('-' if sign in {'−', '-'} else '+') + str(int(modifier))
         elif re.fullmatch('[0-9]+', raw):
             value = str(int(raw))
+        elif re.fullmatch(r'[+−-][0-9]+', raw):
+            # Non-whitespace URL masks cannot manufacture a literal boundary.
+            value = _signed_integer(raw, article_text, start, end)
+            if value is None:
+                reason = 'signed integer is adjacent to unsupported expression syntax'
         elif re.fullmatch('[' + CN + ']+', raw):
             value = _cn_integer(raw)
             suffix = text[end:]

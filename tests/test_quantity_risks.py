@@ -74,6 +74,88 @@ class QuantityTests(unittest.TestCase):
                 self.assertEqual(result['status'], 'quantity_surface_match', result)
                 self.assertFalse(result['semantic_verified'])
 
+    def test_isolated_signed_integer_spellings_keep_explicit_sign_and_offsets(self):
+        for left, right, value in [('+3', '+3', '+3'), ('-3', '-3', '-3'),
+                                   ('−3', '-3', '-3'), ('＋０３', '+3', '+3'),
+                                   ('－０３', '−3', '-3'), ('+0', '+00', '+0'),
+                                   ('-0', '−00', '-0')]:
+            with self.subTest(left=left, right=right):
+                sources, targets = records('Bonus: ' + left + '.', '加值：' + right + '。')
+                before = copy.deepcopy([sources, targets])
+                result = q.scan(sources, targets, config(), gate.parse_commonmark_ast)
+                self.assertEqual(result['status'], 'quantity_surface_match', result)
+                self.assertFalse(result['semantic_verified'])
+                for side in ['source', 'translation']:
+                    evidence = result['scopes'][0][side]
+                    self.assertEqual([t['value'] for t in evidence['tokens']], [value])
+                    self.assertFalse(evidence['uncertain'])
+                    for token in evidence['tokens']:
+                        self.assertEqual(evidence['extracted_text'][token['start']:token['end']], token['quote'])
+                self.assertEqual([sources, targets], before)
+        result = self.scan('**Experience:** Aquatic +3', '**经历：** 水生 +3')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        self.assertEqual(result['scopes'][0]['source']['tokens'], [
+            {'start': 20, 'end': 22, 'quote': '+3', 'kind': 'integer', 'value': '+3'}])
+        self.assertEqual(self.scan('**ATK:** +3', '**攻击加值：** +3')['status'], 'quantity_surface_match')
+
+    def test_signed_integer_changes_omissions_repetition_and_order_need_review(self):
+        for source, target in [('+3', '-3'), ('-3', '+3'), ('+3', '+4'),
+                               ('+3', '3'), ('-3', '3'), ('+0', '-0'),
+                               ('+3', ''), ('+3', '+3；加值：+3'),
+                               ('+3; bonus -2', '-2；加值：+3')]:
+            with self.subTest(source=source, target=target):
+                result = self.scan('Bonus: ' + source + '.', '加值：' + target + '。')
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertIn('quantity_sequence_difference', [r['kind'] for r in result['scopes'][0]['risks']])
+                self.assertFalse(result['semantic_verified'])
+
+    def test_signed_literals_cannot_be_rescued_from_malformed_or_compound_contexts(self):
+        examples = ['++3', '--3', '+-3', '-+3', '*-3', '/+3', 'x-3', 'id-3',
+                    'x -3', '3 +3', '* +3', '+ +3', '- (-3)', '*(+3)',
+                    'negative +3', 'minus -3', 'positive -3', 'plus +3',
+                    '负-3', '负 +3', '負 -3', '正 +3', 'negative (+3)',
+                    '+3+', '+3 /', '+3 * x', '(+3)*2', '+3 x 2',
+                    '+3 ,5', '+3 .5', '+3.5', '+3/4', '+3-4', '+3–4',
+                    '+3%', '+3e2', '+3d6', '−3d6', '+ 3', '- 3',
+                    '3:+3', '3 : +3', '3 / (+3)', '+3 = 4', '+3^2',
+                    '+3_000', '+3_foo', '+3 point five', '+3 point',
+                    '3 times -4', '3 divided by -4', '3 multiplied by -4',
+                    '3 over -4', '3 to -4', '3 through -4',
+                    '+3 times four', '+3 divided by four', '+3 over four',
+                    '+3 to five', '+3 到 5', '3 至 -4',
+                    '+3 000', '-3 000', '+3\u00a0000', "+3'000", '+3’000',
+                    '+3 to -5', '+3 through -5', '+3 point 5', '+3é', '+3三',
+                    '+3·4', '+3⋅4', '4·-3', '4⋅-3', 'α -3', '(+3)foo']
+        for expression in examples:
+            with self.subTest(expression=expression):
+                result = self.scan('Bonus: ' + expression + '.', '加值：+3。')
+                evidence = result['scopes'][0]['source']
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertTrue(evidence['uncertain'], evidence)
+                for token in evidence['tokens'] + evidence['uncertain']:
+                    self.assertEqual(evidence['extracted_text'][token['start']:token['end']], token['quote'])
+
+    def test_signed_literals_keep_unsupported_identical_forms_uncertain(self):
+        for expression in ['+3.5', '-3.5', '3-5', '+3-5', '10/17', '+3/4',
+                           'negative three', 'minus 3', '负三', '负3',
+                           '++3', '--3', 'x-3', 'negative +3', '+3_000',
+                           '+3 point five', '3 times -4', '3 divided by -4']:
+            with self.subTest(expression=expression):
+                result = self.scan('Bonus: ' + expression + '.', '加值： ' + expression + '。')
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertTrue(result['scopes'][0]['source']['uncertain'], result)
+                self.assertTrue(result['scopes'][0]['translation']['uncertain'], result)
+
+    def test_signed_literal_boundaries_do_not_use_masked_urls(self):
+        result = self.scan('[Bonus +3](https://example.org/+9).', '加值：+3。')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        for source in ['Bonus: https://example.org/value +3.',
+                       'Bonus: +3 https://example.org/value']:
+            with self.subTest(source=source):
+                result = self.scan(source, '加值：+3。')
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertTrue(result['scopes'][0]['source']['uncertain'], result)
+
     def test_counted_hp_article_has_exact_original_evidence(self):
         source = ('**Healing Skin - Reaction:** When the Eeligator is spotlighted, '
                   'you can mark 2 Stress to clear a HP.')
@@ -205,9 +287,9 @@ class QuantityTests(unittest.TestCase):
 
     def test_unsupported_lexemes_never_pass_as_integer_fragments(self):
         examples = ['1.5', '.5', '1,000', '1/2', '10%', '10 percent', '2–3', '2-3',
-                    '2 to 3', '2:3', '1e3', '-2', '- 2', '+2', '2nd', 'x2', '2x',
+                    '2 to 3', '2:3', '1e3', '- 2', '2nd', 'x2', '2x',
                     '2 + 3', 'half', 'one hundred', 'one and two', '½', '²', 'Ⅲ', '٢',
-                    '１．５', '１／２', '＋２', '2d6kh1', 'd6!', 'd6+2+3', 'd6/2',
+                    '１．５', '１／２', '2d6kh1', 'd6!', 'd6+2+3', 'd6/2',
                     'd6 + 1d4', '0d6', 'd0', 'd6 + Strength', 'negative two', 'minus 2',
                     'two-thirds', 'twenty-first', 'two point five', 'two thirds', 'twenty first',
                     'two percent', '2 per cent', '1 000', '1\u202f000', '2点5', '2÷3', '2^3', '2d6÷2']
