@@ -211,6 +211,14 @@ STRICT_DICE = re.compile(r'([0-9]*)[dD]([0-9]+)(?:([+−-])([0-9]+))?')
 UNIT_SUFFIX = re.compile(r'(?:点|點|次|个|個|名|颗|顆|枚|张|張|只|位|轮|輪|回合|小时|小時|分钟|分鐘|天|日|周|米|尺|格|步|级|級|层|層|项|項|种|種|条|條|份|压力|壓力|希望|生命|护甲|護甲|伤害|傷害|目标|目標|敌人|敵人|盟友|骰|以上|以下|以内|以內|以外)')
 AMBIGUOUS_CN = re.compile('一旦|一起|一同|一并|一併|一律|一致|唯一|统一|統一|万一|萬一|两者|兩者|二者|一方|十分|一半')
 URL = re.compile(r"https?://[A-Za-z0-9:/?#\[\]@!$&'()*+,;=%._~+\-]+")
+# A single, bounded mechanic spelling, not a general article-to-one rule.
+# Whitespace/start before the verb excludes compounds such as "un-clear".
+# Horizontal spaces cannot bridge the blank lines joining extracted blocks;
+# terminal punctuation must itself end before whitespace or end of text.
+COUNTED_HP_ARTICLE = re.compile(
+    r'(?<!\S)clear[ \t]+(?P<article>an?)[ \t]+HP'
+    r'(?=[ \t]*(?:\Z|[.!?;](?=\s|\Z)))', re.I)
+HP_ARTICLE = re.compile(r'(?<!\w)(?P<article>an?)[ \t]+HP(?!\w)', re.I)
 
 
 def _cn_spelling(number):
@@ -264,10 +272,14 @@ def _english_integer(text):
 def tokenize(text):
     """Offsets always refer to the supplied extracted text, including full width."""
     normalized = text.translate(FULLWIDTH)
+    article_text = normalized
     # Mask URLs without changing offsets. Explicit Markdown destinations were
     # already omitted by the AST extraction; bare URLs are not quantity evidence.
     for match in list(URL.finditer(normalized)):
         normalized = normalized[:match.start()] + ' ' * len(match.group()) + normalized[match.end():]
+        # A URL must not supply the spaces or end-of-clause gap required by the
+        # counted-article grammar. Keep its mask non-whitespace and same-length.
+        article_text = article_text[:match.start()] + '\ufffc' * len(match.group()) + article_text[match.end():]
     tokens, uncertain, covered = [], [], set()
     ambiguous = [m.span() for m in AMBIGUOUS_CN.finditer(text)]
     for match in LEXEMES.finditer(normalized):
@@ -309,7 +321,16 @@ def tokenize(text):
         if index not in covered and char.isnumeric():
             uncertain.append({'start': index, 'end': index + 1, 'quote': text[index:index + 1],
                               'reason': 'unsupported Unicode numeric form'})
-    return {'tokens': tokens, 'uncertain': sorted(uncertain, key=lambda item: item['start'])}
+    counted_articles = {match.span('article') for match in COUNTED_HP_ARTICLE.finditer(article_text)}
+    for match in HP_ARTICLE.finditer(article_text):
+        start, end = match.span('article')
+        evidence = {'start': start, 'end': end, 'quote': text[start:end]}
+        if (start, end) in counted_articles:
+            tokens.append(dict(evidence, kind='integer', value='1'))
+        else:
+            uncertain.append(dict(evidence, reason='HP article is outside the supported counted operation'))
+    return {'tokens': sorted(tokens, key=lambda item: item['start']),
+            'uncertain': sorted(uncertain, key=lambda item: item['start'])}
 
 
 def scan(sources, translations, config, parse_ast):

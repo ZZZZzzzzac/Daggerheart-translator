@@ -1,4 +1,4 @@
-"""Synthetic scoped quantity regressions; no model runs or historical artifacts."""
+"""Scoped quantity regressions; no model runs or external artifact dependencies."""
 import copy
 import json
 import subprocess
@@ -73,6 +73,104 @@ class QuantityTests(unittest.TestCase):
                 result = self.scan('Mark ' + left + ' Stress.', '标记' + right + '压力点。')
                 self.assertEqual(result['status'], 'quantity_surface_match', result)
                 self.assertFalse(result['semantic_verified'])
+
+    def test_counted_hp_article_has_exact_original_evidence(self):
+        source = ('**Healing Skin - Reaction:** When the Eeligator is spotlighted, '
+                  'you can mark 2 Stress to clear a HP.')
+        target = '**自愈表皮 - 反应：** 当电鳗鳄获得聚焦时，你可以为它标记 2 压力点，使它恢复 1 生命点。'
+        sources, translations = records(source, target)
+        before = copy.deepcopy([sources, translations])
+        result = q.scan(sources, translations, config(), gate.parse_commonmark_ast)
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        self.assertFalse(result['semantic_verified'])
+        row = result['scopes'][0]
+        self.assertEqual(row['source']['tokens'], [
+            {'start': 73, 'end': 74, 'quote': '2', 'kind': 'integer', 'value': '2'},
+            {'start': 91, 'end': 92, 'quote': 'a', 'kind': 'integer', 'value': '1'}])
+        self.assertEqual([(t['start'], t['end'], t['quote']) for t in row['translation']['tokens']],
+                         [(29, 30, '2'), (40, 41, '1')])
+        for side in ['source', 'translation']:
+            for token in row[side]['tokens']:
+                self.assertEqual(row[side]['extracted_text'][token['start']:token['end']], token['quote'])
+        self.assertEqual([sources, translations], before)
+
+    def test_counted_hp_article_variants_and_repetition_keep_order(self):
+        for source, quote in [('Clear a HP', 'a'), ('clear an HP.', 'an'),
+                              ('CLEAR A HP!', 'A'), ('Clear\ta\tHP?', 'a'),
+                              ('Clear **an** HP.', 'an')]:
+            with self.subTest(source=source):
+                result = self.scan(source, '恢复1生命点。')
+                self.assertEqual(result['status'], 'quantity_surface_match', result)
+                self.assertEqual(result['scopes'][0]['source']['tokens'][0]['quote'], quote)
+        result = self.scan('Clear a HP; clear an HP. Mark 2 Stress.', '恢复1生命点，恢复1生命点，标记2压力点。')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        self.assertEqual([t['value'] for t in result['scopes'][0]['source']['tokens']], ['1', '1', '2'])
+
+    def test_counted_hp_article_does_not_hide_changes_or_omissions(self):
+        source = 'Mark 2 Stress to clear a HP.'
+        for target in ['标记3压力点，恢复1生命点。', '标记2压力点，恢复2生命点。',
+                       '标记2压力点。', '恢复1生命点。',
+                       '标记2压力点，恢复1生命点，再恢复1生命点。', '恢复1生命点，标记2压力点。']:
+            with self.subTest(target=target):
+                result = self.scan(source, target)
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertIn('quantity_sequence_difference', [r['kind'] for r in result['scopes'][0]['risks']])
+                self.assertFalse(result['semantic_verified'])
+
+    def test_unsupported_hp_articles_are_uncertain_not_silent_matches(self):
+        for expression in ['a HP', 'a HP threshold', 'clear a HP threshold.',
+                           "clear a HP's value.", 'clear a HP-related effect.',
+                           'clear a HP/Stress.', 'clear a HP or two.',
+                           'clear a HP, then act.', 'clear a HP every turn.',
+                           'clear a HP.threshold', 'unclear a HP.', 'un-clear a HP.',
+                           'foo/clear a HP.', '_clear a HP.', 'clear\n\na HP.',
+                           'negative a HP.', 'half a HP.']:
+            with self.subTest(expression=expression):
+                result = self.scan('Mark 2 Stress. ' + expression, '标记2压力点。')
+                self.assertEqual(result['status'], 'needs_review', result)
+                evidence = result['scopes'][0]['source']
+                self.assertTrue(evidence['uncertain'], evidence)
+                self.assertNotIn('1', [t['value'] for t in evidence['tokens']])
+                for token in evidence['tokens'] + evidence['uncertain']:
+                    self.assertEqual(evidence['extracted_text'][token['start']:token['end']], token['quote'])
+
+    def test_articles_and_resource_compounds_are_not_globally_one(self):
+        for expression in ['a target', 'an ally', 'a Stress', 'a Fear', 'a HPs',
+                           'a HP1', 'a HPP', 'a _HP', 'a HP_threshold', 'a HP-target']:
+            with self.subTest(expression=expression):
+                result = q.tokenize('clear ' + expression + '.')
+                self.assertNotIn('1', [t['value'] for t in result['tokens']], result)
+                self.assertEqual(self.scan('clear ' + expression + '.', '恢复1生命点。')['status'], 'needs_review')
+        self.assertEqual(q.tokenize('Choose a target or an ally.')['tokens'], [])
+        result = self.scan('You cannot clear a HP.', '你不能恢复1生命点。')
+        self.assertEqual(result['status'], 'quantity_surface_match')
+        self.assertFalse(result['semantic_verified'])
+
+    def test_counted_hp_article_uses_only_visible_supported_markdown(self):
+        result = self.scan('[Clear a HP](https://example.org/99 "clear a HP").', '恢复1生命点。')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        self.assertEqual(len(result['scopes'][0]['source']['tokens']), 1)
+        result = self.scan('Mark 2 Stress. https://example.org/clear/a/HP', '标记2压力点。')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        for source in ['`clear a HP.`', '<!-- clear a HP. -->', '![clear a HP.](#1)']:
+            with self.subTest(source=source):
+                result = self.scan(source, '恢复1生命点。')
+                self.assertEqual(result['status'], 'needs_review', result)
+                self.assertIn('unavailable', result['scopes'][0]['source'])
+
+    def test_url_mask_cannot_complete_the_counted_article_frame(self):
+        for source in ['clear https://example.org/thing a HP.',
+                       'clear a https://example.org/thing HP.',
+                       'clear a HP https://example.org/thing']:
+            with self.subTest(source=source):
+                self.assertNotIn('1', [t['value'] for t in q.tokenize(source)['tokens']])
+                result = self.scan('Mark 2 Stress. ' + source, '标记2压力点，恢复1生命点。')
+                self.assertEqual(result['status'], 'needs_review', result)
+        source = 'Clear a HP. https://example.org/99'
+        result = self.scan(source, '恢复1生命点。')
+        self.assertEqual(result['status'], 'quantity_surface_match', result)
+        self.assertEqual(result['scopes'][0]['source']['tokens'], [
+            {'start': 6, 'end': 7, 'quote': 'a', 'kind': 'integer', 'value': '1'}])
 
     def test_whole_dice_normalization_and_atomicity(self):
         for left, right in [('d6', '1d6'), ('D6', 'd6'), ('2d6 + 2', '2D6+2'),
