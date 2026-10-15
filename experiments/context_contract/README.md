@@ -178,6 +178,77 @@ python experiments/context_contract/pbres_names.py prepare cases.json resources.
 
 `prepare` 的最终交付结构只有 Markdown，所以任一侧 `field` 选择器都会在创建运行目录前拒绝；字段检查仅用于独立 `scan` / PBRES `check`。API 为 `scan_records(..., quantity_scopes=配置)`、`prepare(..., quantity_scopes=配置)`，PBRES 的 `prepare/check` 接受同名可选参数；省略与显式 `None` 不等价。
 
+## 可选：只读配置预览与未确认草稿
+
+`config_preview.py` 是独立、离线的辅助入口，不加入默认流程，也不运行名称核对、数量比较或语义检查。用途仅是把已有资源名称路径和两侧真实 AST 位置摆出来，减少重复填写资源/单元 ID、JSON Pointer、标题级别和选择器结构。资源与单元 ID 必须由调用者明确提供；选择它们、点击或填写索引均不代表人工已经确认归属、对齐或同名实体身份。
+
+先预览一个显式选择的资源及单元。输入仍是上文的 `resources.json`、源文记录数组 `sources.json` 和含 `units` 的 `translations.json`，两侧须有同一个选定单元 ID：
+
+```bash
+# 输出只写 stdout；如需保存，必须用新的独立文件，不能覆盖任何输入或已有运行文件。
+# Bash 的 noclobber 可防止下面的 > 覆盖已存在的普通文件。
+set -C
+python experiments/context_contract/config_preview.py preview resources.json sources.json translations.json --resource-id r1 --unit-id s > ../translation-trial-runs/new-config-preview.json
+```
+
+预览提供：
+
+- `name_choices`：所选资源的真实 `resource_id + name_pointer`、中文名、原名及 absent/empty 状态。每个路径保留独立选择编号，同名特性不会合并，也不搜索或推荐另一个父资源。
+- `sides.source` / `sides.translation`：各自完整原始 Markdown、记录位置、AST 哈希与顶层 `blocks`。`block` 始终是真实的零起始 AST 索引；列表、引用、代码等不支持选择的块仍保留在列表中，不会过滤后重新编号。两侧不自动配对，不能假设相同索引表示相同内容。
+- 每块包含原始 AST；可用位置另列 `name_candidate` / `quantity_candidate` 与可见文本，不可用位置列出原因。这里只表示现有选择器能提取该位置，不表示它是正确名称、含数量或已核对机制。链接目标不作为可见文字；后缀不自动剥除。
+- 输入的规范 JSON 哈希、解析器版本和实现哈希。哈希基于 UTF-8、键排序、紧凑分隔的 JSON，并非文件字节，因此仅改变 JSON 排版或对象键顺序不会使预览过期。正文、结构、资源、其他输入记录或相关实现变化则须重新预览。
+
+随后只按本次预览中实际显示的编号选择，生成始终未确认的组合草稿。例如合成示例中，主名是 choice 0，某特性是 choice 2，原文规则在 block 2，译文标题在 block 0，译文特性在 block 3：
+
+```bash
+python experiments/context_contract/config_preview.py draft resources.json sources.json translations.json ../translation-trial-runs/new-config-preview.json --name 0 0 --name-with-suffix 2 3 ' - 反应' --quantity 2 3 > ../translation-trial-runs/new-config-draft.json
+```
+
+这次只填写名称选择号、目标块号及原译文各自块号；资源/单元 ID 从预览读取，名称路径和标题级别从实际结构取得，不必再次手写完整 JSON。上面的编号只是合成示意，必须换成本次预览中的实际位置。`--name NAME TARGET_BLOCK` 可重复；`--name-with-suffix NAME TARGET_BLOCK LITERAL_SUFFIX` 只接受人工明确输入且标签实际具有的后缀；`--quantity SOURCE_BLOCK TARGET_BLOCK` 可重复。辅助入口仅提供顶层 Markdown 块，不生成 `unit` 或结构化 `field` 选择器，不把裸文本、嵌套块或不支持的标记假装成受支持名称。
+
+草稿使用独立的 `pbres-config-draft-v1` 外壳，包含完整预览、未确认的父资源提议，以及 `proposed_name_bindings` / `proposed_quantity_scopes`。每项始终 `approval_status: "unconfirmed"`，并保留名称预期/观察文字和两侧所选内容供人查看。不存在批准、转换或导出正式配置的命令，也没有可直接取出的正式配置子对象。草稿及预览整体都不满足现有 `--bindings` / `--quantity-scopes` 格式，不能直接用于 `prepare`、独立检查或后续发布门禁；人工独立核对后，仍须按前述正式格式另外整理配置。
+
+有效索引也可能选错父资源、同名特性或原译文段落。这样的选择仍只是未确认提议，字面相等也不会获得“已确认”状态。未知/缺失/重复 ID、越界或布尔索引、重复端点、不支持的块、重复 JSON 键、解析器不可用，以及已修改或过期的预览都会失败并返回退出码 2，不会输出半份草稿。新增段落等结构变化后，旧索引不得继续使用，须重新预览、重新查看、重新选择。哈希用于检查本地一致性，不是身份认证、审批记录或签名。
+
+工具不修改输入，不创建或覆盖文件，不访问网络。它没有 `--out`；shell 重定向在程序启动前就可能截断文件，因此不要把输入路径、其符号链接/硬链接别名或已有运行文件放在 `>` 后。保留原输入与已有运行，仅在仓库外另存新预览和新草稿。
+
+### 离线 HTML 高亮审阅
+
+将上述未确认草稿渲染为单文件 HTML，直接用浏览器打开，不部署网站，也不上传数据：
+
+```bash
+python experiments/context_contract/render_config_preview.py ../translation-trial-runs/new-config-draft.json ../translation-trial-runs/new-config-draft.html
+```
+
+也可以渲染前述 `delivery_gate.py scan --output quantity-review.json` 生成的现有数量报告，或含 `quantity_risk_check` 的完整检查 JSON：
+
+```bash
+python experiments/context_contract/render_config_preview.py quantity-review.json ../translation-trial-runs/new-quantity-review.html
+```
+
+两种输入的高亮含义不同：
+
+- 名称草稿：只高亮人工指定的译文标题或特性名称槽位，按结构定位，不搜索第一个同名词。名称后缀和正文中的重复同名词不跟着高亮。草稿没有原文名称位置选择器，因此左侧保留完整原文并明确显示“未指定原文名称位置”，不伪造对应高亮；资源表原名只是参考。若该块正文含不支持的结构，仅显示提取的名称槽位，完整原始文本仍可访问。
+- 数量草稿：两侧整块高亮只表示显式选择的未确认范围，页面明确提示未运行数字比较。它不是数量风险或正式范围配置。
+- 已有数量报告：在两侧的 `extracted_text` 中，按保存的 Unicode 码点区间精确高亮每个数字/骰式证据及不确定表达，保留重复出现的位置；逐项验证引文、偏移、边界和非重叠条件。绝不把这些偏移套到原始 Markdown。显示单元 ID、各侧选择器、字段路径与 AST 位置；无法提取的一侧如实留空并说明原因，另一侧证据继续显示。数量表面相同也标为语义未核对。
+
+所有条目的原译文、精确高亮、待核对说明和完整原始 Markdown 都在生成时写入静态 HTML；关闭或无法启动 JavaScript 时仍可完整阅读。高亮同时使用背景色、加粗和下划线，低功能渲染器也可辨认。文本逐片段安全转义，CR/CRLF 的回车使用字符引用保留，避免 HTML 换行规范化破坏原始码点位置；显示文本若含 HTML 无法无损保存的 NUL 字符则拒绝生成，不静默替换。
+
+JavaScript 仅在首次成功绘制后接管为 `daggerheart-translation-audit` 的逐条审阅页面、精准高亮和独立滚动框；初始化失败时静态全文继续可见，不显示失效控件，也不重复展示两套界面。交互模式下完整原始 Markdown 保留在“关联上下文与依据”；“完成”只保存阅读进度，不批准配置、不改变待核实性质、不修改输入或证明翻译正确。`file://` 下浏览器持久存储不保证可靠，可导出进度 JSON 备份。空范围、空队列和配置错误不会显示成审阅通过。
+
+渲染器只读保存的快照，不重新比对当前项目文件、不运行扫描或自动对齐。草稿要求未确认状态并校验内嵌预览哈希与所选证据；数量报告验证引文对应关系，但两者都不是签名或人工审批记录。生成页使用安全文本节点，不执行输入中的 HTML，不引入外部链接、脚本、字体或图片；CSP 仅允许内嵌的固定审阅脚本与样式，禁止网络请求。输出必须是尚不存在的新文件，已有文件及输入路径一律拒绝覆盖。预览清单本身不能直接渲染，需先显式选择形成草稿；渲染不提供批准或导出正式配置功能。
+
+回归检查：
+
+```bash
+python -m unittest discover -s tests -p test_render_config_preview.py -v
+node skills/daggerheart-translation-audit/tests/test_highlighting.js
+node skills/daggerheart-translation-audit/tests/test_report_state.js
+node skills/daggerheart-translation-audit/tests/test_scroll_panes.js
+```
+
+测试包含静态全文与码点高亮还原、无脚本/XSS、初始化成功/失败及交互状态；安装了可选 `lxml` 时另跑 HTML 分词器的 CRLF/CR 保真回归。结构与模拟 DOM 测试不等于真实浏览器视觉验收；静态 PDF/PNG 栅格检查也不证明浏览器交互。交付时应分别记录静态像素、实际浏览器是否成功渲染、两侧滚动与完成/撤销/刷新是否验证。
+
 ## 已知边界
 
 - 校验表与资源一致、绑定与父资源一致，不代表人工资源归属正确。若调用者把同名单元的父资源和绑定一起填错，工具不能从字面证明这种错误；资源边界、父子归属、名称译法和所选位置仍须人工确认。
