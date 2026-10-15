@@ -17,11 +17,14 @@ def profile_validate(profile):
 DICE_PATTERN=r'(?<![A-Za-z0-9])\d*[dD]\d+(?:\s*[+−-]\s*\d+)?(?![A-Za-z0-9])'
 BARE_URL_PATTERN=r"https?://[A-Za-z0-9:/?#\[\]@!$&'()*+,;=%._~+\-]+"
 
-def parse_commonmark(text):
+def parse_commonmark_ast(text):
  if not shutil.which('pandoc'):raise RuntimeError('pandoc CommonMark parser unavailable')
  result=subprocess.run(['pandoc','--from=commonmark','--to=json'],input=text,text=True,capture_output=True,timeout=15)
  if result.returncode:raise RuntimeError('CommonMark parse failed: '+result.stderr[:200])
- ast=json.loads(result.stdout);segments=[];targets=set()
+ return json.loads(result.stdout)
+
+def parse_commonmark(text):
+ ast=parse_commonmark_ast(text);segments=[];targets=set()
  def walk(node,mode='text'):
   if isinstance(node,list):
    for x in node:walk(x,mode)
@@ -108,6 +111,19 @@ def release(run,development=False):
   if v.digest((run/n).read_bytes())!=h:raise ValueError('prepared delivery input changed: '+n)
  if manifest.get('delivery_parser')!=parser_identity():raise ValueError('delivery parser changed since prepare')
  profile=v.read_json(run/'delivery-profile.json')
+ # Cross-check the hash-pinned packet and rule registration, not just the optional marker.
+ bindings=None;names=None;packet=v.read_json(run/'two-pass-packet.json')
+ binding_rule='experiments/context_contract/pbres_bindings.py'
+ if 'name_bindings' in manifest or 'name-bindings.json' in manifest['prepared_files'] or (run/'name-bindings.json').exists() or binding_rule in manifest['rules'] or 'name_binding_contract' in packet:
+  if manifest.get('name_bindings')!='name-bindings.json' or 'name-bindings.json' not in manifest['prepared_files']:raise ValueError('prepared name binding registration missing or invalid')
+  if binding_rule not in manifest['rules']:raise ValueError('prepared name binding rule registration missing')
+  if packet.get('name_binding_contract')!={'file':'name-bindings.json','sha256':v.digest((run/'name-bindings.json').read_bytes())}:raise ValueError('prepared name binding packet contract missing or changed')
+  if manifest.get('original_name_sidecar')!='original-names.json':raise ValueError('name bindings require the prepared PBRES sidecar')
+  for name in ['original-name-resources.json','original-names.json']:
+   if name not in manifest['prepared_files']:raise ValueError('unregistered PBRES input: '+name)
+  spec=importlib.util.spec_from_file_location('release_pbres_names',Path(__file__).with_name('pbres_names.py'));names=importlib.util.module_from_spec(spec);spec.loader.exec_module(names)
+  resources=names.read(run/'original-name-resources.json');sidecar=names.read(run/'original-names.json');bindings=names.read(run/'name-bindings.json')
+  names.validate_bindings(resources,sidecar,v.read_json(run/'sources.json'),bindings,markdown_only=True)
  if not (run/'frozen.json').exists():tp.freeze(run,development,delivery_gate=True)
  frozen=v.read_json(run/'frozen.json')
  for n,h in frozen['output_hashes'].items():
@@ -116,7 +132,11 @@ def release(run,development=False):
  for arm in arms:
   path=run/(arm+'-delivery.json')
   if not path.exists():results[arm]=[{'kind':'missing_valid_delivery'}];continue
-  checked=scan_records(v.read_json(run/'sources.json'),v.read_json(path),profile);results[arm]=checked['units']+[{'kind':'identity_error','detail':e} for e in checked['identity_errors']]
+  checked=scan_records(v.read_json(run/'sources.json'),v.read_json(path),profile)
+  if names is not None:
+   bound=names.check(resources,sidecar,v.read_json(run/'sources.json'),v.read_json(path),bindings)['name_binding_check']
+   checked['units']+=bound['bindings']+[{'kind':'name_binding_configuration_error','detail':e} for e in bound['configuration_errors']]
+  results[arm]=checked['units']+[{'kind':'identity_error','detail':e} for e in checked['identity_errors']]
  allowed=not frozen.get('structural_errors') and all(all(not row.get('findings') and 'kind' not in row for row in rows) for rows in results.values())
  out={'release_allowed':allowed,'status':'ready-for-semantic-review' if allowed else 'BLOCKED','parser':manifest['delivery_parser'],'checked_output_hashes':frozen['output_hashes'],'profile_sha256':v.digest((run/'delivery-profile.json').read_bytes()),'findings':results,'gate_scope':'Basic delivery only; true does not authorize automatic publication or replace semantic review.','note':'No text changed. Passing basic gate is not semantic/fluency proof. A blocked result cannot be automatically delivered as clean final.'};v.dump(run/'delivery-gate.json',out);return out
 

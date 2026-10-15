@@ -11,10 +11,18 @@ from urllib.parse import unquote
 
 HERE = Path(__file__).resolve().parent
 SCHEMAS = HERE / 'pbres-name-schemas.json'
+_UNSET = object()
 
 
 def read(path):
-    return json.loads(Path(path).read_text(encoding='utf-8'))
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('duplicate JSON object key: ' + key)
+            result[key] = value
+        return result
+    return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=unique_object)
 
 
 def write(path, data):
@@ -105,28 +113,55 @@ def gate_module():
     return module
 
 
-def prepare(cases, resources, out):
+def binding_module():
+    spec = importlib.util.spec_from_file_location('pbres_name_bindings', HERE / 'pbres_bindings.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def validate_bindings(resources, sidecar, sources, bindings, *, markdown_only=False):
+    """Validate reviewed associations and exact selectors; not source semantics."""
+    validate(resources, sidecar)
+    binding_module().validate_config(resources, sidecar, sources, bindings, markdown_only=markdown_only)
+
+
+def prepare(cases, resources, out, bindings=_UNSET):
     """Bind sidecar and policy to both drafting arms and later refinement."""
     sidecar = extract(resources)  # Validate before creating a run.
+    if bindings is not _UNSET:
+        validate_bindings(resources, sidecar, cases, bindings, markdown_only=True)
     gate = gate_module()
     gate.prepare(cases, out, {'allowed_latin': []})
     run = Path(out)
     write(run / 'original-name-resources.json', resources)
     write(run / 'original-names.json', sidecar)
     guidance = policy(sidecar)
+    if bindings is not _UNSET:
+        write(run / 'name-bindings.json', bindings)
+        guidance += '\n\n' + binding_module().policy(bindings)
     for name in ['phase1-generate.txt', 'baseline-generate.txt']:
         path = run / name
         path.write_text(guidance + '\n\n' + path.read_text(encoding='utf-8'), encoding='utf-8')
     packet = read(run / 'two-pass-packet.json')
     packet['guidance'] = guidance + '\n\n' + packet['guidance']
+    if bindings is not _UNSET:
+        packet['name_binding_contract'] = {
+            'file': 'name-bindings.json', 'sha256': gate.v.digest((run / 'name-bindings.json').read_bytes())}
     write(run / 'two-pass-packet.json', packet)
     gate.update_manifest(run)
     manifest = read(run / 'manifest.json')
-    for path in [Path(__file__), SCHEMAS]:
+    rules = [Path(__file__), SCHEMAS]
+    if bindings is not _UNSET:
+        rules.append(HERE / 'pbres_bindings.py')
+    for path in rules:
         manifest['rules'][str(path.relative_to(gate.v.ROOT))] = gate.v.digest(path.read_bytes())
     for name in ['original-name-resources.json', 'original-names.json']:
         manifest['prepared_files'][name] = gate.v.digest((run / name).read_bytes())
     manifest['original_name_sidecar'] = 'original-names.json'
+    if bindings is not _UNSET:
+        manifest['prepared_files']['name-bindings.json'] = gate.v.digest((run / 'name-bindings.json').read_bytes())
+        manifest['name_bindings'] = 'name-bindings.json'
     write(run / 'manifest.json', manifest)
 
 
@@ -136,34 +171,50 @@ def polish(run, development=False):
     run = Path(run)
     if not development:
         path = run / 'baseline-review.txt'
-        path.write_text(policy(read(run / 'original-names.json')) + '\n\n' + path.read_text(encoding='utf-8'), encoding='utf-8')
+        guidance = policy(read(run / 'original-names.json'))
+        if read(run / 'manifest.json').get('name_bindings'):
+            guidance += '\n\n' + binding_module().policy(read(run / 'name-bindings.json'))
+        path.write_text(guidance + '\n\n' + path.read_text(encoding='utf-8'), encoding='utf-8')
         hashes = read(run / 'stage-input-hashes.json')
         hashes['baseline-review.txt'] = gate.v.digest(path.read_bytes())
         write(run / 'stage-input-hashes.json', hashes)
 
 
-def check(resources, sidecar, sources, translations):
+def check(resources, sidecar, sources, translations, bindings=_UNSET):
     validate(resources, sidecar)
     # Sidecar English never grants a prose exemption. Dice/links remain protected.
-    return gate_module().scan_records(sources, translations, {'allowed_latin': []})
+    gate = gate_module()
+    result = gate.scan_records(sources, translations, {'allowed_latin': []})
+    if bindings is not _UNSET:
+        module = binding_module()
+        try:
+            module.validate_config(resources, sidecar, sources, bindings)
+        except ValueError as error:
+            result['name_binding_check'] = {'release_allowed': False,
+                                            'configuration_errors': [str(error)], 'bindings': []}
+        else:
+            result['name_binding_check'] = module.scan(sidecar, translations, bindings, gate.parse_commonmark_ast)
+        result['release_allowed'] = result['release_allowed'] and result['name_binding_check']['release_allowed']
+    return result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('extract'); p.add_argument('resources'); p.add_argument('out')
-    p = sub.add_parser('prepare'); p.add_argument('cases'); p.add_argument('resources'); p.add_argument('out')
-    p = sub.add_parser('check'); p.add_argument('resources'); p.add_argument('sidecar'); p.add_argument('sources'); p.add_argument('translations')
+    p = sub.add_parser('prepare'); p.add_argument('cases'); p.add_argument('resources'); p.add_argument('out'); p.add_argument('--bindings')
+    p = sub.add_parser('check'); p.add_argument('resources'); p.add_argument('sidecar'); p.add_argument('sources'); p.add_argument('translations'); p.add_argument('--bindings')
     p = sub.add_parser('polish'); p.add_argument('run'); p.add_argument('--development', action='store_true')
     args = parser.parse_args()
     if args.command == 'extract':
         write(args.out, extract(read(args.resources)))
     elif args.command == 'prepare':
-        prepare(read(args.cases), read(args.resources), args.out)
+        prepare(read(args.cases), read(args.resources), args.out, read(args.bindings) if args.bindings else _UNSET)
     elif args.command == 'polish':
         polish(args.run, args.development)
     else:
-        result = check(read(args.resources), read(args.sidecar), read(args.sources), read(args.translations))
+        result = check(read(args.resources), read(args.sidecar), read(args.sources), read(args.translations),
+                       read(args.bindings) if args.bindings else _UNSET)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         if not result['release_allowed']:
             raise SystemExit(2)
