@@ -1,0 +1,1112 @@
+{
+  "repository": "ZZZZzzzzac/PbDH",
+  "commit": "9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3",
+  "retrieved_at": "2026-10-15",
+  "registry_url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/index.ts",
+  "schemas": [
+    {
+      "path": "packages/templates/src/core/adversary/1.1.1/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/adversary/1.1.1/schema.json",
+      "git_blob_sha": "f5125d2e185486a04d73ad06fc136ccc2dc960c4",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E6%95%8C%E4%BA%BA/1.1.1/schema.json",
+        "title": "敌人 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "位阶",
+          "种类",
+          "特性",
+          "类型",
+          "简介",
+          "动机与战术",
+          "难度",
+          "重度伤害阈值",
+          "严重伤害阈值",
+          "生命点",
+          "压力点",
+          "攻击命中",
+          "攻击武器",
+          "攻击范围",
+          "攻击伤害",
+          "攻击属性",
+          "经历"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "位阶": {
+            "type": "string"
+          },
+          "种类": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性类型",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性类型": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "动机与战术": {
+            "type": "string"
+          },
+          "难度": {
+            "type": "string"
+          },
+          "重度伤害阈值": {
+            "type": "string"
+          },
+          "严重伤害阈值": {
+            "type": "string"
+          },
+          "生命点": {
+            "type": "string"
+          },
+          "压力点": {
+            "type": "string"
+          },
+          "攻击命中": {
+            "type": "string"
+          },
+          "攻击武器": {
+            "type": "string"
+          },
+          "攻击范围": {
+            "type": "string"
+          },
+          "攻击伤害": {
+            "type": "string"
+          },
+          "攻击属性": {
+            "type": "string"
+          },
+          "经历": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/ancestry/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/ancestry/1.1.0/schema.json",
+      "git_blob_sha": "d623067dc330a3c4d41e25762547c2dcae8b7847",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%A7%8D%E6%97%8F/1.1.0/schema.json",
+        "title": "种族 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "简介",
+          "特性"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/armor/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/armor/1.1.0/schema.json",
+      "git_blob_sha": "bf7d0fb04c9a35b41f5f9fa2725ec9523f589b78",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E6%8A%A4%E7%94%B2/1.1.0/schema.json",
+        "title": "护甲 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "护甲值",
+          "重度伤害阈值",
+          "严重伤害阈值",
+          "特性名称",
+          "特性描述",
+          "简介",
+          "位阶"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "护甲值": {
+            "type": "string"
+          },
+          "重度伤害阈值": {
+            "type": "string"
+          },
+          "严重伤害阈值": {
+            "type": "string"
+          },
+          "特性名称": {
+            "type": "string"
+          },
+          "特性原文": {
+            "type": "string"
+          },
+          "特性描述": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "位阶": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/community/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/community/1.1.0/schema.json",
+      "git_blob_sha": "f4940de70b483a987af30fc32109c70b276d9ba4",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%A4%BE%E7%BE%A4/1.1.0/schema.json",
+        "title": "社群 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "简介",
+          "性格",
+          "特性"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "性格": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "object",
+            "required": [
+              "特性名称",
+              "特性描述"
+            ],
+            "properties": {
+              "特性名称": {
+                "type": "string"
+              },
+              "特性原文": {
+                "type": "string"
+              },
+              "特性描述": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/domain/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/domain/1.1.0/schema.json",
+      "git_blob_sha": "9d4b527c4893b4102bb745e98e7384df8e739451",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E9%A2%86%E5%9F%9F%E5%8D%A1/1.1.0/schema.json",
+        "title": "领域卡 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "领域",
+          "等级",
+          "属性",
+          "回想",
+          "特性描述",
+          "简介"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "领域": {
+            "type": "string"
+          },
+          "等级": {
+            "type": "string"
+          },
+          "属性": {
+            "type": "string"
+          },
+          "回想": {
+            "type": "string"
+          },
+          "特性描述": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/environment/1.1.1/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/environment/1.1.1/schema.json",
+      "git_blob_sha": "d42e56c3e4f2089f00a3148dfe3d4022465a4cda",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%8E%AF%E5%A2%83/1.1.1/schema.json",
+        "title": "环境 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "位阶",
+          "种类",
+          "简介",
+          "趋向",
+          "难度",
+          "潜在敌人",
+          "特性"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "位阶": {
+            "type": "string"
+          },
+          "种类": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "趋向": {
+            "type": "string"
+          },
+          "难度": {
+            "type": "string"
+          },
+          "潜在敌人": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性类型",
+                "特性描述",
+                "引导问题"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性类型": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                },
+                "引导问题": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/free/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/free/1.1.0/schema.json",
+      "git_blob_sha": "e4014639b2e8952fb42bb18f11bf833afa127c30",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E8%87%AA%E7%94%B1/1.1.0/schema.json",
+        "title": "自由 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "简介",
+          "内容"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "内容": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "名称",
+                "描述"
+              ],
+              "properties": {
+                "名称": {
+                  "type": "string"
+                },
+                "原文": {
+                  "type": "string"
+                },
+                "描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "path": "packages/templates/src/core/hopefind-supply/1.0.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/hopefind-supply/1.0.0/schema.json",
+      "git_blob_sha": "a8a0c2024d80069075a99fb91acdede8e13ee4b1",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/hopefind-supply/1.0.0/schema.json",
+        "title": "寻望物资",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "简介",
+          "内容",
+          "尺寸"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "内容": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "名称",
+                "描述"
+              ],
+              "properties": {
+                "名称": {
+                  "type": "string"
+                },
+                "原文": {
+                  "type": "string"
+                },
+                "描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "尺寸": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/item/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/item/1.1.0/schema.json",
+      "git_blob_sha": "d9c1d86f275cca4d3f74b025260c33a1a2ae78c1",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%89%A9%E5%93%81/1.1.0/schema.json",
+        "title": "物品 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "掷骰",
+          "特性描述",
+          "简介"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "掷骰": {
+            "type": "string"
+          },
+          "特性描述": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/player-card/1.0.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/player-card/1.0.0/schema.json",
+      "git_blob_sha": "2771311f1e358b80701fa4bd18236bd909525d3b",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%8E%A9%E5%AE%B6%E5%8D%A1/1.0.0/schema.json",
+        "title": "玩家卡 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "玩家名",
+          "生命上限",
+          "压力上限",
+          "希望上限",
+          "护甲槽上限",
+          "备注"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "玩家名": {
+            "type": "string"
+          },
+          "生命上限": {
+            "$ref": "#/$defs/count"
+          },
+          "压力上限": {
+            "$ref": "#/$defs/count"
+          },
+          "希望上限": {
+            "$ref": "#/$defs/count"
+          },
+          "护甲槽上限": {
+            "$ref": "#/$defs/count"
+          },
+          "备注": {
+            "type": "string"
+          }
+        },
+        "$defs": {
+          "count": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/profession/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/profession/1.1.0/schema.json",
+      "git_blob_sha": "007393da8fdca7497a58e83e8e32d9146c347a84",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E8%81%8C%E4%B8%9A/1.1.0/schema.json",
+        "title": "职业 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "简介",
+          "领域",
+          "生命点",
+          "闪避值",
+          "职业物品",
+          "希望特性",
+          "特性",
+          "推荐初始属性",
+          "推荐初始武器",
+          "推荐初始护甲",
+          "背景问题",
+          "关系问题"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "领域": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "string"
+            }
+          },
+          "生命点": {
+            "type": "string"
+          },
+          "闪避值": {
+            "type": "string"
+          },
+          "职业物品": {
+            "type": "string"
+          },
+          "希望特性": {
+            "type": "object",
+            "required": [
+              "特性名称",
+              "特性描述"
+            ],
+            "properties": {
+              "特性名称": {
+                "type": "string"
+              },
+              "特性原文": {
+                "type": "string"
+              },
+              "特性描述": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "推荐初始属性": {
+            "type": "object",
+            "required": [
+              "敏捷",
+              "力量",
+              "灵巧",
+              "本能",
+              "风度",
+              "知识"
+            ],
+            "properties": {
+              "敏捷": {
+                "type": "string"
+              },
+              "力量": {
+                "type": "string"
+              },
+              "灵巧": {
+                "type": "string"
+              },
+              "本能": {
+                "type": "string"
+              },
+              "风度": {
+                "type": "string"
+              },
+              "知识": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "推荐初始武器": {
+            "type": "string"
+          },
+          "推荐初始护甲": {
+            "type": "string"
+          },
+          "背景问题": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "关系问题": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/rhodes-subclass/1.0.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/rhodes-subclass/1.0.0/schema.json",
+      "git_blob_sha": "daecd8ed1daad9492674ebd8f0a08d7d34645a83",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E7%BD%97%E5%BE%B7%E5%B2%9B%E5%AD%90%E8%81%8C/1.0.0/schema.json",
+        "title": "罗德岛子职 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "主职",
+          "等级",
+          "阶段",
+          "施法属性",
+          "武器原型",
+          "特性",
+          "简介"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "主职": {
+            "type": "string"
+          },
+          "等级": {
+            "type": "string"
+          },
+          "阶段": {
+            "type": "string"
+          },
+          "施法属性": {
+            "type": "string"
+          },
+          "推荐次领域": {
+            "type": "string"
+          },
+          "武器原型": {
+            "type": "string"
+          },
+          "子职提升": {
+            "type": "string"
+          },
+          "子职特性": {
+            "type": "string"
+          },
+          "职业特性": {
+            "type": "string"
+          },
+          "希望特性": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "简介": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/subclass/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/subclass/1.1.0/schema.json",
+      "git_blob_sha": "e31326ab24e96f167be869ae1085a61f76b80eee",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E5%AD%90%E8%81%8C%E4%B8%9A/1.1.0/schema.json",
+        "title": "子职业 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "主职",
+          "等级",
+          "施法属性",
+          "特性",
+          "简介"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "主职": {
+            "type": "string"
+          },
+          "等级": {
+            "type": "string"
+          },
+          "施法属性": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "简介": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/weapon/1.1.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/weapon/1.1.0/schema.json",
+      "git_blob_sha": "632594404a7331df91500503e6e19e23656c4c1f",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E6%AD%A6%E5%99%A8/1.1.0/schema.json",
+        "title": "武器 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "类型",
+          "属性",
+          "距离",
+          "伤害",
+          "负荷",
+          "伤害类型",
+          "特性名称",
+          "特性描述",
+          "位阶"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "类型": {
+            "type": "string"
+          },
+          "属性": {
+            "type": "string"
+          },
+          "距离": {
+            "type": "string"
+          },
+          "伤害": {
+            "type": "string"
+          },
+          "负荷": {
+            "type": "string"
+          },
+          "伤害类型": {
+            "type": "string"
+          },
+          "特性名称": {
+            "type": "string"
+          },
+          "特性原文": {
+            "type": "string"
+          },
+          "特性描述": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "位阶": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "packages/templates/src/core/adversary/1.0.0/schema.json",
+      "url": "https://github.com/ZZZZzzzzac/PbDH/blob/9cfb0ec491058c07465acd92f2ac97b9fbc4f2d3/packages/templates/src/core/adversary/1.0.0/schema.json",
+      "git_blob_sha": "6ca18cf0ff7cdb2f5a52d2962b91593da2f55eab",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://pbdh.dev/templates/%E6%95%8C%E4%BA%BA/1.0.0/schema.json",
+        "title": "敌人 Template Data",
+        "type": "object",
+        "required": [
+          "名称",
+          "位阶",
+          "种类",
+          "特性",
+          "类型",
+          "简介",
+          "动机与战术",
+          "难度",
+          "重度伤害阈值",
+          "严重伤害阈值",
+          "生命点",
+          "压力点",
+          "攻击命中",
+          "攻击武器",
+          "攻击范围",
+          "攻击伤害",
+          "攻击属性",
+          "经历"
+        ],
+        "properties": {
+          "名称": {
+            "type": "string"
+          },
+          "原文": {
+            "type": "string"
+          },
+          "位阶": {
+            "type": "string"
+          },
+          "种类": {
+            "type": "string"
+          },
+          "特性": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "特性名称",
+                "特性类型",
+                "特性描述"
+              ],
+              "properties": {
+                "特性名称": {
+                  "type": "string"
+                },
+                "特性原文": {
+                  "type": "string"
+                },
+                "特性类型": {
+                  "type": "string"
+                },
+                "特性描述": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "类型": {
+            "type": "string"
+          },
+          "简介": {
+            "type": "string"
+          },
+          "动机与战术": {
+            "type": "string"
+          },
+          "难度": {
+            "type": "string"
+          },
+          "重度伤害阈值": {
+            "type": "string"
+          },
+          "严重伤害阈值": {
+            "type": "string"
+          },
+          "生命点": {
+            "type": "string"
+          },
+          "压力点": {
+            "type": "string"
+          },
+          "攻击命中": {
+            "type": "string"
+          },
+          "攻击武器": {
+            "type": "string"
+          },
+          "攻击范围": {
+            "type": "string"
+          },
+          "攻击伤害": {
+            "type": "string"
+          },
+          "攻击属性": {
+            "type": "string"
+          },
+          "经历": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}
