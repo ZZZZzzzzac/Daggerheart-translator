@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a saved UNCONFIRMED draft or quantity scan as standalone offline HTML.
+"""Render an UNCONFIRMED draft, quantity scan, or full check as offline HTML.
 
 This adapter reuses the audit skill's safe, code-point-aware review UI. It does
 not parse Markdown into active HTML, align texts, approve configuration, compare
@@ -283,20 +283,125 @@ def _quantity_findings(data):
                       '输入状态：' + data['status'] + '；配置错误：' + str(len(errors)))
 
 
+def _gate_label(data, label):
+    value = data.get('release_allowed')
+    if type(value) is not bool:
+        raise ValueError(label + ' release_allowed must be a boolean')
+    return '未见阻断项（不等于语义通过）' if value else '阻止交付，需处理'
+
+
+def _name_findings(data):
+    """Display saved name-check results, without inventing missing body spans."""
+    if not isinstance(data, dict):
+        raise ValueError('name_binding_check must be an object')
+    label = _gate_label(data, 'name check')
+    findings = []
+    rows = _array(data.get('bindings'), 'name bindings')
+    errors = _array(data.get('configuration_errors'), 'name configuration errors')
+    for index, row in enumerate(rows):
+        uid = _text(row['unit_id'], 'name unit ID')
+        rid = _text(row['resource_id'], 'name resource ID')
+        pointer = _text(row['name_pointer'], 'name pointer')
+        if not isinstance(row['selector'], dict):
+            raise ValueError('name selector must be an object')
+        expected = _text(row['expected'], 'expected name')
+        actual = _text(row['actual'], 'actual name') if 'actual' in row else ''
+        issues = _array(row.get('findings'), 'name findings')
+        details = '\n'.join(_text(issue['kind'], 'name finding kind') + '：' +
+                            _text(issue['text'], 'name finding text') for issue in issues)
+        title = ('名称检查待处理' if issues else '名称证据缺失' if 'actual' not in row else
+                 '名称检查未列出问题，语义未核对')
+        problem = ('这是已保存的名称检查结果，不重新执行检查，也不证明资源归属或语义正确。\n'
+                   '期望名称（资源表中文值，不是原文）：' + expected + '\n' +
+                   (('实际提取名称：' + actual if actual else '实际提取名称：空字符串（已提取但值为空）。')
+                    if 'actual' in row else '实际提取名称：未提供，不能补造。') +
+                   '\n证据缺口：此检查结果没有原文正文、完整译文或正文字符偏移；'
+                   '右侧仅显示已保存的提取值，不推断对应原文，也不生成正文高亮。\n'
+                   '资源：' + rid + '；名称路径：' + pointer + '\n' +
+                   (details if issues else '此行未列出问题；未列出问题不等于人工确认。'))
+        findings.append(_finding(['name-check', index, uid, rid, pointer, row['selector']], uid,
+                                 title + ' · ' + expected, '', actual, problem,
+                                 'unit ' + uid + ' · translation ' + _json(row['selector'])))
+    for index, error in enumerate(errors):
+        findings.append(_finding(['name-configuration-error', index, error], 'configuration',
+                                 '名称配置错误 · 无法完成名称核对', '', '',
+                                 _text(error, 'name configuration error') +
+                                 '\n检查结果未提供可定位正文证据，不生成高亮。', 'name configuration'))
+    return findings, ('名称检查：' + label + '；绑定条目：' + str(len(rows)) +
+                      '；配置错误：' + str(len(errors)))
+
+
+def _check_findings(data):
+    """Keep the whole saved envelope visible; a subcheck cannot stand for it."""
+    top = _gate_label(data, 'top-level check') if 'release_allowed' in data else '未提供总门禁状态'
+    notice = ('总门禁：' + ('未见阻断' if data['release_allowed'] else '阻止交付')) \
+        if 'release_allowed' in data else '总门禁状态缺失'
+    parts, coverage, blockers = [], [], []
+    if 'identity_errors' in data or 'units' in data:
+        errors = _array(data.get('identity_errors'), 'identity errors')
+        units = _array(data.get('units'), 'base delivery units')
+        for index, error in enumerate(errors):
+            parts.append(_finding(['identity-error', index, error], 'identity', '基础交付身份错误', '', '',
+                                  _text(error, 'identity error') + '\n未提供完整正文证据，不推断高亮。', 'identity'))
+        issue_count = 0
+        for index, unit in enumerate(units):
+            uid = _text(unit['id'], 'delivery unit ID')
+            issues = _array(unit.get('findings'), 'base delivery findings')
+            issue_count += len(issues)
+            if issues:
+                for issue in issues:
+                    _text(issue['kind'], 'delivery finding kind')
+                    _text(issue['text'], 'delivery finding text')
+                parts.append(_finding(['base-delivery', index, uid], uid,
+                                      '基础交付阻断项 · ' + uid, '', '',
+                                      '保留检查器报告的全部字段；没有完整正文或可靠的共同偏移基准，不生成高亮。\n' +
+                                      '\n'.join(_json(issue) for issue in issues), 'unit ' + uid))
+        coverage.append('基础交付：身份错误 ' + str(len(errors)) + '；正文阻断项 ' + str(issue_count))
+        blockers.append(bool(errors or issue_count))
+    else:
+        coverage.append('基础交付结果：未提供，不能由子检查推断')
+    for key, absent, adapt in [('name_binding_check', '名称检查：未提供，不能视为已检查或通过', _name_findings),
+                               ('quantity_risk_check', '数量检查：未提供，不能视为已检查或通过', _quantity_findings)]:
+        if key not in data:
+            coverage.append(absent)
+            continue
+        check = data[key]
+        if not isinstance(check, dict):
+            raise ValueError(key + ' must be an object')
+        gate_label = _gate_label(check, key)
+        rows, detail = adapt(check)
+        parts.extend(rows)
+        coverage.append(detail + ('；数量子门禁：' + gate_label if key == 'quantity_risk_check' else ''))
+        blockers.append(not check['release_allowed'])
+    contradiction = data.get('release_allowed') is True and any(blockers)
+    if contradiction:
+        notice = '报告状态矛盾，需核对'
+    summary = ('完整检查报告 · ' + notice + '\n顶层 release_allowed：' +
+               (_json(data['release_allowed']) if 'release_allowed' in data else '未提供') + '；' + top + '\n' +
+               '\n'.join(coverage) + '\n' +
+               ('输入状态矛盾：顶层允许交付，但存在阻断项；保留原结果，请核对原始检查报告。\n' if contradiction else '') +
+               '各项仅陈述检查器保存的结果。没有执行的名称/数量检查不算通过；子项无阻断不能替代总门禁，数字相同不能证明语义正确。')
+    overview = _finding(['check-overview'], 'report', '完整检查报告 · ' + notice,
+                        '', '', summary, 'saved check envelope')
+    return [overview] + parts, summary, notice
+
+
 def to_report(data):
     """Adapt saved evidence without approving it or re-running a comparison."""
     if not isinstance(data, dict):
         raise ValueError('input must be an object')
+    notice = NOTICE
     if data.get('format') == 'pbres-config-draft-v1':
         findings, coverage = _draft_findings(data)
+    elif ('name_binding_check' in data or 'quantity_risk_check' in data or
+          all(key in data for key in ('release_allowed', 'identity_errors', 'units'))):
+        findings, coverage, gate_notice = _check_findings(data)
+        notice = gate_notice + ' · ' + NOTICE
     else:
-        quantity = data.get('quantity_risk_check', data)
-        if not isinstance(quantity, dict):
-            raise ValueError('quantity_risk_check must be an object')
-        findings, coverage = _quantity_findings(quantity)
+        findings, coverage = _quantity_findings(data)
     return {'schemaVersion': 1, 'reportId': 'offline-config-' + _digest(data),
             'title': '离线配置与数量证据审阅 · 未确认', 'findings': findings,
-            'progressFormat': 'offline-config-reading-progress', 'progressNotice': NOTICE,
+            'progressFormat': 'offline-config-reading-progress', 'progressNotice': notice,
             'sourceDescription': coverage,
             'notes': '这是输入快照；本页不证明它与当前项目文件一致。名称槽位、范围边界和数字证据分别说明；'
                      '不自动配对，不批准配置，不修改原译文，也不证明译文正确。',
@@ -327,7 +432,7 @@ def _static_report(report):
     escape = _escape_static
     parts = ['<div id="static-review" role="main" aria-label="完整离线静态审阅">',
              '<h1>' + escape(report['title']) + '</h1>',
-             '<p class="static-notice">' + escape(NOTICE) +
+             '<p class="static-notice">' + escape(report['progressNotice']) +
              '。全部条目已在下方显示，无需 JavaScript。脚本成功启动后可使用逐条浏览与进度功能。</p>',
              '<p>' + escape(report['sourceDescription']) + '</p>',
              '<p>' + escape(report['notes']) + '</p>']
@@ -388,7 +493,7 @@ def render(data):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('input', type=Path, help='saved config draft or quantity scan report JSON')
+    parser.add_argument('input', type=Path, help='saved config draft, quantity report, or complete check JSON')
     parser.add_argument('output', type=Path, help='new standalone HTML file (never overwritten)')
     args = parser.parse_args()
     try:

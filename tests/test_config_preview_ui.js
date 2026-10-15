@@ -19,7 +19,7 @@ class Node {
 }
 function boot(failRender=false){
  const nodes=new Map(),queued=[];
- const document={getElementById:id=>nodes.get(id),createElement:tag=>{if(failRender)throw Error('simulated render failure');return new Node(document,tag);},createTextNode:text=>{const n=new Node(document,'text');n.textContent=text;return n;}};
+ const document={getElementById:id=>nodes.get(id),createElement:tag=>{if(failRender)throw Error('simulated render failure');return new Node(document,tag);},createTextNode:text=>{if(failRender)throw Error('simulated render failure');const n=new Node(document,'text');n.textContent=text;return n;}};
  for(const match of html.matchAll(/\sid="([^"]+)"/g))nodes.set(match[1],new Node(document));
  nodes.get('app').hidden=true;
  nodes.get('enhanced-menu').hidden=true;
@@ -43,15 +43,16 @@ assert.equal(good.el('app').hidden,false);
 assert.equal(good.el('enhanced-menu').hidden,false);
 const first=payload.findings[0];
 assert.equal(good.el('original').textContent,first.original);
-assert.equal(good.el('translation').textContent,first.translation);
+assert.equal(good.el('translation').textContent,first.translation||'【本条尚无译文】');
 assert.deepEqual(good.el('translation').children.filter(x=>x.tagName==='mark').map(x=>x.textContent),first.translation_highlights.map(x=>x.text));
 good.el('next').onclick();
 assert.equal(good.el('original').textContent,payload.findings[1].original);
-assert.equal(good.el('translation').textContent,payload.findings[1].translation);
+assert.equal(good.el('translation').textContent,payload.findings[1].translation||'【本条尚无译文】');
 good.el('previous').onclick();
-assert.equal(good.el('translation').textContent,first.translation,'navigation replaces text rather than duplicating static content');
+assert.equal(good.el('translation').textContent,first.translation||'【本条尚无译文】','navigation replaces text rather than duplicating static content');
 good.el('complete').onclick();assert.equal(good.stored.size,1);
 assert(good.el('progressNotice').textContent.includes('不批准配置'));
+assert(good.el('progressNotice').textContent.includes(payload.progressNotice),'top-level gate notice remains visible while navigating or completing child items');
 assert.equal(good.el('static-review').hidden,true);
 good.el('view').value='done';good.el('view').onchange();good.el('complete').onclick();assert.equal(good.stored.size,0);
 console.log('PASS static-first fallback, failed initialization, exact enhanced marks, navigation, completion and undo (simulated DOM)');

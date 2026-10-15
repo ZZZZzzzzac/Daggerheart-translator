@@ -19,7 +19,8 @@ except ImportError:
     lxml_html = None
 
 from test_config_preview import m as preview
-from test_pbres_names import ROOT, fixture
+from test_pbres_names import ROOT, fixture, m as names
+from test_pbres_bindings import config as name_config
 from test_quantity_risks import config, gate, q, records
 
 SCRIPT = ROOT / 'experiments/context_contract/render_config_preview.py'
@@ -43,6 +44,18 @@ def draft():
 def scan(source='🦊 **2** then [2](https://example.org/99 "2").', translation='🦊 **二**，再标记3压力点。'):
     sources, translations = records(source, translation)
     return q.scan(sources, translations, config(), gate.parse_commonmark_ast)
+
+
+def combined(name='守护者', quantity='2', *, with_names=True, with_quantities=True):
+    resources = fixture()
+    sources, translations = records('# Guardian\n\nMark 2 Stress.', '#' + (' ' + name if name else '') +
+                                    '\n\n标记' + quantity + '压力点。')
+    options = {}
+    if with_names:
+        options['bindings'] = name_config()
+    if with_quantities:
+        options['quantity_scopes'] = config({'kind': 'block', 'block': 1}, {'kind': 'block', 'block': 1})
+    return names.check(resources, names.extract(resources), sources, translations, **options)
 
 
 class StaticReader(HTMLParser):
@@ -75,6 +88,110 @@ class StaticReader(HTMLParser):
 
 
 class OfflineReportTests(unittest.TestCase):
+    def test_combined_name_failure_and_quantity_match_both_remain_visible(self):
+        data = combined(name='游侠')
+        before = copy.deepcopy(data)
+        report = m.to_report(data)
+        self.assertEqual(len(report['findings']), 3)
+        overview, name, quantity = report['findings']
+        self.assertIn('阻止交付', overview['title'])
+        self.assertIn('阻止交付', report['progressNotice'])
+        self.assertIn('bound_name_mismatch', name['problem'])
+        self.assertIn('守护者', name['problem'])
+        self.assertEqual(name['translation'], '游侠')
+        self.assertEqual(name['original'], '')
+        self.assertEqual(name['original_highlights'], [])
+        self.assertEqual(name['translation_highlights'], [])
+        self.assertIn('证据缺口', name['problem'])
+        self.assertIn('语义未核对', quantity['title'])
+        self.assertEqual([h['text'] for h in quantity['translation_highlights']], ['2'])
+        self.assertIn('bound_name_mismatch', m.render(data).split('<script id="report-data"', 1)[0])
+        self.assertEqual(data, before)
+
+    def test_combined_reverse_both_fail_and_both_without_blockers(self):
+        for name_bad, quantity_bad in ((False, True), (True, True), (False, False)):
+            data = combined(name='游侠' if name_bad else '守护者', quantity='3' if quantity_bad else '2')
+            report = m.to_report(data)
+            overview, name, quantity = report['findings']
+            self.assertEqual('bound_name_mismatch' in name['problem'], name_bad)
+            self.assertEqual('quantity_sequence_difference' in quantity['problem'], quantity_bad)
+            self.assertEqual('阻止交付' in overview['title'], name_bad or quantity_bad)
+            self.assertTrue(all(f['status'] == 'uncertain' for f in report['findings']))
+            if not name_bad:
+                self.assertIn('不等于语义通过', overview['problem'])
+
+    def test_name_only_failure_and_empty_actual_have_explicit_evidence_gaps(self):
+        data = combined(name='', with_quantities=False)
+        report = m.to_report(data)
+        self.assertEqual(len(report['findings']), 2)
+        self.assertIn('数量检查：未提供', report['sourceDescription'])
+        name = report['findings'][1]
+        self.assertEqual(name['original'], '')
+        self.assertEqual(name['translation'], '')
+        self.assertIn('空字符串', name['problem'])
+        self.assertIn('bound_name_mismatch', name['problem'])
+        self.assertFalse(name['translation_highlights'])
+        self.assertIn('阻止交付', m.render(data))
+
+    def test_no_optional_checks_and_base_blockers_are_not_treated_as_checks_passed(self):
+        for bad in (False, True):
+            data = combined(with_names=False, with_quantities=False)
+            if bad:
+                data['release_allowed'] = False
+                data['identity_errors'] = ['source/translation identity mismatch']
+                data['units'][0]['findings'] = [{'kind': 'missing_original_dice_expression', 'text': 'd6', 'count': 2}]
+            report = m.to_report(data)
+            self.assertIn('名称检查：未提供', report['sourceDescription'])
+            self.assertIn('数量检查：未提供', report['sourceDescription'])
+            self.assertEqual('阻止交付' in report['progressNotice'], bad)
+            if bad:
+                self.assertEqual(len(report['findings']), 3)
+                self.assertIn('identity mismatch', report['findings'][1]['problem'])
+                self.assertIn('"count":2', report['findings'][2]['problem'])
+                self.assertTrue(all(not row['original_highlights'] and not row['translation_highlights']
+                                    for row in report['findings']))
+
+    def test_name_configuration_errors_and_selector_failures_remain_visible(self):
+        data = combined(with_quantities=False)
+        data['release_allowed'] = False
+        data['name_binding_check'] = {'release_allowed': False, 'configuration_errors': ['bad parent'], 'bindings': []}
+        report = m.to_report(data)
+        self.assertIn('名称配置错误', report['findings'][1]['title'])
+        self.assertIn('bad parent', report['findings'][1]['problem'])
+        data = combined(with_quantities=False)
+        row = data['name_binding_check']['bindings'][0]
+        del row['actual']
+        row['findings'] = [{'kind': 'bound_name_selector_failed', 'text': 'selected slot unavailable'}]
+        data['name_binding_check']['release_allowed'] = data['release_allowed'] = False
+        finding = m.to_report(data)['findings'][1]
+        self.assertIn('未提供，不能补造', finding['problem'])
+        self.assertIn('bound_name_selector_failed', finding['problem'])
+
+    def test_combined_statuses_are_preserved_not_recomputed_or_inferred(self):
+        data = combined(name='游侠')
+        data['release_allowed'] = True  # Deliberately inconsistent saved envelope.
+        report = m.to_report(data)
+        self.assertIn('状态矛盾', report['progressNotice'])
+        self.assertIn('release_allowed：true', report['findings'][0]['problem'])
+        del data['release_allowed']
+        self.assertIn('总门禁状态缺失', m.to_report(data)['progressNotice'])
+        for key in ('name_binding_check', 'quantity_risk_check'):
+            bad = combined(); bad[key] = None
+            with self.assertRaises(ValueError):
+                m.render(bad)
+        with self.assertRaises(ValueError):
+            m.render({'release_allowed': True})
+
+    def test_combined_name_text_is_escaped_in_static_and_interactive_payloads(self):
+        data = combined(name='游侠')
+        attack = '</script><img src="https://invalid.test" onerror="alert(1)">'
+        row = data['name_binding_check']['bindings'][0]
+        row['expected'] = row['actual'] = row['findings'][0]['text'] = attack
+        output = m.render(data)
+        self.assertNotIn('<img', output)
+        self.assertIn('&lt;img', output)
+        self.assertEqual(StaticReader(output).sides[3]['text'], attack)
+
     def test_static_html_rejects_nul_in_displayed_text_instead_of_replacing_it(self):
         sources, translations = records()
         sources[0]['quantity_fields'] = {'v': '2\x00 then 2'}
@@ -138,10 +255,11 @@ class OfflineReportTests(unittest.TestCase):
     def test_progressive_initialization_and_state_in_simulated_dom(self):
         with tempfile.TemporaryDirectory() as folder:
             output = Path(folder) / 'report.html'
-            output.write_text(m.render(draft()), encoding='utf-8')
-            result = subprocess.run(['node', str(ROOT / 'tests/test_config_preview_ui.js'), str(output)],
-                                    capture_output=True, text=True)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            for data in (draft(), combined(name='游侠')):
+                output.write_text(m.render(data), encoding='utf-8')
+                result = subprocess.run(['node', str(ROOT / 'tests/test_config_preview_ui.js'), str(output)],
+                                        capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_csp_hashes_cover_final_enhanced_script_and_static_styles(self):
         output = m.render(draft())
@@ -221,7 +339,10 @@ class OfflineReportTests(unittest.TestCase):
     def test_wrapper_accepts_existing_scan_output(self):
         sources, translations = records()
         data = gate.scan_records(sources, translations, quantity_scopes=config())
-        self.assertEqual(len(m.to_report(data)['findings']), 1)
+        report = m.to_report(data)
+        self.assertEqual(len(report['findings']), 2)
+        self.assertIn('完整检查报告', report['findings'][0]['title'])
+        self.assertIn('数量', report['findings'][1]['title'])
 
     def test_draft_names_use_exact_selected_slot_and_no_source_inference(self):
         data = draft()

@@ -220,17 +220,22 @@ python experiments/context_contract/config_preview.py draft resources.json sourc
 python experiments/context_contract/render_config_preview.py ../translation-trial-runs/new-config-draft.json ../translation-trial-runs/new-config-draft.html
 ```
 
-也可以渲染前述 `delivery_gate.py scan --output quantity-review.json` 生成的现有数量报告，或含 `quantity_risk_check` 的完整检查 JSON：
+也可以渲染前述 `delivery_gate.py scan --output quantity-review.json` 生成的现有数量报告，或 `pbres_names.py check` 保存的完整检查 JSON。完整检查可以含名称与数量两项、只有名称、只有数量，或两项都未启用：
 
 ```bash
 python experiments/context_contract/render_config_preview.py quantity-review.json ../translation-trial-runs/new-quantity-review.html
+python experiments/context_contract/render_config_preview.py combined-check.json ../translation-trial-runs/new-combined-review.html
 ```
 
-两种输入的高亮含义不同：
+各类输入的高亮与证据含义不同：
 
 - 名称草稿：只高亮人工指定的译文标题或特性名称槽位，按结构定位，不搜索第一个同名词。名称后缀和正文中的重复同名词不跟着高亮。草稿没有原文名称位置选择器，因此左侧保留完整原文并明确显示“未指定原文名称位置”，不伪造对应高亮；资源表原名只是参考。若该块正文含不支持的结构，仅显示提取的名称槽位，完整原始文本仍可访问。
 - 数量草稿：两侧整块高亮只表示显式选择的未确认范围，页面明确提示未运行数字比较。它不是数量风险或正式范围配置。
 - 已有数量报告：在两侧的 `extracted_text` 中，按保存的 Unicode 码点区间精确高亮每个数字/骰式证据及不确定表达，保留重复出现的位置；逐项验证引文、偏移、边界和非重叠条件。绝不把这些偏移套到原始 Markdown。显示单元 ID、各侧选择器、字段路径与 AST 位置；无法提取的一侧如实留空并说明原因，另一侧证据继续显示。数量表面相同也标为语义未核对。
+- 完整检查：先列顶层 `release_allowed`、基础交付阻断项和每个可选检查是否提供，再分别显示全部名称结果/配置错误与数量结果。顶层门禁状态在静态页及交互阅读提示中保留；数量无风险不会盖掉名称失败，名称无问题也不会盖掉数量或基础交付阻断。没有启用的检查明确标为未提供，不算通过；保存的顶层状态与子项矛盾时明确提示核对，不改写输入结果。
+- 实际名称检查行：保留资源 ID、名称路径、选择器、期望值、实际值及 `bound_name_mismatch` 等问题。期望值是资源表中文名，不冒充原文；`actual` 缺失与已提取的空字符串分别说明。现有检查载荷不含原文正文、完整译文及可靠字符偏移，因此只显示已保存的提取值，不借用数量上下文或搜索同名词补造高亮。此证据缺口不影响显示名称失败。
+
+渲染器不扩大数量词法或将风险自动改判为通过。例如英文不定冠词 `a HP` 中的 `a` 尚不计为数值 `1`，与中文显式“1 生命点”比较时可能留下需要人工核对的风险，即使两者语义相同。
 
 所有条目的原译文、精确高亮、待核对说明和完整原始 Markdown 都在生成时写入静态 HTML；关闭或无法启动 JavaScript 时仍可完整阅读。高亮同时使用背景色、加粗和下划线，低功能渲染器也可辨认。文本逐片段安全转义，CR/CRLF 的回车使用字符引用保留，避免 HTML 换行规范化破坏原始码点位置；显示文本若含 HTML 无法无损保存的 NUL 字符则拒绝生成，不静默替换。
 
