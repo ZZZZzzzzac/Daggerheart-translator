@@ -314,6 +314,67 @@ class QuantityTests(unittest.TestCase):
         for source, target in [('', ''), ('Rest.', '休息。'), ('Pay half.', '支付一半。')]:
             self.assertEqual(self.scan(source, target)['status'], 'needs_review')
 
+    def test_bilateral_unsupported_only_evidence_has_one_blocking_diagnostic(self):
+        for source, target in [('10/17', '10/17'), ('10/17', '11/18'),
+                               ('half', '一半'), ('½', '²')]:
+            with self.subTest(source=source, target=target):
+                result = self.scan(source, target)
+                row = result['scopes'][0]
+                self.assertEqual([r['kind'] for r in row['risks']], ['quantity_not_comparable'])
+                self.assertEqual(result['risk_count'], 1)
+                self.assertEqual(result['status'], 'needs_review')
+                self.assertEqual(row['status'], 'needs_review')
+                self.assertFalse(result['release_allowed'])
+                self.assertFalse(result['semantic_verified'])
+                self.assertFalse(row['semantic_verified'])
+                for side in ('source', 'translation'):
+                    evidence = row[side]
+                    self.assertEqual(evidence['tokens'], [])
+                    self.assertTrue(evidence['uncertain'])
+                    self.assertEqual(row['risks'][0][side], evidence)
+                    for token in evidence['uncertain']:
+                        self.assertEqual(evidence['extracted_text'][token['start']:token['end']], token['quote'])
+
+    def test_absent_quantity_evidence_keeps_its_diagnostic_on_either_side(self):
+        for absent in ('', 'Rest.'):
+            for source, target in [('10/17', absent), (absent, '10/17')]:
+                with self.subTest(source=source, target=target):
+                    result = self.scan(source, target)
+                    self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']],
+                                     ['quantity_not_comparable', 'no_comparable_quantities'])
+                    self.assertEqual(result['risk_count'], 2)
+                    self.assertEqual(result['status'], 'needs_review')
+                    self.assertFalse(result['release_allowed'])
+        for source, target in [('', ''), ('Rest.', '休息。')]:
+            result = self.scan(source, target)
+            self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['no_comparable_quantities'])
+            self.assertEqual(result['risk_count'], 1)
+            self.assertFalse(result['release_allowed'])
+
+    def test_uncertainty_does_not_suppress_supported_sequence_differences(self):
+        for source, target in [('10/17', '10'), ('10', '10/17'),
+                               ('10/17; 2', '10/17; 3'), ('10/17; 2', '10/17')]:
+            with self.subTest(source=source, target=target):
+                result = self.scan(source, target)
+                self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']],
+                                 ['quantity_not_comparable', 'quantity_sequence_difference'])
+                self.assertEqual(result['risk_count'], 2)
+                self.assertFalse(result['release_allowed'])
+        result = self.scan('10/17; 2', '10/17; 2')
+        self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['quantity_not_comparable'])
+        self.assertFalse(result['release_allowed'])
+
+    def test_unsupported_quantity_dedup_still_blocks_outer_gate(self):
+        result = gate.scan_records(*records('Thresholds: 10/17', '伤害阈值：10/17'), quantity_scopes=config())
+        self.assertFalse(result['release_allowed'])
+        self.assertEqual(result['quantity_risk_check']['risk_count'], 1)
+        self.assertEqual(result['quantity_risk_check']['status'], 'needs_review')
+        self.assertFalse(result['quantity_risk_check']['semantic_verified'])
+        cfg = config({'kind': 'block', 'block': 1}, {'kind': 'unit'})
+        result = self.scan('10/17', '10/17', cfg)
+        self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['quantity_scope_unavailable'])
+        self.assertFalse(result['release_allowed'])
+
     def test_explicit_blocks_use_independent_top_level_ast_indices(self):
         cfg = config({'kind': 'block', 'block': 1}, {'kind': 'block', 'block': 2})
         result = self.scan('# Level 9\n\nMark **2** Stress.', '# 第8级\n\n说明。\n\n标记二压力点。', cfg)

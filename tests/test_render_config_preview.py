@@ -283,6 +283,23 @@ class OfflineReportTests(unittest.TestCase):
         self.assertEqual(data, before)
         self.assertIn('extracted_text', f['problem'])
 
+    def test_deduplicated_unsupported_scope_remains_a_highlighted_review_item(self):
+        data = scan('Thresholds: **10/17**', '伤害阈值：**10/17**')
+        report = m.to_report(data)
+        self.assertEqual(len(report['findings']), 1)
+        f = report['findings'][0]
+        self.assertIn('数量风险待审', f['title'])
+        self.assertEqual(f['status'], 'uncertain')
+        self.assertIn('quantity_not_comparable', f['problem'])
+        self.assertNotIn('no_comparable_quantities', f['problem'])
+        for side in ('original', 'translation'):
+            self.assertEqual([h['text'] for h in f[side + '_highlights']], ['10/17'])
+        sides = StaticReader(m.render(data)).sides
+        self.assertEqual(len(sides), 2)
+        for item, side in zip(sides, ('original', 'translation')):
+            self.assertEqual(item['text'], f[side])
+            self.assertEqual(item['marks'], f[side + '_highlights'])
+
     def test_explicit_block_uses_extracted_scope_not_raw_markdown_or_first_same_word(self):
         sources, translations = records('2 before.\n\n🦊 **2** selected.', '前面2点。\n\n🦊 **三**点。')
         cfg = config({'kind': 'block', 'block': 1}, {'kind': 'block', 'block': 1})

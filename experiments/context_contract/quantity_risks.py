@@ -400,7 +400,11 @@ def scan(sources, translations, config, parse_ast):
             left = [(t['kind'], t['value']) for t in source['tokens']]
             right = [(t['kind'], t['value']) for t in target['tokens']]
             if not left and not right:
-                kinds.append(('no_comparable_quantities', 'No supported quantity evidence on either side.'))
+                # Bilateral unsupported evidence already has a blocking review
+                # clue above. Keep the absence clue if either side has no
+                # quantity evidence at all; never infer that uncertain forms match.
+                if not (source['uncertain'] and target['uncertain']):
+                    kinds.append(('no_comparable_quantities', 'No supported quantity evidence on either side.'))
             elif left != right:
                 kinds.append(('quantity_sequence_difference', 'Ordered quantity surfaces differ; legitimate reordering is possible.'))
         for kind, detail in kinds:

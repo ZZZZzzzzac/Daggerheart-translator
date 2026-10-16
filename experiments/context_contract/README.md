@@ -149,6 +149,8 @@ python experiments/context_contract/pbres_names.py check resources.json original
 
 上例返回 `quantity_risk_check.status: "needs_review"`、带原文 `2` / 译文 `3` 证据的 `quantity_sequence_difference`，总 `release_allowed` 为 false、CLI 退出码 2。这表示需审阅，不表示已经确认译错；不会自动改数字、替换译文或删句。`risk_count` 是风险条数，配置错误单独放在 `configuration_errors`，两者都不是语义错误计数。
 
+两侧都只有不确定数量表达、没有受支持 token 时，只列 `quantity_not_comparable`，不再重复列 `no_comparable_quantities`；例如 `10/17` 对 `10/17` 或 `11/18` 都仍须人工审阅并阻止通过，不能据此认为两种表达相等。两侧都没有受支持 token，且任一侧连不确定数量证据也没有时，仍保留缺少可比较数量的提示；已有受支持 token 的顺序差异也照常报告。这只减少重复说明，不减少需审范围或证明人工审阅已完成。
+
 ### 范围与证据
 
 - `unit`：显式选择该单元的完整 Markdown。推荐短规则单元，不能代替人工核对范围。
