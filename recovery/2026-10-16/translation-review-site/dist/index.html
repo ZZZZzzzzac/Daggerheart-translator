@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="本地导入 JSON，对照原文与译文、查看精确证据，并保存阅读进度。公开只读工具，无需登录。">
+<title>译文审阅台 · Translation Review</title>
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<header class="topbar"><a href="./" class="brand" aria-label="译文审阅台首页"><span class="brand-icon" aria-hidden="true">文</span><span>译文审阅台<small>TRANSLATION REVIEW</small></span></a><span class="privacy-pill"><span aria-hidden="true">●</span> 本地处理 · 无需登录</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">READ CLOSELY. REVIEW CLEARLY.</p><h1>让每一处证据，<br>都回到上下文里。</h1><p class="intro-copy">原文与译文并排读，准确定位待核对的位置。<br>这是只读审阅台；完成标记只记录阅读进度。</p></div><div class="import-panel" id="dropzone"><span class="step-label">01 / 打开报告</span><h2>从您的文件开始</h2><p>拖入 JSON 文件，或从设备中选择。<br>文件只在当前浏览器处理，不会上传。</p><label class="button primary file-label" for="report-file">选择审阅 JSON <span aria-hidden="true">↗</span></label><input id="report-file" type="file" accept=".json,application/json" class="file-input"><button id="demo" class="text-button">先看看演示 <span aria-hidden="true">→</span></button><small>支持审阅报告、配置草稿、数量报告及完整检查报告 · 最大 10 MB</small></div></section>
+<p id="status" class="status" role="status" aria-live="polite">公开工具，私密阅读。您导入的内容不会成为网页的公开内容。</p>
+<section id="workspace" hidden aria-label="审阅工作区">
+<div class="report-heading"><div><p class="eyebrow">02 / 对照阅读</p><h2 id="report-title"></h2><p id="filename" class="muted"></p></div><button id="close" class="button secondary">关闭报告</button></div>
+<div class="notice"><span aria-hidden="true">ⓘ</span><div><strong>阅读完成 ≠ 审核通过</strong><p id="report-notice"></p></div></div>
+<details class="report-description"><summary>报告范围与说明</summary><p id="description" class="prewrap"></p></details>
+<div class="toolbar"><div class="tabs" role="group" aria-label="阅读状态筛选"><button data-filter="all" aria-pressed="true">全部 <span id="count-all">0</span></button><button data-filter="unread" aria-pressed="false">未读 <span id="count-unread">0</span></button><button data-filter="done" aria-pressed="false">已读 <span id="count-done">0</span></button></div><label class="search"><span class="sr-only">搜索条目</span><input id="search" type="search" placeholder="搜索条目、原文或译文…" maxlength="500"></label></div>
+<div class="review-layout"><aside class="queue"><div class="queue-heading"><span>审阅条目</span><span id="position"></span></div><nav id="finding-list" aria-label="选择审阅条目"></nav></aside><section class="detail" id="detail" aria-label="当前条目"></section></div>
+<div class="progress-panel"><div><strong id="progress-label">阅读进度</strong><p>进度按文件内容独立保存。原文与译文不保存到本地存储。换设备前请导出进度。</p><progress id="progress-bar" value="0" max="1" aria-label="阅读完成进度"></progress></div><div class="progress-actions"><button id="export" class="button secondary">导出进度</button><label for="progress-file" class="button secondary file-label">导入进度</label><input id="progress-file" type="file" accept=".json,application/json" class="file-input"></div></div>
+</section>
+<details class="help"><summary>支持哪些文件？数据会保存在哪里？</summary><div><p>可导入包含 findings 的 schemaVersion: 1 审阅报告、pbres-config-draft-v1 配置草稿、mechanic-quantity-scopes-v1 数量报告，以及包含名称或数量子检查的完整检查 JSON。网页展示保存的证据，不重新扫描、自动对齐或批准配置。</p><p>高亮按 Unicode 码点偏移验证，不按关键词猜测。输入中的 Markdown 和 HTML 仅作为文字显示。格式错误或引文不匹配时，导入会被拒绝，并保留已打开的报告。</p><p>您的文件只在浏览器内存中读取；没有上传、分析追踪或第三方字体。阅读标记保存在当前浏览器的本地存储中；清理网站数据或使用无痕模式可能丢失进度。进度 JSON 可用于备份，并且只能导回同一份文件内容。</p><p>网页需要 JavaScript。报告最大 10 MB；大报告请使用搜索缩小范围。此页面没有翻译编辑、账号或审批功能。</p></div></details>
+</main>
+<footer><span>译文审阅台</span><span>只读证据 · 保留判断 · 回看上下文</span></footer>
+<noscript><p class="notice">请启用 JavaScript 后使用本地文件审阅。文件不会上传。</p></noscript>
+</body>
+</html>

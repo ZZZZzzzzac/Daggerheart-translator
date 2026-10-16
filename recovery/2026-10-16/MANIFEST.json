@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "baseline_commit": "af9b77001a09fa4212555856bd8f60c49a762a0d",
+  "scope": "Public recovery assets; nonpublic corpora deliberately omitted.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2691,
+      "sha256": "fbde2aea53b368276ed069522da12760c325d37df449155b0ab0d78cca865b04",
+      "preservation": "generated_recovery_helper"
+    },
+    {
+      "path": "legacy/Daggerheart-translator/README.md",
+      "bytes": 2765,
+      "sha256": "4f2b7a81bc0deddf74afa92648eb354ba52351f790cdec1c9a629bafa2c3d269",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator/README.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-biyu-damage/skills/daggerheart-chinese-writing/REFERENCE.md",
+      "bytes": 4889,
+      "sha256": "34e9a9023165eb497c9601103950b6e6bb35e4301495cfcc56d50618d59491b6",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-biyu-damage/skills/daggerheart-chinese-writing/REFERENCE.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-context-contract/experiments/context_contract/PBRES_NAMES.md",
+      "bytes": 4251,
+      "sha256": "c9d4204da1b996c3b941afb158a935d5e361354b437da7d743a00fd86838e671",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-context-contract/experiments/context_contract/PBRES_NAMES.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-context-contract/experiments/context_contract/README.md",
+      "bytes": 15323,
+      "sha256": "cbaedc70b4aebae85c16bebd2049a1c8ed2a6fdce4b57078e1394eb1ffbce9ee",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-context-contract/experiments/context_contract/README.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/README.md",
+      "bytes": 2765,
+      "sha256": "4f2b7a81bc0deddf74afa92648eb354ba52351f790cdec1c9a629bafa2c3d269",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/README.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/skills/daggerheart-chinese-writing/REFERENCE.md",
+      "bytes": 4817,
+      "sha256": "11abba4e08e0af3b7af512bf9ac7ca8d679b9f71e7306107c713f2eb1dbb2bcc",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/skills/daggerheart-chinese-writing/REFERENCE.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/skills/daggerheart-term-checker/SKILL.md",
+      "bytes": 7564,
+      "sha256": "56bbcbd37ab92566138ff31c49399d2601981eaf696c2f52d190ea5c553925e3",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/skills/daggerheart-term-checker/SKILL.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/SKILL.md",
+      "bytes": 11762,
+      "sha256": "30417855c7ce288d907c7ae17b47a49a3e9402b84b4bda0d0ebd84e88cd8b7b7",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/SKILL.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/scripts/semantic_qa_prompt.py",
+      "bytes": 4445,
+      "sha256": "11b794955bdbe615740a6ca8d79fa00e2b319b0ee70f6fbe8e9c788b2fb8ca5e",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/scripts/semantic_qa_prompt.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/scripts/translation_prompt.py",
+      "bytes": 11725,
+      "sha256": "caf96b074bc8fea310939b9d24aa5f05ee8ae4ebd7055c7a9ac19f188c2bcd09",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/skills/daggerheart-translation-pipeline/scripts/translation_prompt.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/tests/test_reference_examples.py",
+      "bytes": 3266,
+      "sha256": "71db210551e1ae9dbd4f093ebd9029b4fd21e4c1a048e8b2ee6ed7f102eb6954",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/tests/test_reference_examples.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-experiment/tests/test_translation_prompts.py",
+      "bytes": 8668,
+      "sha256": "d53808bcd71754258f6e7a80f12778b8234e8b92c5f9faedf5dca4a40d08e4f3",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-experiment/tests/test_translation_prompts.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-pre-isolation/README.md",
+      "bytes": 2765,
+      "sha256": "4f2b7a81bc0deddf74afa92648eb354ba52351f790cdec1c9a629bafa2c3d269",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-pre-isolation/README.md"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/approve_term_review.py",
+      "bytes": 2728,
+      "sha256": "903054e0360aa004e3754334aef64e90d571a7e54ca8bf0849414e67a999e499",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/approve_term_review.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/check_terms.py",
+      "bytes": 16107,
+      "sha256": "940b991f1259696fc7b029efced19360b1bace6ce4d212d971ddfb29bbfc8022",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/check_terms.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/term_markers.py",
+      "bytes": 2219,
+      "sha256": "15aade88792a1673a9457309c5b371870c0067bb15fdc4e4aba21258b9a01705",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/term_markers.py"
+    },
+    {
+      "path": "legacy/Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/term_review.py",
+      "bytes": 7657,
+      "sha256": "0b763910b182ad30733f7e9b39aaf414963e239453b80676dfce4f92652172fe",
+      "preservation": "byte_identical",
+      "source_label": "Daggerheart-translator-pre-isolation/skills/daggerheart-term-checker/scripts/term_review.py"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/compare-matrix.py",
+      "bytes": 2844,
+      "sha256": "89e00a2bb75085ca3933644aca34ac8efb3ee0bfc0657de392eea214396adb63",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/compare-matrix.py"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/differential-matrix.json",
+      "bytes": 221257,
+      "sha256": "ef7f8a4884a4f7b7e21061c9c451bfc4a0f97cc4ee730ac9043d836758257172",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/differential-matrix.json"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/differential-matrix.log",
+      "bytes": 175,
+      "sha256": "53e9c4f6195985e58f08b84ddb88b56ab9a04ed830e78942f17a6fe0e956678e",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/differential-matrix.log"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/implementation.patch",
+      "bytes": 8912,
+      "sha256": "4c9498d52ede33b952eb7b649a4982a74a5b7eb95c14d370412b24196e7221c9",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/implementation.patch"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/protocol.json",
+      "bytes": 944,
+      "sha256": "12a0d6127fa26142e2365577d50408b5c0778681288a267025bdb98a3bf9decd",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/protocol.json"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/quantity_risks.before.py",
+      "bytes": 22134,
+      "sha256": "f01f8adcebfa72762be6cd78c79c3fce270b806bd6d44e29df6543c2f04117f8",
+      "preservation": "byte_identical",
+      "source_label": "quantity-diagnostic-dedup-20261016/quantity_risks.before.py"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/replay_synthetic.py",
+      "bytes": 3274,
+      "sha256": "4c0f516829dd5bd8d614508e0c0cc38fe6ce9ab4e498b061a0b29ebaf25ad29e",
+      "preservation": "generated_recovery_helper"
+    },
+    {
+      "path": "quantity-diagnostic-dedup/statistics.json",
+      "bytes": 1160,
+      "sha256": "d91a5e8f2ebd8461fb4dc94cd1a498afc9bbeb001e2e1d96cd513affc909e5b3",
+      "preservation": "generated_recovery_helper"
+    },
+    {
+      "path": "translation-review-site/.openai/hosting.json",
+      "bytes": 106,
+      "sha256": "fef41629fffbf9ad7e8336c3ba94fc1964f8ca5f711590607bc12f81cca63309",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/.openai/hosting.json"
+    },
+    {
+      "path": "translation-review-site/README.md",
+      "bytes": 2791,
+      "sha256": "5b67afd6a09105a2b6954e76e42a351686ca545c0ddeb9a2f6d9f4e1b8cd2eaf",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/README.md"
+    },
+    {
+      "path": "translation-review-site/app.test.mjs",
+      "bytes": 5214,
+      "sha256": "ad2d2144aa3b4d168a750eff0da1304d07a7bc52ec62a30b0b5511fba0c622a1",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/app.test.mjs"
+    },
+    {
+      "path": "translation-review-site/dist/app.mjs",
+      "bytes": 12774,
+      "sha256": "035d54b10cd05adefa00e46b98fe7e12520612c12188c41defbe0b7598c5449f",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/dist/app.mjs"
+    },
+    {
+      "path": "translation-review-site/dist/index.html",
+      "bytes": 5383,
+      "sha256": "b5bb0cfb3645bce72dfc885993d14b69e6ad0dac3702ce9e1bea504608e5161f",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/dist/index.html"
+    },
+    {
+      "path": "translation-review-site/dist/model.mjs",
+      "bytes": 38476,
+      "sha256": "09fb98e36effd515b6abe6d71420b916b59fe58bc8330663e8b67c469b68788d",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/dist/model.mjs"
+    },
+    {
+      "path": "translation-review-site/dist/styles.css",
+      "bytes": 9710,
+      "sha256": "b0d3054c9c1cee68ba7766198a24fd81aeb0788b505d6b62ee51f080851b90b7",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/dist/styles.css"
+    },
+    {
+      "path": "translation-review-site/model.test.mjs",
+      "bytes": 16335,
+      "sha256": "baf6c8fb6333a97bb2c950428c80e79f2e5c81c73ddb49690d0ab8651b8fec58",
+      "preservation": "byte_identical",
+      "source_label": "translation-review-site/model.test.mjs"
+    }
+  ]
+}
