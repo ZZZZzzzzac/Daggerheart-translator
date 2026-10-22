@@ -41,6 +41,10 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 脚本只校验本地审阅记录和证据、生成报告，不自动宣称完成语义审阅；报告勾选也不修改原译文。见[输入格式与合成示例](skills/daggerheart-translation-audit/references/paired-inputs.md)。
 
+## 中文资源排版
+
+加载 [daggerheart-resource-layout](skills/daggerheart-resource-layout/SKILL.md)：将已取得的中文 TRPG 正文与素材排成读者资源。默认双栏，按完整卡片组织内容，处理选项列表、局部强调和插图，并分别核验内容覆盖与实际导出页面。它不替代翻译管线，也不改写规则。
+
 ## 术语表分层
 
 - `terms-core.json`：以原人工清洗表为基线，维护跨项目复用的规则术语和官方战役框架名称；不是 ParaTranz 的自动同步导出。
