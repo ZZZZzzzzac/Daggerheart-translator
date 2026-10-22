@@ -32,6 +32,14 @@ class CleanupTests(unittest.TestCase):
         cls.matcher = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.matcher)
 
+    def test_reroll_and_variant_use_requested_translation(self):
+        self.assertEqual(self.by['reroll'], {
+            'term': 'reroll', 'translation': '重掷', 'variants': ['rerolling'],
+        })
+        for source in ('reroll', 'rerolling', 'Reroll'):
+            with self.subTest(source=source):
+                self.assertEqual(self.tag(source), '【' + source + '｜重掷】')
+
     def test_fixed_rest_phrase_is_preserved(self):
         self.assertEqual(self.by["Once per long rest"]["translation"], "每长休一次")
         for source in ('Once per long rest', 'once per long rest'):

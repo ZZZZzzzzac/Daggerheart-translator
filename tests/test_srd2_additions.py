@@ -79,7 +79,10 @@ class Srd2AdditionsTests(unittest.TestCase):
         spec.loader.exec_module(cls.matcher)
 
     def test_exact_counts_and_authorized_set(self):
-        self.assertEqual(len(self.core), self.cleanup['counts']['core_after'])
+        # Keep the 2026-10-14 cleanup count historical; track later approved additions.
+        later_additions = {'reroll'}
+        self.assertEqual(len(self.core), self.cleanup['counts']['core_after'] + len(later_additions))
+        self.assertTrue(later_additions <= {e['term'] for e in self.core})
         self.assertEqual(len(self.new), 36)
         self.assertEqual(len(self.context), 6)
         self.assertEqual({e['term'] for e in self.new}, set(EXPECTED) - CONTEXT_NAMES)
