@@ -3,6 +3,10 @@
 **不是术语表**——所有 1:1 的译名见 `terms-core.json`。
 这里只放术语表解决不了的：上下文相关选择、格式规范、句式模板。
 
+## 合成语境审阅示例
+
+按需参照[合成的语境审阅示例](examples/synthetic-review-examples.json)：能力可用性与发动、地点与移动。仅为现有忠实度要求的合成审阅示例，不摘录出版物或人工终稿，不是已审定决策、自动替换规则或项目术语表。
+
 ## SRD2 语境参考
 
 遇到 Hedge、Moon、Transformation、Ghost、Focus、Favor，按所属子职业、转变或资源规则查阅 [SRD2 语境参考](../daggerheart-translation-pipeline/resources/reference/srd2-context-only.json)，仅用于语义选择，不作为自动替换表。记录中的中文沿当前源译，语境／实体选择按已记录上下文执行；Ghost 的转变选项“鬼魂”不得覆盖敌人特性“幽灵形态”。新增核心词的大小写标记也不能代替实体判断；来源与边界见 [新增说明](../daggerheart-translation-pipeline/resources/reference/srd2-additions.md)。
