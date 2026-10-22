@@ -186,6 +186,7 @@
   {"term": "Recall Cost", "translation": "回想费用", "variants": ["Recall Costs"]},
   {"term": "Relative Strength", "translation": "战力浮动"},
   {"term": "Relentless", "translation": "无情", "note": "如果是特性名, 则采取以下模板: 无情 Relentless (X) - 被动：在每个游戏主持人轮次中，此敌人可以至多被聚焦 X 次。像往常一样花费恐惧点来聚焦该敌人。"},
+  {"term": "reroll", "translation": "重掷", "variants": ["rerolling"]},
   {"term": "Resistance", "translation": "抗性", "variants": ["resistances", "RESISTANCE"], "case_sensitive": true},
   {"term": "Restrained", "translation": "束缚", "note": "状态", "case_sensitive": true, "variants": ["RESTRAINED"]},
   {"term": "Ribbet", "translation": "蛙裔"},
