@@ -1,12 +1,12 @@
 {
   "version": 1,
   "date": "2026-10-25",
-  "total": 975,
+  "total": 972,
   "groups": [
     {
       "file": "terms-core.json",
       "label": "游戏性与规则机制",
-      "count": 289,
+      "count": 287,
       "default": true
     },
     {
@@ -36,7 +36,7 @@
     {
       "file": "worldbuilding.json",
       "label": "世界设定",
-      "count": 235,
+      "count": 234,
       "default": true
     },
     {

@@ -105,7 +105,12 @@ class TermHtmlTests(unittest.TestCase):
     def test_xss_and_output_links_are_safe(self):
         self.put('【Hope｜希望｜</script><img src=x onerror=alert(1)>】', '【希望｜希望｜</script><img src=x onerror=alert(1)>】')
         source = self.base / '_chunks/01.md'; before = source.read_bytes()
-        target = self.base / '_term_review_report.html'; target.symlink_to(source)
+        target = self.base / '_term_review_report.html'; 
+        try:
+            target.symlink_to(source)
+        except OSError as exc:
+            if getattr(exc, 'winerror', None) == 1314: self.skipTest('Windows symlink privilege unavailable')
+            raise
         self.run_report()
         self.assertEqual(source.read_bytes(), before)
         self.assertFalse(target.is_symlink())
@@ -118,7 +123,12 @@ class TermHtmlTests(unittest.TestCase):
         source = self.base / '_chunks/01.md'
         target = self.project / 'actual-source.md'
         source.rename(target)
-        source.symlink_to(target)
+        
+        try:
+            source.symlink_to(target)
+        except OSError as exc:
+            if getattr(exc, 'winerror', None) == 1314: self.skipTest('Windows symlink privilege unavailable')
+            raise
         before = target.read_bytes()
         for destination in (source, target):
             with self.subTest(destination=destination), self.assertRaisesRegex(ValueError, '覆盖'):

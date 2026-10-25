@@ -4,12 +4,12 @@
 
 | 分组 | 文件 | 条数 | 默认加载 |
 | --- | --- | ---: | --- |
-| 游戏性与规则机制 | `terms-core.json` | 289 | 是 |
+| 游戏性与规则机制 | `terms-core.json` | 287 | 是 |
 | 敌人特性 | `adversaries_features.json` | 12 | 是 |
 | 装备特性 | `equipment_features.json` | 19 | 是 |
 | 敌人名字 | `adversaries_name.json` | 152 | 是 |
 | 敌人动机、战术与经历 | `adversaries_motivation.json` | 112 | 是 |
-| 世界设定 | `worldbuilding.json` | 235 | 是 |
+| 世界设定 | `worldbuilding.json` | 234 | 是 |
 | 玩家资源名称 | `player_resources.json` | 100 | 是 |
 | 玩家特性与能力 | `player_features.json` | 1 | 是 |
 | 环境名字 | `environments_name.json` | 15 | 是 |
