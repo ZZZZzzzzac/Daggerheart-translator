@@ -1,0 +1,21 @@
+# 规则术语规范化
+
+`makeup.py` 只自动处理明确的资源短语，保留文档结构。`process_markdown()` 可重复运行，结果应保持不变。
+
+```bash
+python scripts/makeup.py source/_translated.md --diff
+python scripts/makeup.py source/_translated.md --check
+python scripts/makeup.py source/_translated.md --suffix ""
+python scripts/test_makeup.py
+```
+
+- `--diff` 只显示差异；`--check` 不写文件，有变化时退出码为 1。
+- CLI 默认覆盖输入；`--suffix _makeup` 另存。Python 的 `process_markdown_file()` 默认后缀仍为 `_makeup`。
+- `[动词] [数量] [资源]` 统一空格、中文数字和重复量词，识别骰式、至少／至多、等量的等数量。
+- 生命点用“恢复”；压力点、护甲槽用“清除”；“消耗”改为“花费”。护甲值、资源容量槽、希望骰等不按资源处理。
+- “获得一种希望之光”等叙述以及共用动词的并列资源句不自动改写。
+- 标题、代码、链接、图片、HTML 属性、锚点和元数据保持原样；保留强调、表格、换行。
+- 正文中的 PC／GM 换成中文全称；括号、引号中的缩写定义和标识符保持原样。“重骰”统一为“重掷”。
+- 默认不删除图片、链接或空 span，不给全部数字加粗，也不做全局中英空格处理。需要中英空格时使用 `--space-ascii`。
+
+网站 `static/js/makeup-core.mjs` 使用相同的资源规则，并为已识别短语加粗。修改规则时需同时更新两端，并运行共享用例和整站渲染测试。

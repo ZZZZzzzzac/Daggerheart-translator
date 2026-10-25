@@ -1,248 +1,229 @@
-# makeup.py — Markdown 后处理（资源短语格式化、图片清理、排版修正）
+"""Conservative Markdown rule terminology normalization.
+
+Only explicit resource phrases are rewritten. Markdown structure and narrative
+phrases are retained. Use --diff/--check to inspect a document before writing it.
+"""
+import argparse
+import difflib
 import re
-import os
+from pathlib import Path
 
 
-def remove_image_filename(markdown_text):
-    """删除 ![](_page_0_Picture_2.jpeg) 格式的图像链接"""
-    return re.sub(r'!\[\]\(_page.*?\)', '', markdown_text)
+def protected_spans(text):
+    """Locate code, headings, metadata, links and HTML without rendering Markdown."""
+    spans = []
+    lines = text.splitlines(keepends=True)
+    offset = 0
+    fence = None
+    start = 0
+    frontmatter = bool(lines and lines[0].strip() == '---')
+    for i, line in enumerate(lines):
+        if frontmatter:
+            if i and line.strip() in ('---', '...'):
+                spans.append((0, offset + len(line))); frontmatter = False
+            offset += len(line); continue
+        marker = re.match(r'^ {0,3}(`{3,}|~{3,})(.*)', line)
+        if fence:
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                spans.append((start, offset + len(line))); fence = None
+        elif marker:
+            fence, start = marker[1], offset
+        elif re.match(r'^(?: {4}|\t| {0,3}#{1,6}\s| {0,3}\[[^\]]+\]:)', line):
+            spans.append((offset, offset + len(line)))
+        offset += len(line)
+    if fence: spans.append((start, len(text)))
+    if frontmatter: spans.append((0, len(text)))
+    for m in re.finditer(r'<!--[\s\S]*?-->|<(pre|code|script|style)\b[^>]*>[\s\S]*?</\1\s*>|<[^>\n]+>|https?://[^\s<>]+', text, re.I):
+        spans.append(m.span())
+    for m in re.finditer(r'(`+)(?!`)(.*?)(?<!`)\1(?!`)', text, re.S):
+        spans.append(m.span())
+    # Balanced links/images; protect their labels too, including reference links.
+    def closing(pos, opening, ending):
+        depth = 0
+        for j in range(pos, len(text)):
+            if j and text[j-1] == '\\': continue
+            if text[j] == opening: depth += 1
+            elif text[j] == ending:
+                depth -= 1
+                if depth == 0: return j + 1
+        return None
+    pos = 0
+    while pos < len(text):
+        if text[pos] != '[' or (pos and text[pos-1] == '\\'):
+            pos += 1; continue
+        end = closing(pos, '[', ']')
+        if end and end < len(text) and text[end] in '([':
+            tail = closing(end, text[end], ')' if text[end] == '(' else ']')
+            if tail:
+                spans.append((pos-1 if pos and text[pos-1] == '!' else pos, tail)); pos = tail; continue
+        # A bare [label] can be a shortcut reference; leave it alone.
+        if end: spans.append((pos, end)); pos = end
+        else: pos += 1
+    spans.sort()
+    merged = []
+    for a, b in spans:
+        if merged and a <= merged[-1][1]: merged[-1] = (merged[-1][0], max(b, merged[-1][1]))
+        else: merged.append((a, b))
+    return merged
 
 
-def remove_span(markdown_text):
-    """删除 <span.*></span> 标签"""
-    return re.sub(r'<span.*?></span>', '', markdown_text, flags=re.DOTALL)
+def transform_prose(text, transform):
+    out, last = [], 0
+    for a, b in protected_spans(text):
+        out.extend((transform(text[last:a]), text[a:b])); last = b
+    out.append(transform(text[last:]))
+    return ''.join(out)
 
 
-def format_resource_phrases_fn(markdown_text):
-    """标准化资源短语为 "动词 数量 资源点" 格式。
-
-    >>> f = format_resource_phrases_fn
-    >>> # 基本: 中文数词/数字 + 个/点 → 数字
-    >>> f('标记一个生命点')
-    '标记 1 生命点'
-    >>> f('标记1生命点')
-    '标记 1 生命点'
-    >>> f('获得一希望')
-    '获得 1 希望点'
-    >>> f('失去四压力')
-    '失去 4 压力点'
-    >>> # 骰子表达式
-    >>> f('标记1d6生命点')
-    '标记 1d6 生命点'
-    >>> f('恢复2d8+1生命点')
-    '恢复 2d8+1 生命点'
-    >>> # 非简单数量 - 原样保留
-    >>> f('标记一或更多生命点')
-    '标记 一或更多 生命点'
-    >>> f('花费至少1希望点')
-    '花费 至少1 希望点'
-    >>> # 穿透 ** 加粗标记
-    >>> f('**标记一个生命点**')
-    '**标记 1 生命点**'
-    >>> f('**花费 **1** 恐惧点**')
-    '**花费 1 恐惧点**'
-    >>> # 动词标准化: 回复→恢复, 移除→清除, 消耗→花费
-    >>> f('回复1生命点')
-    '恢复 1 生命点'
-    >>> f('消耗1希望点')
-    '花费 1 希望点'
-    >>> # 资源标准化: 绝望→恐惧, 护甲→护甲槽, 生命值→生命点
-    >>> f('标记1绝望点')
-    '标记 1 恐惧点'
-    >>> f('恢复1护甲')
-    '恢复 1 护甲槽'
-    >>> f('标记1生命值')
-    '标记 1 生命点'
-    >>> # 幂等
-    >>> f('标记 1 生命点')
-    '标记 1 生命点'
-    >>> # 不匹配 - 无数量
-    >>> f('恢复生命')
-    '恢复生命'
-    """
-    verbs = r'恢复|回复|标记|清除|移除|获得|花费|消耗|失去|承受'
-    resources_base = r'生命|希望|压力|恐惧|绝望|恩宠|专注|回响|充能|护甲'
-
-    pattern = rf'({verbs})(.{{1,10}}?)({resources_base})(点|值|槽)?'
-
-    verb_map = {'回复': '恢复', '移除': '清除', '消耗': '花费'}
-    num_map = {'一': '1', '二': '2', '三': '3', '四': '4', '五': '5', '六': '6'}
-    simple_num = re.compile(r'^[一二三四五六七八九十两]?[个点]?$|^\d{1,2}[个点]?$|^\d{1,2}d\d{1,2}([+\-]\d+)?$')
-
-    def normalize(match):
-        verb = match.group(1)
-        mid_raw = match.group(2)
-        res = match.group(3)
-        suffix = match.group(4) or ''
-
-        verb = verb_map.get(verb, verb)
-        if res == "绝望":
-            res = "恐惧"
-
-        mid_clean = mid_raw.replace('*', '').strip()
-        if simple_num.match(mid_clean):
-            mid_clean = mid_clean.rstrip('个点')
-            mid_clean = num_map.get(mid_clean, mid_clean)
-
-        if "护甲" in res:
-            suffix = "槽"
-        elif not suffix or suffix == "值":
-            suffix = "点"
-
-        return f"{verb} {mid_clean} {res}{suffix}"
-
-    return re.sub(pattern, normalize, markdown_text)
+SPACE = r'[ \t]*(?:\*\*[ \t]*)*'
+NUMBER = r'(?:\d*[dD]\d+(?:[ \t]*[+\-−][ \t]*\d+)?|\d+|[一二三四五六七八九十两]{1,3})'
+AMOUNT = rf'(?:(?:至少|至多|最多|最少)[ \t]*)?{NUMBER}(?:[ \t]*(?:或更多|或更少))?|等量的|任意数量的|所有|全部|其余的|剩余的|最后一个'
+BASE = r'生命|希望|压力|恐惧|绝望|恩宠|专注|回响|充能'
+RESOURCE = rf'(?:(?:{BASE})(?:点|值|槽)(?![点值槽骰池数上限])|护甲(?:槽|值|点)(?![点值槽骰池数上限])|(?:{BASE}|护甲)(?![\u3400-\u9fffA-Za-z0-9_]))'
+PHRASE = re.compile(rf'(?P<verb>恢复|回复|标记|清除|移除|获得|花费|消耗|失去|承受){SPACE}(?P<amount>{AMOUNT}){SPACE}(?:个|点)?{SPACE}(?P<resource>{RESOURCE})')
+ZH_DIGITS = dict(zip('零一二三四五六七八九', range(10)))
+ZH_DIGITS['两'] = 2
 
 
-def add_space_around_italics_fn(markdown_text):
-    pattern = r'(?<=[一-龥,.，。])\*{1}[一-龥]{1,5}\*{1}(?=[一-龥,.，。])'
-    return re.sub(pattern, lambda m: f" {m.group(0)} ", markdown_text)
+def normalize_number(value):
+    if value in ZH_DIGITS: return str(ZH_DIGITS[value])
+    if '十' in value:
+        left, right = value.split('十', 1)
+        if (not left or left in ZH_DIGITS) and (not right or right in ZH_DIGITS):
+            return str((ZH_DIGITS.get(left, 1) * 10) + ZH_DIGITS.get(right, 0))
+    return value
 
 
-def add_space_between_chinese_and_ascii_fn(markdown_text):
-    """Separate retained English names from adjacent Chinese prose."""
-    markdown_text = re.sub(r'(?<=[A-Za-z0-9])(?=[一-龥])', ' ', markdown_text)
-    return re.sub(r'(?<=[一-龥])(?=[A-Za-z])', ' ', markdown_text)
+def _resource_phrases(text):
+    def normalize(m):
+        verb, amount, resource = m['verb'], m['amount'], m['resource']
+        # A coordinated phrase may share its verb/quantity across resources.
+        # Leave it for human review rather than assigning the first noun's verb.
+        if re.search(r'(?:恢复|回复|清除|移除)[ \t]*(?:和|与|或|并)[ \t]*$', text[:m.start()]):
+            return m[0]
+        if re.match(r'[ \t]*(?:和|与|及|或)[ \t]*(?:生命|希望|压力|恐惧|护甲)', text[m.end():]):
+            return m[0]
+        # Do not swallow only one side of an emphasis span.
+        stars = m[0].count('**')
+        if stars % 2: return m[0]
+        if resource == '护甲':
+            if verb not in ('标记', '恢复', '回复', '清除', '移除'): return m[0]
+            resource = '护甲槽'
+        elif resource == '护甲点': resource = '护甲槽'
+        elif resource == '生命值': resource = '生命点'
+        elif resource in ('生命', '希望', '压力', '恐惧', '绝望', '恩宠', '专注', '回响', '充能'): resource += '点'
+        # Armor Score and capacity slots are not spendable resources.
+        if resource.endswith('值') or (resource.endswith('槽') and resource != '护甲槽'):
+            return m[0]
+        resource = resource.replace('绝望点', '恐惧点')
+        verb = {'回复':'恢复', '消耗':'花费'}.get(verb, verb)
+        if verb in ('清除', '移除') and resource == '生命点': verb = '恢复'
+        elif verb in ('恢复', '移除') and resource in ('压力点', '护甲槽'): verb = '清除'
+        elif verb == '移除': verb = '清除'
+        if amount != '最后一个':
+            amount = re.sub(r'[一二三四五六七八九十两]+', lambda x:normalize_number(x[0]), amount)
+        amount = re.sub(r'\s*([dD+\-−])\s*', lambda x:x[1].lower().replace('−','-'), amount)
+        amount = re.sub(r'^(至少|至多|最多|最少)\s*', r'\1 ', amount)
+        amount = re.sub(r'\s*(或更多|或更少)$', r' \1', amount)
+        phrase = f'{verb} {amount} {resource}'
+        if stars and text[:m.start()].count('**') % 2 == 0: phrase = '**'+phrase+'**'
+        return phrase
+    return PHRASE.sub(normalize, text)
 
 
-def simplify_markdown_links_fn(markdown_text):
-    if markdown_text.startswith("![]"):
-        return markdown_text
-    pattern = r'\[([^\]]+)\]\([^\)]*\)'
-    return re.sub(pattern, lambda match: match.group(1), markdown_text)
+def format_resource_phrases_fn(text):
+    return transform_prose(text, _resource_phrases)
 
 
 REPLACEMENTS = [
-    (r'(?<![A-Za-z\(（])PC(?![A-Za-z\)）])', '玩家角色'),
-    (r'(?<![A-Za-z\(（])GM(?![A-Za-z\)）])', '游戏主持人'),
+    (r'''(?<![A-Za-z0-9_(（“”‘’"'])PC(?![A-Za-z0-9_)）“”‘’"'])''', '玩家角色'),
+    (r'''(?<![A-Za-z0-9_(（“”‘’"'])GM(?![A-Za-z0-9_)）“”‘’"'])''', '游戏主持人'),
     (r'重骰', '重掷'),
+    (r'生命点值', '生命点'),
+    (r'恐惧点池', '恐惧池'),
 ]
 
 
-def replace_keywords_fn(markdown_text):
-    """按 REPLACEMENTS 列表执行关键词替换"""
-    text = markdown_text
-    for pattern, replacement in REPLACEMENTS:
-        text = re.sub(pattern, replacement, text)
-    return text
+def replace_keywords_fn(text):
+    def replace(prose):
+        for pattern, replacement in REPLACEMENTS: prose = re.sub(pattern, replacement, prose)
+        return prose
+    return transform_prose(text, replace)
 
 
 replace_pc_gm_fn = replace_keywords_fn
 
 
-def bold_numbers_and_dice_fn(markdown_text):
-    """在中文上下文中加粗数字和骰子表达式。"""
-    chinese_chars_and_punctuation = r'一-龥'
-    find_pattern = r'([-−+]?)\s*(\d*d\d+(?:[-−+]\s*\d+)?|\d+)'
-
-    dice_or_number_pattern_no_space = r'[-−+]?\d*d\d+(?:[-−+]\d+)?|[-−+]?\d+'
-    pattern_pre_bold = f'([{chinese_chars_and_punctuation}])(?<!\\s)\\*\\*({dice_or_number_pattern_no_space})\\*\\*'
-    processed_text = re.sub(pattern_pre_bold, r'\1 **\2**', markdown_text)
-    pattern_post_bold = f'\\*\\*({dice_or_number_pattern_no_space})\\*\\*(?!\\s)([{chinese_chars_and_punctuation}])'
-    processed_text = re.sub(pattern_post_bold, r'**\1** \2', processed_text)
-
-    parts = processed_text.split('**')
-    new_parts = []
-    for i, part in enumerate(parts):
-        if i % 2 != 0:
-            new_parts.append(part)
-            continue
-
-        new_sub_part = ""
-        last_end = 0
-        for match in re.finditer(find_pattern, part):
-            new_sub_part += part[last_end:match.start()]
-            start, end = match.start(), match.end()
-            pre_char = part[start - 1] if start > 0 else ''
-            post_char = part[end] if end < len(part) else ''
-
-            if (pre_char == '(' and post_char == ')') or \
-               (pre_char == '（' and post_char == '）'):
-                new_sub_part += match.group(0)
-                last_end = end
-                continue
-
-            is_pre_chinese = re.search(f'[{chinese_chars_and_punctuation}]', pre_char)
-            is_post_chinese = re.search(f'[{chinese_chars_and_punctuation}]', post_char)
-
-            if is_pre_chinese or is_post_chinese:
-                cleaned_match = re.sub(r'\s', '', match.group(0))
-                pre_space = '' if pre_char.isspace() or not pre_char else ' '
-                post_space = '' if post_char.isspace() or not post_char else ' '
-                new_sub_part += f"{pre_space}**{cleaned_match}**{post_space}"
-            else:
-                new_sub_part += match.group(0)
-            last_end = end
-
-        new_sub_part += part[last_end:]
-        new_parts.append(new_sub_part)
-
-    return '**'.join(new_parts)
+def add_space_around_italics_fn(text):
+    return transform_prose(text, lambda s:re.sub(r'(?<=[一-龥,.，。])\*([一-龥]{1,5})\*(?=[一-龥,.，。])', r' *\1* ', s))
 
 
-def remove_escaped_underscore(markdown_text):
-    """将 PDF 转义的 \\_ 恢复为普通 _"""
-    return markdown_text.replace('\\_', '_')
+def add_space_between_chinese_and_ascii_fn(text):
+    def space(s):
+        s = re.sub(r'(?<=[A-Za-z0-9])(?=[一-龥])', ' ', s)
+        return re.sub(r'(?<=[一-龥])(?=[A-Za-z])', ' ', s)
+    return transform_prose(text, space)
 
 
-makeup_list = [
-    remove_image_filename,
-    remove_span,
-    remove_escaped_underscore,
-    format_resource_phrases_fn,
-    # bold_numbers_and_dice_fn,
-    add_space_around_italics_fn,
-    add_space_between_chinese_and_ascii_fn,
-    simplify_markdown_links_fn,
-    replace_keywords_fn,
-]
+def remove_image_filename(text):
+    # Retained as an explicit opt-in helper; never called by the default pipeline.
+    return re.sub(r'!\[\]\(_page_[^\n)]*\)', '', text)
 
 
-def process_markdown(content, suffix="_makeup"):
-    """对 Markdown 文本内容应用 makeup_list 中的所有转换函数，返回处理后的内容。"""
-    paragraphs = content.split('\n\n')
-    processed_paragraphs = []
-    for paragraph in paragraphs:
-        processed_paragraph = paragraph
-        for func in makeup_list:
-            processed_paragraph = func(processed_paragraph)
-        processed_paragraphs.append(processed_paragraph)
-    return '\n\n'.join(processed_paragraphs)
+def remove_span(text):
+    """Remove only truly attribute-free empty spans, retaining all anchors."""
+    return re.sub(r'<span\s*>\s*</span>', '', text)
 
 
-def process_markdown_file(input_filepath, suffix="_makeup"):
-    """读取文件、处理、写入新文件。返回输出文件路径。"""
-    if not os.path.exists(input_filepath):
-        print(f"错误：文件 '{input_filepath}' 不存在。")
-        return None
-
-    try:
-        with open(input_filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except Exception as e:
-        print(f"读取文件 '{input_filepath}' 时出错: {e}")
-        return None
-
-    processed_content = process_markdown(content, suffix)
-
-    base, ext = os.path.splitext(input_filepath)
-    output_filepath = f"{base}{suffix}{ext}"
-
-    try:
-        with open(output_filepath, 'w', encoding='utf-8') as f:
-            f.write(processed_content)
-        print(f"处理完成，结果已写入 '{output_filepath}'")
-    except Exception as e:
-        print(f"写入文件 '{output_filepath}' 时出错: {e}")
-        return None
-
-    return output_filepath
+def remove_escaped_underscore(text):
+    return transform_prose(text, lambda s:s.replace('\\_', '_'))
 
 
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="对 Markdown 文件应用后处理排版")
-    parser.add_argument("input", help="输入的 .md 文件路径")
-    parser.add_argument("--suffix", default="", help="输出文件后缀（默认: 覆盖原文件）")
+def simplify_markdown_links_fn(text):
+    """Compatibility helper: link stripping is no longer a normalization step."""
+    return text
+
+
+def bold_numbers_and_dice_fn(text):
+    """Opt-in number emphasis, restricted to prose outside existing emphasis."""
+    def bold(s):
+        parts = s.split('**')
+        for i in range(0,len(parts),2):
+            parts[i] = re.sub(r'(?<=[一-龥])([+−-]?\d*(?:d\d+|\d+)(?:[+−-]\d+)?)',r' **\1** ',parts[i])
+        return '**'.join(parts)
+    return transform_prose(text, bold)
+
+
+makeup_list = [replace_keywords_fn, format_resource_phrases_fn, add_space_around_italics_fn]
+
+
+def process_markdown(content, suffix='_makeup', *, space_ascii=False):
+    for func in makeup_list: content = func(content)
+    if space_ascii: content = add_space_between_chinese_and_ascii_fn(content)
+    return content
+
+
+def process_markdown_file(input_filepath, suffix='_makeup', *, space_ascii=False):
+    path = Path(input_filepath)
+    content = path.read_bytes().decode('utf-8')
+    result = process_markdown(content, suffix, space_ascii=space_ascii)
+    output = path.with_name(path.stem + suffix + path.suffix)
+    output.write_bytes(result.encode('utf-8'))
+    print(f'处理完成，结果已写入 {output}')
+    return str(output)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='保留 Markdown 结构的规则术语规范化')
+    parser.add_argument('input')
+    parser.add_argument('--suffix', default='', help='输出后缀；默认覆盖原文件')
+    parser.add_argument('--space-ascii', action='store_true', help='额外调整正文中英混排空格')
+    parser.add_argument('--diff', action='store_true', help='只显示差异，不写文件')
+    parser.add_argument('--check', action='store_true', help='只检查；有变化时返回 1')
     args = parser.parse_args()
-    process_markdown_file(args.input, suffix=args.suffix)
+    if args.diff or args.check:
+        source = Path(args.input).read_bytes().decode('utf-8')
+        result = process_markdown(source, space_ascii=args.space_ascii)
+        if args.diff: print(''.join(difflib.unified_diff(source.splitlines(True), result.splitlines(True), fromfile=args.input, tofile=args.input+' (normalized)')),end='')
+        if args.check: raise SystemExit(int(source != result))
+    else: process_markdown_file(args.input, args.suffix, space_ascii=args.space_ascii)

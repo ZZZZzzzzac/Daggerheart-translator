@@ -1,92 +1,26 @@
-# 术语表：来源、范围与维护
+# 术语分组与维护
 
-当前状态（2026-10-22）：核心固定词条 **339 条**；在2026-10-14清理后的338条基础上，按维护者要求新增`reroll`→“重掷”，含变体`rerolling`。历史清理记录保持不变。SRD2新增36条包含其中；六项SRD2语境参考及两项框架机制分别保留。当前处理结果见本文末尾“语境与重复项清理”和 [逐词决定](reference/glossary-cleanup-decisions.json)。下文初次分层与首轮新增的数量是历史记录。
+默认按 `term-groups.json` 的顺序加载 `default: true` 的分组，再加载项目术语。核心表沿用远端的 `terms-core.json` 名称；它不是 Paratranz 导出镜像。
 
-## 核心表不是 ParaTranz 镜像
+| 分组 | 文件 | 条数 | 默认加载 |
+| --- | --- | ---: | --- |
+| 游戏性与规则机制 | `terms-core.json` | 289 | 是 |
+| 敌人特性 | `adversaries_features.json` | 12 | 是 |
+| 装备特性 | `equipment_features.json` | 19 | 是 |
+| 敌人名字 | `adversaries_name.json` | 152 | 是 |
+| 敌人动机、战术与经历 | `adversaries_motivation.json` | 112 | 是 |
+| 世界设定 | `worldbuilding.json` | 235 | 是 |
+| 玩家资源名称 | `player_resources.json` | 100 | 是 |
+| 玩家特性与能力 | `player_features.json` | 1 | 是 |
+| 环境名字 | `environments_name.json` | 15 | 是 |
+| 环境特性 | `environments_features.json` | 2 | 是 |
+| 装备与物品名字 | `equipment_names.json` | 5 | 是 |
+| 翻译固定用语 | `translation_phrases.json` | 33 | 否 |
 
-`terms-core.json` 的维护目标是跨项目复用的 Daggerheart 规则术语，而非收录某个翻译平台项目里的全部条目。它从本仓库已人工清洗的 `terms-14448.json` 迁移而来；旧文件名不表示今后应与 ParaTranz 项目自动同步。
+每条 JSON 对象独占一行。特性、动机、趋向和经历按 SRD 2.0 的独立资源定义计数，至少出现两次；不把数值变体、拆卡或中英重复展示算成重复定义。专名不套用这项频次限制。
 
-初次分层的历史迁移基线：提交 `89caa5449a8a3682f54df32ab55d859d517ed4a6` 的 `skills/daggerheart-translation-pipeline/resources/terms-14448.json`，共 328 条。迁移后核心表 326 条，两个框架术语表各 1 条。保留所有条目的原 `term`、`translation`、`note`、`variants`、`case_sensitive` 字段；没有引入 ParaTranz 新导出，也没有改译名。
+同词头的规则区分、词形变体及大小写边界沿用已审定结果：Support 为“辅助”，Dazed 为“恍惚”，Stunned 为“眩晕”。Ghost、Cloaked 的不同实体含义仍按上下文判断，不进入默认敌人特性表。
 
-不要使用 ParaTranz 全量导出覆盖核心表。外部术语表可以作为对照资料；新增、改译名或改匹配规则必须逐条审阅，明确规则依据和适用范围。
+按本轮要求，七个既有 OCR 词头并入核心组；规范拼写同时保留。官方战役框架名称随世界设定组加载，框架专属机制从 `scoped/` 按项目选择；`reference/` 中的语境说明不参与自动合并。
 
-## SRD2 首轮新增记录（2026-10-14，清理前）
-
-经逐项核对 SRD2 原文与当前中文快照，首轮新增 42 个概念：36 条进入核心表，当时核心共 **362 条**；另有 6 条写入 [语境参考](reference/srd2-context-only.json)，供翻译与语义审阅查阅，尚不参与自动匹配。来源、原译、页码、实际别名及待定语义边界见 [逐项来源](reference/srd2-additions.md)。首轮新增不是 ParaTranz 镜像同步，当时未改写旧核心326条；随后的授权清理有单独逐词记录，当前核心338条。
-
-语境参考必须按所属规则上下文阅读，不得放入默认合并命令、目录通配符或 `scoped/` 框架表。Ghost已按实体决定：转变/鬼魂实体用“鬼魂”，敌人同名被动特性用“幽灵形态”，两者均需语境判断；Vampire 与既有敌人表 VAMPIRE 同译“吸血鬼”，保留这项明确记录的同译复用。
-
-## 范围边界
-
-- 核心表：官方战役框架名称（跨项目统一译名）；通用掷骰、资源、状态、距离、伤害等机制；职业、子职业、种族、社群、领域；可跨项目复用的敌人类型、特性及规则表达。不能因为名称看起来像专名就删除这些规则分类。
-- 项目表 `glossary/_glossary.json`：当前项目独有的人名、地名、组织及其他概念。官方战役框架名称保留于核心表；框架专属机制归入各自框架术语表，按项目需要选用。
-- `scoped/`：从历史核心表移出的条目备份，可供相关项目选用。它们不是默认输入，不应用目录通配符加载。只把原文涉及且适用于本项目的条目加入项目表。
-- `adversaries_*.json`：现有敌人专项参考，独立于核心表；默认管线仍按原有顺序加载。本次将Cloaked、Ghost移出默认敌人特性表，译法保留在语境参考。其余条目未全量重分类，不能据此宣称整个敌人参考表已完成语义审计。
-
-保留既有优先级：`terms-core.json` > `adversaries_*.json` > 项目表。手动模式的冲突仍须先审阅；自动模式仍保留高优先级译名并输出报告。
-
-## 官方战役框架名称：保留在核心表
-
-以下名称由官方 [Downloads 的 Campaign Frame Materials (Core)](https://www.daggerheart.com/downloads/) 列为战役框架。按维护者要求，以下六条保留在 `terms-core.json`，以统一官方框架译名：
-
-| 原文 | 原译名 |
-|---|---|
-| Age of Umbra | 暗影纪元 |
-| Beast Feast | 野兽饭 |
-| Colossus of the Drylands | 旱土巨像 |
-| Five Banners Burning | 五旗成焰 |
-| Motherboard | 主板 |
-| Witherwild | 秽野之息 |
-
-## 两条框架机制：分别归入各自框架术语表
-
-以下两条不属于总表，按维护者确认分别存入各自框架的术语表；保持原字段，不混入一个共用机制表：
-
-| 原文 | 原译名 | 框架术语表 | 范围与依据 |
-|---|---|---|---|
-| Colossal Power | 巨像之力 | `scoped/colossus-of-the-drylands.json` | Colossus of the Drylands 巨像特性；官方[勘误](https://www.daggerheart.com/wp-content/uploads/2025/09/Daggerheart-Errata-September9th2025.pdf)在核心书第 322 页 Daktadae the Cleaver 下列出此特性。 |
-| flavor profile | 风味组合 | `scoped/beast-feast.json` | Beast Feast 的料理规则；[Demiplane 官方功能公告](https://forums.demiplane.com/t/lets-feast-daggerheart-beast-feast-campaign-frame-support-now-available/5343)将 Flavor Profile 列在该框架的食谱功能中。 |
-
-两条机制均完整保留，没有丢弃。翻译 Colossus of the Drylands 时，仅选用 `scoped/colossus-of-the-drylands.json` 的相关条目；翻译 Beast Feast 时，仅选用 `scoped/beast-feast.json` 的相关条目。将所需条目保留原字段加入项目 `glossary/_glossary.json` 后执行正常合并。不默认加载任何框架表，也不把两个框架表一起批量导入无关项目。六个官方框架名称仍默认可用。
-
-## 初次分层时的待查记录（历史）
-
-以下仅记录初次分层时的保守处理，不能当作当前待办或现行译法。Dazed/Stunned、Cloaked/Ghost、重复映射及kohd的后续去向见末尾清理记录、中文写作REFERENCE和逐词决定；没有据此宣称全部语义问题都已穷尽：
-
-- `kohd`：疑似 Motherboard 专属语言。尚未补齐官方原文证据，本次保留待核实。
-- `Segment`、`Weak Point`：可能涉及框架巨像机制，但尚未确认是否存在通用用法，本次保留。
-- `core realms`、`realms`、`the Astral Realm` 等世界观用语：需结合通用规则中的用途判断，不能仅因是地点概念就删除。
-- `CHAOS REALM`、`CIRCLES BELOW`、`Phase Change`：在[官方 SRD](https://www.daggerheart.com/wp-content/uploads/2025/09/Daggerheart-SRD-9-09-25.pdf)中分别涉及环境、Infernis/恶魔背景和通用敌人数据块，本次保留。
-- `Dazed` 与 `stunned` 当时同译为“眩晕”，未擅自采用外部表中的另一译名。
-- `Cloaked` 当时已存在，译为“隐匿”；`Hidden` 为“隐藏”，`Shrouded` 为“幽影”。本次未添加或重写三者的语境说明。
-- 原表存在大小写或变体之间可能冲突的映射（如 `Support` / `Supports`、`spotlight` / `SPOTLIGHT`、`advance` / `ADVANCEMENTS`）。现有合并脚本只按完全相同的主词条检测冲突；本次不改变匹配与裁决逻辑，也不把译名分歧自动当作重复项删除。
-
-## 迁移已有项目
-
-1. 把自有命令中的 `resources/terms-14448.json` 改为 `resources/terms-core.json`。
-2. 检查项目术语表，只选择该项目实际需要的限定范围条目。
-3. 在继续翻译前重新执行第 4 步，生成新的 `_merged_terms.json` 和术语标记；已有临时合并表不会因文件改名自动更新。已翻译的文件应先另存或用版本控制保留，再按项目进度决定是否重跑后续步骤。
-
-## 验证
-
-在仓库根目录运行：
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-测试覆盖资源结构、官方框架名称保留与专属机制按框架分层、规则分类保留、默认命令引用、显式项目选用、变体标记，以及手动/自动冲突行为。脚本原先没有硬编码旧文件名，因此无需为此次改名修改运行逻辑。
-
-
-## 2026-10-14 语境与重复项清理
-
-维护者随后要求由译者结合ParaTranz通常译法自行处理术语，不再提交逐条审阅队列。本次已只读刷新项目术语、SRD2正文/装备及相关讨论；未修改线上译文。
-
-- 当前固定词条338项；首轮SRD2新增36项仍在其中。六项SRD2语境参考、原有两项框架分表仍各自独立。
-- 原39项非一对一词义/截断模板移入`reference/contextual-usage.json`；7项重复主词合并。原25项其他候选中22项成为固定词条，3项成为语境规则。
-- 统一项目已明确的辅助、聚焦、恍惚/眩晕、光荣就义。Cloaked与Ghost的不同实体不再由默认敌人表覆盖核心/转变文本，而由语境参考给出各自译法。
-- 两条reduce裸前缀退出直接表；完整数值减伤、阈值降级及少标生命点句式见中文写作REFERENCE。没有新增匹配机制，也不把字面X当变量。
-- `reference/`下JSON为带用途声明的对象，**不是自动合并输入**；中文写作REFERENCE显式要求读它们。只按SKILL中的明确文件列表加载，不能使用目录通配符。
-- 变体补齐和大小写只能修已知词面问题，不具备语义识别能力。行内标记、漏标及词面一致仍不能替代全文审校。
-
-逐词去向、来源和44张旧审阅卡的处理结果均在`reference/glossary-cleanup-decisions.json`。历史首轮新增的冻结快照用于追溯，不应被当作当前338项表的“保持旧表不变”约束。
+固定用语组默认不自动替换；已明确固定的“每长休一次”仍在核心组。术语备注只说明含义、规则效果与匹配范围，不加入“保留作参考”、审定日期或整理过程。

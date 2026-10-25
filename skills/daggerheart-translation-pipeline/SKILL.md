@@ -42,9 +42,9 @@ description: Orchestrates the end-to-end Daggerheart translation flow: project s
 
 固定优先级：
 
-`terms-core.json` > `adversaries_*.json` > `glossary/_glossary.json`
+`resources/term-groups.json` 中 `default: true` 的分组（按清单顺序） > `glossary/_glossary.json`。核心表为 `terms-core.json`，仅收游戏性与规则机制；玩家资源、敌人、环境、装备和世界设定分别加载。来源冲突须人工审阅，不用 Paratranz 快照整表覆盖。
 
-核心表是人工维护的规则术语基线，不是 ParaTranz 导出快照。六个官方战役框架名称保留于核心表以统一译名。项目独有的人名、地名、组织及概念应留在项目术语表；不得自动回填核心表。框架专属机制使用各自的框架术语表，按当前项目需要选用，不放入总表。`resources/scoped/` 仅供按项目选择条目，不参与默认合并。具体边界与迁移记录见 `resources/README.md`。
+条目每个对象一行。特性、动机、趋向与经历须在 SRD 2.0 至少两个独立资源定义中出现；仍需语境判断的同名概念不加入默认自动替换。框架专属机制按项目选择 `resources/scoped/`，语境说明不作为术语数组加载。分组与维护规则见 `resources/README.md`。
 
 ## 路径约定
 
@@ -113,7 +113,7 @@ python scripts/setup_project.py <项目目录>
 将全局术语表与本文档术语表合并，并对原文做内联标记。
 
 ```bash
-python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
+python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/equipment_features.json" "resources/adversaries_name.json" "resources/adversaries_motivation.json" "resources/worldbuilding.json" "resources/player_resources.json" "resources/player_features.json" "resources/environments_name.json" "resources/environments_features.json" "resources/equipment_names.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
 python scripts/replace_terms.py "source/_original.md" "source/temp/_merged_terms.json" "source/temp/_tagged.md"
 ```
 

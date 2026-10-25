@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "date": "2026-10-25",
+  "total": 975,
+  "groups": [
+    {
+      "file": "terms-core.json",
+      "label": "游戏性与规则机制",
+      "count": 289,
+      "default": true
+    },
+    {
+      "file": "adversaries_features.json",
+      "label": "敌人特性",
+      "count": 12,
+      "default": true
+    },
+    {
+      "file": "equipment_features.json",
+      "label": "装备特性",
+      "count": 19,
+      "default": true
+    },
+    {
+      "file": "adversaries_name.json",
+      "label": "敌人名字",
+      "count": 152,
+      "default": true
+    },
+    {
+      "file": "adversaries_motivation.json",
+      "label": "敌人动机、战术与经历",
+      "count": 112,
+      "default": true
+    },
+    {
+      "file": "worldbuilding.json",
+      "label": "世界设定",
+      "count": 235,
+      "default": true
+    },
+    {
+      "file": "player_resources.json",
+      "label": "玩家资源名称",
+      "count": 100,
+      "default": true
+    },
+    {
+      "file": "player_features.json",
+      "label": "玩家特性与能力",
+      "count": 1,
+      "default": true
+    },
+    {
+      "file": "environments_name.json",
+      "label": "环境名字",
+      "count": 15,
+      "default": true
+    },
+    {
+      "file": "environments_features.json",
+      "label": "环境特性",
+      "count": 2,
+      "default": true
+    },
+    {
+      "file": "equipment_names.json",
+      "label": "装备与物品名字",
+      "count": 5,
+      "default": true
+    },
+    {
+      "file": "translation_phrases.json",
+      "label": "翻译固定用语",
+      "count": 33,
+      "default": false
+    }
+  ],
+  "frequencyPolicy": "特性、动机、趋向和经历按 SRD 2.0 资源定义统计，至少出现于 2 个原始资源条目；其他专名组不按定义次数剔除。"
+}
