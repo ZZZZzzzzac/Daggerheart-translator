@@ -1,6 +1,6 @@
 # Daggerheart 翻译技能合集
 
-本仓库包含 9 个技能：7 个 Daggerheart TTRPG 翻译技能、1 个通用双语审阅技能，外加 1 个 ParaTranz 平台操作技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
+本仓库包含 10 个技能：7 个 Daggerheart TTRPG 翻译技能、1 个中文资源排版技能、1 个通用双语审阅技能，外加 1 个 ParaTranz 平台操作技能。技能本体在 `skills/` 目录下，彼此独立，可单独使用。
 
 ## 技能清单
 
@@ -14,6 +14,7 @@
 | `daggerheart-term-checker` | `skills/daggerheart-term-checker/SKILL.md` | 术语审阅报告与清标记 |
 | `daggerheart-json-formatter` | `skills/daggerheart-json-formatter/SKILL.md` | 译文 → JSON |
 | `daggerheart-translation-audit` | `skills/daggerheart-translation-audit/SKILL.md` | 对已取得原文与译文做通用抓虫与HTML审阅 |
+| `daggerheart-resource-layout` | `skills/daggerheart-resource-layout/SKILL.md` | 中文 TRPG 资源双栏、卡片与插图排版，核验内容及导出页面 |
 | `paratranz-ops` | `skills/paratranz-ops/SKILL.md` | ParaTranz API 操作：查进度、拉快照、回写译文、对账 |
 
 ## 安装

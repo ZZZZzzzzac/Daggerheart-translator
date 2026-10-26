@@ -37,6 +37,36 @@ class TwoPassTests(unittest.TestCase):
    self.assertEqual(frozen['structural_errors'],[])
    self.assertEqual(m.v1.read_json(run/'candidate-delivery.json')['units'][0]['translation'],self.f['units'][0]['translation'])
    with self.assertRaises(ValueError):m.freeze(run,development=True)
+ def test_comparison_freeze_preserves_candidate_bytes_but_formats_baseline(self):
+  # Synthetic workflow coverage, not a translation-quality evaluation.
+  with tempfile.TemporaryDirectory() as tmp:
+   run=Path(tmp)/'run';m.prepare(self.src,run)
+   text='每长休一次，获得1点希望。'
+   self.d['units'][0]['translation']=text
+   self.f['units'][0]['translation']=text
+   self.f['units'][0]['invariant_checks'][0]['target_quote']='获得1点希望'
+   self.f['units'][0]['ambiguity_checks'][0]['target_quote']='获得1点希望'
+   m.v1.dump(run/'candidate-draft.json',self.d)
+   wrapped='[[[KILO_TARGET_START]]]\n'+text+'\n[[[KILO_TARGET_END]]]'
+   (run/'baseline/drafts/a.md').write_text(wrapped,encoding='utf-8')
+   m.polish_packet(run,main=True)
+   (run/'baseline/finals/a.md').write_text(wrapped,encoding='utf-8')
+   m.v1.dump(run/'baseline-review-log.json',{'questions':[],'changes':[]})
+   m.v1.dump(run/'candidate-final.json',self.f)
+   final_bytes=(run/'candidate-final.json').read_bytes()
+   formatter=m.v1.module('test_comparison_makeup',m.v1.BASE/'scripts/makeup.py')
+   normalized=formatter.process_markdown(text)
+   self.assertNotEqual(normalized,text)
+   frozen=m.freeze(run,development=False)
+   self.assertEqual(frozen['structural_errors'],[])
+   self.assertFalse(frozen['development_only'])
+   self.assertEqual((run/'candidate-final.json').read_bytes(),final_bytes)
+   candidate=m.v1.read_json(run/'candidate-delivery.json')['units'][0]['translation']
+   baseline=m.v1.read_json(run/'baseline-delivery.json')['units'][0]['translation']
+   self.assertEqual(candidate.encode('utf-8'),text.encode('utf-8'))
+   self.assertEqual(baseline,normalized)
+   self.assertNotEqual(candidate,baseline)
+   self.assertEqual(frozen['output_hashes']['candidate-final.json'],m.v1.digest(final_bytes))
  def test_polish_locks_first_stage(self):
   with tempfile.TemporaryDirectory() as tmp:
    run=Path(tmp)/'run';m.prepare(self.src,run)

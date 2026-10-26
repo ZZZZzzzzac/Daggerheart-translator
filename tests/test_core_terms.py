@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from grouped_terms import default_entries, default_paths
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,7 @@ FRAME_NAMES = {
 
 class CoreTermsTests(unittest.TestCase):
     def setUp(self):
-        self.core = json.loads(CORE.read_text(encoding='utf-8'))
+        self.core = default_entries()
         self.colossus = json.loads(COLOSSUS.read_text(encoding='utf-8'))
         self.beast_feast = json.loads(BEAST_FEAST.read_text(encoding='utf-8'))
         self.scoped = self.colossus + self.beast_feast
@@ -43,7 +44,7 @@ class CoreTermsTests(unittest.TestCase):
                 names.append(entry['term'])
             self.assertEqual(len(names), len(set(names)))
 
-    def test_official_campaign_names_remain_core(self):
+    def test_official_campaign_names_remain_in_default_groups(self):
         core_names = {e['term'] for e in self.core}
         self.assertTrue(FRAME_NAMES <= core_names)
         self.assertFalse(FRAME_NAMES & {e['term'] for e in self.scoped})
@@ -79,7 +80,7 @@ class CoreTermsTests(unittest.TestCase):
         (path / 'original.md').write_text('Hope and action rolls in Motherboard. Colossal Power and flavor profile.', encoding='utf-8')
         (path / 'project.json').write_text(json.dumps(project_entries, ensure_ascii=False), encoding='utf-8')
         command = [sys.executable, str(PIPELINE / 'scripts/merge_terms.py'),
-                   '--terms', str(CORE), str(path / 'project.json'),
+                   '--terms', *map(str, default_paths()), str(path / 'project.json'),
                    '--output', str(path / 'merged.json'), '--original', str(path / 'original.md')]
         if auto:
             command.append('--auto-resolve')

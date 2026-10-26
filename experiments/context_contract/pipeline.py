@@ -4,7 +4,7 @@ prepare creates immutable input packets; native workers execute the saved prompt
 freeze validates outputs and saves their hashes BEFORE an external blind review.
 """
 from __future__ import annotations
-import argparse, collections, hashlib, html, importlib.util, json, re, sys
+import argparse, collections, hashlib, html, importlib.util, json, re, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,13 +30,62 @@ def module(name, path):
     return m
 
 
+def default_term_paths():
+    """Load only explicitly enabled, top-level groups in manifest order."""
+    manifest = read_json(RES / 'term-groups.json')
+    paths = []
+    for group in manifest['groups']:
+        if group.get('default') is not True:
+            continue
+        name = group['file']
+        if (not isinstance(name, str) or Path(name).name != name
+                or '/' in name or '\\' in name or not name.endswith('.json')
+                or name == 'term-groups.json'):
+            raise ValueError('default term group must be a top-level JSON array: '+str(name))
+        path = RES / name
+        if path.resolve().parent != RES.resolve() or path in paths:
+            raise ValueError('duplicate or external default term group: '+name)
+        paths.append(path)
+    if not paths:
+        raise ValueError('no default term groups')
+    return paths
+
+
 def merged_terms():
-    # Explicit standard priority. No scoped/context-reference JSON is merged.
-    result = {}
-    for filename in ['terms-core.json', 'adversaries_features.json',
-                     'adversaries_motivation.json', 'adversaries_name.json']:
-        for item in read_json(RES / filename): result.setdefault(item['term'], item)
+    # Reject conflicting translations or changed declarations of the exact same term.
+    # Distinct terms with the same translation retain their own notes and case policy.
+    # Their overlapping candidates require semantic review, not first-match selection.
+    result = {}; forms = {}
+    for path in default_term_paths():
+        entries = read_json(path)
+        if not isinstance(entries, list):
+            raise ValueError('term group must be an array: '+path.name)
+        for item in entries:
+            term = item['term']
+            if not isinstance(term, str) or not term.strip() or not isinstance(item['translation'], str):
+                raise ValueError('invalid term entry: '+path.name)
+            if term in result and result[term] != item:
+                raise ValueError('conflicting term declaration requires review: '+term)
+            for form in [term] + item.get('variants', []):
+                key = ' '.join(form.casefold().split())
+                if not key:
+                    raise ValueError('empty term form: '+term)
+                translation = ' '.join(item['translation'].split())
+                if key in forms and forms[key][0] != translation:
+                    raise ValueError('conflicting term/variant requires review: '+form+' ('+forms[key][1]+' / '+term+')')
+                forms[key] = (translation, term)
+            result.setdefault(term, item)
     return list(result.values())
+
+
+def implementation_state():
+    """HEAD identifies ancestry; dependency hashes identify the actual working files."""
+    try:
+        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
+        dirty = bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal'], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip())
+        return {'commit': commit, 'working_tree_dirty': dirty}
+    except (OSError, subprocess.CalledProcessError):
+        return {'commit': None, 'working_tree_dirty': None}
 
 
 def pattern(form, flags=0):
@@ -130,12 +179,13 @@ def validate_cases(cases):
 
 def prepare(cases, out):
     validate_cases(cases)
+    terms = merged_terms()  # Validate before creating a partial run.
     out = Path(out).resolve()
     if out.exists() and any(out.iterdir()): raise ValueError('refuse to overwrite an existing run')
     out.mkdir(parents=True,exist_ok=True)
     clean = [{k:c[k] for k in ['id','source','context'] if k in c} for c in cases]
     dump(out/'sources.json',clean)
-    terms = merged_terms(); dump(out/'terms.json',terms)
+    dump(out/'terms.json',terms)
     repl = module('replace_terms',BASE/'scripts/replace_terms.py')
     prompt = module('translation_prompt',BASE/'scripts/translation_prompt.py')
     candidate_units = []
@@ -159,12 +209,15 @@ def prepare(cases, out):
     (out/'baseline-generate.txt').write_text(baseline_prompt,encoding='utf-8')
     candidate_prompt = CONTRACT+shared+'\n\n'+SCHEMA+'\n\n输入单元：\n'+json.dumps(compact_units(candidate_units),ensure_ascii=False,separators=(',',':'))+'\n\n将完整JSON写入 '+str(out/'candidate-draft.json')
     (out/'candidate-generate.txt').write_text(candidate_prompt,encoding='utf-8')
-    manifest = {'version':VERSION,'base_commit':'d7ec63fd941fe8e30362be01f08d22772cd52db7','stage':'prepared-no-model-output',
+    manifest = {'version':VERSION,'implementation':implementation_state(),
+        'terminology_loader':'default-groups-v1-conflicts-require-review',
+        'baseline_description':'legacy workflow using this checkout rules and formatter; not an unchanged historical main',
+        'stage':'prepared-no-model-output',
         'units':len(clean),'source_hashes':{c['id']:digest(c['source']) for c in clean},
         'source_chars':sum(len(c['source']) for c in clean),
         'candidate_prompt_chars':len(candidate_prompt),'baseline_generated_prompt_chars':len(baseline_prompt),
         'note':'Character counts, not billed tokens. Baseline additionally reads chunks, REFERENCE and linked guidance; native runtime hidden/system context not counted. No API/model identity claim.',
-        'rules':{str(p.relative_to(ROOT)):digest(p.read_bytes()) for p in [Path(__file__),writing/'REFERENCE.md',writing/'SKILL.md',RES/'terms-core.json',RES/'reference/contextual-usage.json',RES/'reference/srd2-context-only.json']},
+        'rules':{str(p.relative_to(ROOT)):digest(p.read_bytes()) for p in [Path(__file__)] + sorted(p for p in SKILLS.rglob('*') if p.is_file() and p.suffix in {'.py', '.md', '.json'})},
         'prepared_files':{str(p.relative_to(out)):digest(p.read_bytes()) for p in sorted(out.rglob('*')) if p.is_file()}}
     dump(out/'manifest.json',manifest)
     return manifest

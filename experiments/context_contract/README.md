@@ -2,6 +2,30 @@
 
 本分支提供源文保留、两阶段翻译输入、中文交付检查和 PBRES 独立原名表适配器。所有入口均须显式运行，不改变现有主流程默认。此处仅包含实现、合成回归测试和使用文档，不包含真实翻译运行、诊断输出或评审材料。
 
+## 当前入口与转正方案
+
+当前安装范围仍是 `skills/`，默认入口仍为 `daggerheart-translation-pipeline/SKILL.md` 的 12 步管线。合入术语分组、保守 makeup 和排版技能不自动切换默认入口。`experiments/` 必须显式调用；`recovery/` 是历史归档，不安装为技能，也不作为执行入口。资源排版是按交付需要选择的独立步骤，不是每次翻译必跑。
+
+建议后续转正时，以 `delivery_gate.py prepare → polish → release` 作为普通两阶段翻译入口；只有任务实际含 PBRES 资源且已确认资源归属时，才使用下文的 `pbres_names.py` 包装入口。无需 PBRES 的候选试用可直接运行：
+
+```bash
+python experiments/context_contract/delivery_gate.py prepare cases.json ../translation-trial-runs/new-candidate-run
+# 执行 phase1-generate.txt，写出 candidate-draft.json 后：
+python experiments/context_contract/delivery_gate.py polish ../translation-trial-runs/new-candidate-run --development
+# 独立执行 phase2-polish.txt，写出 candidate-final.json 后：
+python experiments/context_contract/delivery_gate.py release ../translation-trial-runs/new-candidate-run --development
+```
+
+这些命令准备提示、检查和冻结结果，不调用翻译模型。`--development` 只运行候选，不构成对照评估。候选交付逐字保留精修终稿，不经 makeup；保守 makeup 仅用于既有管线及对照组。交付门禁通过不等于语义审阅批准，也不授权外发或写回平台。
+
+本次只整理方案，不改变默认。正式切换前须另行明确：安装和调用入口、模型执行方式、人工确认节点、项目术语/可选配置的输入方法、输出去向与旧流程兼容方式；同步修改根使用文档和主编排 skill。独立审阅须检查完整原文、机制、中文自然度和最终渲染，不能用合成结构测试替代。
+
+## 术语依赖与重新评估
+
+新运行使用 `resources/term-groups.json` 中 `default: true` 的完整分组及清单顺序；默认关闭的固定用语、`scoped/`、语境参考不混入默认术语数组。语境参考仍按适用范围供阅读，候选命中不证明词义适用。同词头存在不同声明、或大小写/变体碰撞产生不同译名时，准备阶段拒绝继续，须先审阅解决。不同词头同译名的重叠声明保留各自注释和大小写策略，全部进入候选与提示，由译者结合原文判断适用义项；不按清单先后选义，也不把同译名当作适用条件相同。
+
+术语输入或 formatter 变更后，必须在仓库外新建运行目录，保留旧冻结输出、清单、哈希和评分原样。不能把旧运行重新标成当前实现，也不能沿用旧质量结论来证明新版效果。新运行的依赖哈希和实现版本用于复现；合成回归只检查程序行为，不声称新鲜真实翻译已胜出。
+
 ## 依赖与测试
 
 需要 Python、jsonschema 和 Pandoc。已验证环境为 Python 3.12.14、jsonschema 4.26.0、Pandoc 3.1.11.1；其他版本未验证。
