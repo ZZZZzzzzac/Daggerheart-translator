@@ -1,0 +1,11 @@
+{
+  "version": "two-pass-v2",
+  "scope": "Opt-in local translation trial; production defaults unchanged",
+  "input": "Complete source units and applicable terminology; no translation references exposed to drafting",
+  "phase1": "Produce complete draft, source-anchored provisional invariants and scoped fixed phrases",
+  "phase2": "Independently recheck source, improve Chinese wording and validate each invariant; correct source-inconsistent draft assertions",
+  "delivery": "Preserve final candidate text verbatim; validate identity, exact evidence, fixed phrases, Markdown, dice and links through delivery_gate release",
+  "limits": "Structural checks do not establish semantic correctness, naturalness or original-name mapping correctness. Independent source-based review remains required.",
+  "retention": "Use a fresh run directory; keep source and output hashes; do not overwrite frozen runs",
+  "publication": "No automatic publication, remote writes or changes to production defaults"
+}

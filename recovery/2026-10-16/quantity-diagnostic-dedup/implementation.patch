@@ -1,0 +1,130 @@
+diff --git a/experiments/context_contract/README.md b/experiments/context_contract/README.md
+index 7d4a345..fb1f39c 100644
+--- a/experiments/context_contract/README.md
++++ b/experiments/context_contract/README.md
+@@ -149,6 +149,8 @@ python experiments/context_contract/pbres_names.py check resources.json original
+ 
+ 上例返回 `quantity_risk_check.status: "needs_review"`、带原文 `2` / 译文 `3` 证据的 `quantity_sequence_difference`，总 `release_allowed` 为 false、CLI 退出码 2。这表示需审阅，不表示已经确认译错；不会自动改数字、替换译文或删句。`risk_count` 是风险条数，配置错误单独放在 `configuration_errors`，两者都不是语义错误计数。
+ 
++两侧都只有不确定数量表达、没有受支持 token 时，只列 `quantity_not_comparable`，不再重复列 `no_comparable_quantities`；例如 `10/17` 对 `10/17` 或 `11/18` 都仍须人工审阅并阻止通过，不能据此认为两种表达相等。两侧都没有受支持 token，且任一侧连不确定数量证据也没有时，仍保留缺少可比较数量的提示；已有受支持 token 的顺序差异也照常报告。这只减少重复说明，不减少需审范围或证明人工审阅已完成。
++
+ ### 范围与证据
+ 
+ - `unit`：显式选择该单元的完整 Markdown。推荐短规则单元，不能代替人工核对范围。
+diff --git a/experiments/context_contract/quantity_risks.py b/experiments/context_contract/quantity_risks.py
+index 77a6402..3fddd4b 100644
+--- a/experiments/context_contract/quantity_risks.py
++++ b/experiments/context_contract/quantity_risks.py
+@@ -400,7 +400,11 @@ def scan(sources, translations, config, parse_ast):
+             left = [(t['kind'], t['value']) for t in source['tokens']]
+             right = [(t['kind'], t['value']) for t in target['tokens']]
+             if not left and not right:
+-                kinds.append(('no_comparable_quantities', 'No supported quantity evidence on either side.'))
++                # Bilateral unsupported evidence already has a blocking review
++                # clue above. Keep the absence clue if either side has no
++                # quantity evidence at all; never infer that uncertain forms match.
++                if not (source['uncertain'] and target['uncertain']):
++                    kinds.append(('no_comparable_quantities', 'No supported quantity evidence on either side.'))
+             elif left != right:
+                 kinds.append(('quantity_sequence_difference', 'Ordered quantity surfaces differ; legitimate reordering is possible.'))
+         for kind, detail in kinds:
+diff --git a/tests/test_quantity_risks.py b/tests/test_quantity_risks.py
+index b03a549..ab9cda6 100644
+--- a/tests/test_quantity_risks.py
++++ b/tests/test_quantity_risks.py
+@@ -314,6 +314,67 @@ class QuantityTests(unittest.TestCase):
+         for source, target in [('', ''), ('Rest.', '休息。'), ('Pay half.', '支付一半。')]:
+             self.assertEqual(self.scan(source, target)['status'], 'needs_review')
+ 
++    def test_bilateral_unsupported_only_evidence_has_one_blocking_diagnostic(self):
++        for source, target in [('10/17', '10/17'), ('10/17', '11/18'),
++                               ('half', '一半'), ('½', '²')]:
++            with self.subTest(source=source, target=target):
++                result = self.scan(source, target)
++                row = result['scopes'][0]
++                self.assertEqual([r['kind'] for r in row['risks']], ['quantity_not_comparable'])
++                self.assertEqual(result['risk_count'], 1)
++                self.assertEqual(result['status'], 'needs_review')
++                self.assertEqual(row['status'], 'needs_review')
++                self.assertFalse(result['release_allowed'])
++                self.assertFalse(result['semantic_verified'])
++                self.assertFalse(row['semantic_verified'])
++                for side in ('source', 'translation'):
++                    evidence = row[side]
++                    self.assertEqual(evidence['tokens'], [])
++                    self.assertTrue(evidence['uncertain'])
++                    self.assertEqual(row['risks'][0][side], evidence)
++                    for token in evidence['uncertain']:
++                        self.assertEqual(evidence['extracted_text'][token['start']:token['end']], token['quote'])
++
++    def test_absent_quantity_evidence_keeps_its_diagnostic_on_either_side(self):
++        for absent in ('', 'Rest.'):
++            for source, target in [('10/17', absent), (absent, '10/17')]:
++                with self.subTest(source=source, target=target):
++                    result = self.scan(source, target)
++                    self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']],
++                                     ['quantity_not_comparable', 'no_comparable_quantities'])
++                    self.assertEqual(result['risk_count'], 2)
++                    self.assertEqual(result['status'], 'needs_review')
++                    self.assertFalse(result['release_allowed'])
++        for source, target in [('', ''), ('Rest.', '休息。')]:
++            result = self.scan(source, target)
++            self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['no_comparable_quantities'])
++            self.assertEqual(result['risk_count'], 1)
++            self.assertFalse(result['release_allowed'])
++
++    def test_uncertainty_does_not_suppress_supported_sequence_differences(self):
++        for source, target in [('10/17', '10'), ('10', '10/17'),
++                               ('10/17; 2', '10/17; 3'), ('10/17; 2', '10/17')]:
++            with self.subTest(source=source, target=target):
++                result = self.scan(source, target)
++                self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']],
++                                 ['quantity_not_comparable', 'quantity_sequence_difference'])
++                self.assertEqual(result['risk_count'], 2)
++                self.assertFalse(result['release_allowed'])
++        result = self.scan('10/17; 2', '10/17; 2')
++        self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['quantity_not_comparable'])
++        self.assertFalse(result['release_allowed'])
++
++    def test_unsupported_quantity_dedup_still_blocks_outer_gate(self):
++        result = gate.scan_records(*records('Thresholds: 10/17', '伤害阈值：10/17'), quantity_scopes=config())
++        self.assertFalse(result['release_allowed'])
++        self.assertEqual(result['quantity_risk_check']['risk_count'], 1)
++        self.assertEqual(result['quantity_risk_check']['status'], 'needs_review')
++        self.assertFalse(result['quantity_risk_check']['semantic_verified'])
++        cfg = config({'kind': 'block', 'block': 1}, {'kind': 'unit'})
++        result = self.scan('10/17', '10/17', cfg)
++        self.assertEqual([r['kind'] for r in result['scopes'][0]['risks']], ['quantity_scope_unavailable'])
++        self.assertFalse(result['release_allowed'])
++
+     def test_explicit_blocks_use_independent_top_level_ast_indices(self):
+         cfg = config({'kind': 'block', 'block': 1}, {'kind': 'block', 'block': 2})
+         result = self.scan('# Level 9\n\nMark **2** Stress.', '# 第8级\n\n说明。\n\n标记二压力点。', cfg)
+diff --git a/tests/test_render_config_preview.py b/tests/test_render_config_preview.py
+index f9a23ba..d06520b 100644
+--- a/tests/test_render_config_preview.py
++++ b/tests/test_render_config_preview.py
+@@ -283,6 +283,23 @@ class OfflineReportTests(unittest.TestCase):
+         self.assertEqual(data, before)
+         self.assertIn('extracted_text', f['problem'])
+ 
++    def test_deduplicated_unsupported_scope_remains_a_highlighted_review_item(self):
++        data = scan('Thresholds: **10/17**', '伤害阈值：**10/17**')
++        report = m.to_report(data)
++        self.assertEqual(len(report['findings']), 1)
++        f = report['findings'][0]
++        self.assertIn('数量风险待审', f['title'])
++        self.assertEqual(f['status'], 'uncertain')
++        self.assertIn('quantity_not_comparable', f['problem'])
++        self.assertNotIn('no_comparable_quantities', f['problem'])
++        for side in ('original', 'translation'):
++            self.assertEqual([h['text'] for h in f[side + '_highlights']], ['10/17'])
++        sides = StaticReader(m.render(data)).sides
++        self.assertEqual(len(sides), 2)
++        for item, side in zip(sides, ('original', 'translation')):
++            self.assertEqual(item['text'], f[side])
++            self.assertEqual(item['marks'], f[side + '_highlights'])
++
+     def test_explicit_block_uses_extracted_scope_not_raw_markdown_or_first_same_word(self):
+         sources, translations = records('2 before.\n\n🦊 **2** selected.', '前面2点。\n\n🦊 **三**点。')
+         cfg = config({'kind': 'block', 'block': 1}, {'kind': 'block', 'block': 1})

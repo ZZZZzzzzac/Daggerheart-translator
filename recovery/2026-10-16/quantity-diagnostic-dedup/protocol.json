@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-16T01:07:26.892544+00:00",
+  "baseline_head": "39a4a69f6017533a79fe8d83db948f6298b781cc",
+  "scope_count": 11,
+  "change": "Remove redundant no_comparable_quantities only when neither side has supported tokens AND both sides have uncertain quantity evidence. Keep asymmetrically missing evidence and supported sequence differences review-visible.",
+  "success": "Exactly one real risk row removed (4 to 3); the same three scopes still need review; PBRES exit 2; semantic_verified false; byte-identical input and uncertainty evidence.",
+  "non_goals": [
+    "No parser grammar expansion",
+    "No translation edits",
+    "No semantic verdict",
+    "No reduction claimed in manual decisions or review time",
+    "No commit, push, deployment, main edits"
+  ],
+  "tests": "Full Python suite before/after; new focused diagnostic matrix; actual PBRES CLI against unchanged full inputs; synthetic real-copy threshold mutations."
+}

@@ -35,6 +35,12 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 当前管线会在分块翻译后保留术语标记，先生成术语审阅报告，再批量清除标记并继续合并、校验、JSON 提取。
 
+## 两阶段翻译与交付检查
+
+两阶段翻译、中文交付门禁、PBRES 原名表和可选名称/数量检查已纳入 main。入口与操作见 [两阶段翻译说明](experiments/context_contract/README.md)。这些工具仍须显式调用；默认 skill 仍执行上述 12 步管线，安装范围仍为 `skills/`。`experiments/` 保留现有路径以兼容调用，`recovery/` 仅为历史归档，不安装或执行。
+
+两阶段候选精修终稿不经 makeup 改写。门禁和合成回归只验证程序及基础交付约束，不证明语义、自然度或真实翻译质量优于旧流程；交付前仍需独立审阅。
+
 ## 通用译文审阅
 
 加载 [daggerheart-translation-audit](skills/daggerheart-translation-audit/SKILL.md)：对已经取得的原文与译文规范配对、逐段语义抓虫，再生成精准高亮、可保存进度的HTML供人审阅。这个skill不负责取得文本。Daggerheart内容必须调用 `daggerheart-chinese-writing` 指导语言与术语。
@@ -47,8 +53,9 @@ git clone https://github.com/ZZZZzzzzac/Daggerheart-translator.git
 
 ## 术语表分层
 
-- `terms-core.json`：以原人工清洗表为基线，维护跨项目复用的规则术语和官方战役框架名称；不是 ParaTranz 的自动同步导出。
-- `glossary/_glossary.json`：当前项目独有的人名、地名、组织及概念。官方战役框架名称统一使用核心表。
+- `terms-core.json`：以原人工清洗表为基线，维护跨项目复用的游戏性与规则机制术语；不是 ParaTranz 的自动同步导出。
+- `resources/term-groups.json`：按清单顺序加载 `default: true` 的分组；世界设定、玩家资源、敌人、环境和装备分别维护。
+- `glossary/_glossary.json`：当前项目独有的人名、地名、组织及概念。官方战役框架名称统一使用默认分组 `worldbuilding.json`。
 - `resources/scoped/`：按框架分别保存专属机制，保留原译名供对应项目选用，不默认加载。
 
 详见 [术语范围与迁移说明](skills/daggerheart-translation-pipeline/resources/README.md)。

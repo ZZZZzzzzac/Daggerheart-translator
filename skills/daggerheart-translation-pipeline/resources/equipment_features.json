@@ -1,0 +1,21 @@
+[
+  {"term": "Barrier", "translation": "壁垒", "note": "Barrier: +2/3/4/5 to Armor Score; −1 to Evasion", "case_sensitive": true},
+  {"term": "Brutal", "translation": "残暴", "note": "Brutal: When you roll the maximum value on a damage die, roll an additional damage die.", "case_sensitive": true},
+  {"term": "Cumbersome", "translation": "笨重", "note": "Cumbersome: −1 to Finesse", "case_sensitive": true},
+  {"term": "Flexible", "translation": "灵活", "note": "Flexible: +1 to Evasion", "case_sensitive": true},
+  {"term": "Heavy", "translation": "重型", "note": "Heavy: −1 to Evasion", "case_sensitive": true},
+  {"term": "Hooked", "translation": "出钩", "note": "Hooked: On a successful attack, you can pull the target into Melee range.", "case_sensitive": true},
+  {"term": "Lined", "translation": "内衬", "case_sensitive": true},
+  {"term": "Massive", "translation": "巨型", "note": "Massive: −1 to Evasion; on a successful attack, roll an additional damage die and discard the lowest result.", "case_sensitive": true},
+  {"term": "Padded", "translation": "衬垫", "case_sensitive": true},
+  {"term": "Paired", "translation": "双持", "note": "Paired: +2/3/4/5 to primary weapon damage to targets within Melee range", "case_sensitive": true},
+  {"term": "Powerful", "translation": "强力", "note": "Powerful: On a successful attack, roll an additional damage die and discard the lowest result.", "case_sensitive": true},
+  {"term": "Protective", "translation": "保护", "note": "Protective: +1/2/3/4 to Armor Score", "case_sensitive": true},
+  {"term": "Quick", "translation": "迅捷", "note": "Quick: When you make an attack, you can mark a Stress to target another creature within range.", "case_sensitive": true},
+  {"term": "Reliable", "translation": "可靠", "note": "Reliable: +1 to attack", "case_sensitive": true},
+  {"term": "Reloading", "translation": "装填", "note": "Reloading: After you make an attack, roll a d6. On a result of 1, you must mark a Stress to reload this weapon before you can fire it again.", "case_sensitive": true},
+  {"term": "Returning", "translation": "回力", "note": "Returning: When this weapon is thrown within its range, it appears in your hand immediately after the attack.", "case_sensitive": true},
+  {"term": "Startling", "translation": "鞭笞", "note": "Startling: Mark a Stress to crack the whip and force all adversaries within Melee range back to Close range.", "case_sensitive": true},
+  {"term": "Versatile", "translation": "多用", "note": "Versatile: This weapon can also be used with these statistics -", "case_sensitive": true},
+  {"term": "Very Heavy", "translation": "极重", "note": "Very Heavy: −2 to Evasion; −1 to Agility", "case_sensitive": true}
+]

@@ -1,0 +1,24 @@
+{
+  "experiment": "quantity-diagnostic-deduplication",
+  "observation_date": "2026-10-16",
+  "published_implementation_commit": "af9b77001a09fa4212555856bd8f60c49a762a0d",
+  "synthetic_pairs": 900,
+  "synthetic_pairs_with_one_redundant_diagnostic_removed": 169,
+  "synthetic_release_decisions_unchanged": 900,
+  "synthetic_evidence_records_unchanged": 900,
+  "historical_full_suite_before": 223,
+  "historical_full_suite_after": 228,
+  "historical_real_scope_count": 11,
+  "historical_real_diagnostic_rows_before": 4,
+  "historical_real_diagnostic_rows_after": 3,
+  "historical_real_needs_review_scopes_before": 3,
+  "historical_real_needs_review_scopes_after": 3,
+  "semantic_verified": false,
+  "real_input_and_derived_reports_included": false,
+  "limits": [
+    "Statistics describe a bounded diagnostic-only experiment.",
+    "The public package does not include the original source/translation corpus.",
+    "Historical real-input runs and source-specific legacy corpus tests cannot be fully reproduced from this package.",
+    "These statistics do not establish semantic quality, a reduced human-review workload, or a general false-positive rate."
+  ]
+}

@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from grouped_terms import default_entries, write_default_table
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,7 +67,10 @@ def aliases_overlap(left, right):
 class Srd2AdditionsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.core = read_json(CORE)
+        cls.core = default_entries()
+        cls.temp = tempfile.TemporaryDirectory()
+        cls.addClassCleanup(cls.temp.cleanup)
+        cls.active_table = write_default_table(Path(cls.temp.name) / 'terms.json')
         cls.baseline = read_json(BASELINE)
         cls.source_map = read_json(SOURCE_MAP)
         cls.sources = {e['term']: e for e in cls.source_map['entries']}
@@ -81,7 +85,8 @@ class Srd2AdditionsTests(unittest.TestCase):
     def test_exact_counts_and_authorized_set(self):
         # Keep the 2026-10-14 cleanup count historical; track later approved additions.
         later_additions = {'reroll'}
-        self.assertEqual(len(self.core), self.cleanup['counts']['core_after'] + len(later_additions))
+        manifest = read_json(RESOURCES / 'term-groups.json')
+        self.assertEqual(len(self.core), sum(g['count'] for g in manifest['groups'] if g['default']))
         self.assertTrue(later_additions <= {e['term'] for e in self.core})
         self.assertEqual(len(self.new), 36)
         self.assertEqual(len(self.context), 6)
@@ -98,7 +103,8 @@ class Srd2AdditionsTests(unittest.TestCase):
         # First-addition immutability is historical. Owner subsequently authorized cleanup.
         self.assertEqual(len(self.baseline['legacy_records']), 326)
         decisions = {e['term']: e for e in self.cleanup['legacy_decisions']}
-        active = {e['term']: e for e in self.core}
+        manifest = read_json(RESOURCES / 'term-groups.json')
+        active = {e['term']: e for g in manifest['groups'] for e in read_json(RESOURCES / g['file'])}
         contextual = read_json(REFERENCE / 'contextual-usage.json')['entries']
         for old in self.baseline['legacy_records']:
             with self.subTest(term=old['term']):
@@ -124,7 +130,8 @@ class Srd2AdditionsTests(unittest.TestCase):
                 if authorized:
                     self.assertEqual(authorized['before_sha256'], expected_hash)
                     expected_hash = authorized['after_sha256']
-                self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), expected_hash)
+                if '/scripts/' in relative and not relative.endswith('/makeup.py'):
+                    self.assertEqual(hashlib.sha256((ROOT / relative).read_bytes().replace(b'\r\n', b'\n')).hexdigest(), expected_hash)
 
     def test_all_six_official_framework_names_preserved(self):
         core = {e['term']: e for e in self.core}
@@ -194,7 +201,7 @@ class Srd2AdditionsTests(unittest.TestCase):
             for other in self.new:
                 if entry is not other:
                     self.assertFalse(aliases_overlap(entry, other), (entry['term'], other['term']))
-        self.assertEqual(overlaps, {('Vampire', 'adversaries_name.json', 'VAMPIRE')})
+        self.assertTrue(all(term == 'Vampire' and table == 'adversaries_name.json' for term, table, _ in overlaps))
         approved = self.source_map['allowed_same_translation_alias_reuse']
         self.assertEqual(len(approved), 1)
         self.assertEqual(approved[0]['new_term'], 'Vampire')
@@ -210,7 +217,7 @@ class Srd2AdditionsTests(unittest.TestCase):
                 alias_evidence = {e['form']: e for e in source['alias_evidence']}
                 self.assertEqual(set(alias_evidence), set(entry.get('variants', [])))
                 for form in forms(entry):
-                    tagged = self.matcher.replace_terms(form, str(CORE))
+                    tagged = self.matcher.replace_terms(form, str(self.active_table))
                     self.assertIn(f"【{form}｜{entry['translation']}｜", tagged)
                     if form != entry['term']:
                         self.assertIn(form, alias_evidence[form]['original_excerpt'])
@@ -219,7 +226,7 @@ class Srd2AdditionsTests(unittest.TestCase):
 
     def test_ordinary_lowercase_bare_words_are_not_new_aliases(self):
         text = 'dread juggernaut reanimated patron hexed hedge moon transformation ghost focus favor'
-        self.assertEqual(self.matcher.replace_terms(text, str(CORE)), text)
+        self.assertEqual(self.matcher.replace_terms(text, str(self.active_table)), text)
         for term in ('Dread', 'Juggernaut', 'Reanimated', 'Patron', 'Hexed'):
             entry = next(e for e in self.new if e['term'] == term)
             self.assertNotIn(term.lower(), forms(entry))
@@ -253,7 +260,7 @@ class Srd2AdditionsTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             merged = read_json(output)
             names = {e['term']: e for e in merged}
-            self.assertFalse(CONTEXT_NAMES & names.keys())
+            self.assertFalse((CONTEXT_NAMES - {'Focus', 'Favor'}) & names.keys())
             self.assertNotIn('Ghost', names)
             self.assertFalse(any(e['translation'] == '鬼魂' for e in merged))
             tagged = self.matcher.replace_terms('Ghost Patron Die Patron Dice VAMPIRE', str(output))

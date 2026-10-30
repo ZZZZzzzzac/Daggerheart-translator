@@ -34,17 +34,17 @@ description: Orchestrates the end-to-end Daggerheart translation flow: project s
   - 并行翻译前再次确认
   - 术语审阅报告由人工审阅
 - `全自动模式`
-  - 术语冲突按固定优先级自动裁决
+  - 术语来源冲突仍须暂停人工审阅；仅对已明确授权的取舍按固定优先级执行
   - `chunk 01` 自动检查后直接继续
   - 术语审阅报告由 AI 自动审阅并直接回写 chunk
   - 并行翻译、术语审阅、清标记、合并、makeup、检查、JSON 提取连续执行
-  - 仅在最终汇报结果
+  - 无未授权冲突或其他阻断时，仅在最终汇报结果
 
 固定优先级：
 
-`terms-core.json` > `adversaries_*.json` > `glossary/_glossary.json`
+`resources/term-groups.json` 中 `default: true` 的分组（按清单顺序） > `glossary/_glossary.json`。核心表为 `terms-core.json`，仅收游戏性与规则机制；玩家资源、敌人、环境、装备和世界设定分别加载。来源冲突须人工审阅，不用 Paratranz 快照整表覆盖。
 
-核心表是人工维护的规则术语基线，不是 ParaTranz 导出快照。六个官方战役框架名称保留于核心表以统一译名。项目独有的人名、地名、组织及概念应留在项目术语表；不得自动回填核心表。框架专属机制使用各自的框架术语表，按当前项目需要选用，不放入总表。`resources/scoped/` 仅供按项目选择条目，不参与默认合并。具体边界与迁移记录见 `resources/README.md`。
+条目每个对象一行。特性、动机、趋向与经历须在 SRD 2.0 至少两个独立资源定义中出现；仍需语境判断的同名概念不加入默认自动替换。框架专属机制按项目选择 `resources/scoped/`，语境说明不作为术语数组加载。分组与维护规则见 `resources/README.md`。
 
 ## 路径约定
 
@@ -113,7 +113,7 @@ python scripts/setup_project.py <项目目录>
 将全局术语表与本文档术语表合并，并对原文做内联标记。
 
 ```bash
-python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/adversaries_motivation.json" "resources/adversaries_name.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
+python scripts/merge_terms.py --terms "resources/terms-core.json" "resources/adversaries_features.json" "resources/equipment_features.json" "resources/adversaries_name.json" "resources/adversaries_motivation.json" "resources/worldbuilding.json" "resources/player_resources.json" "resources/player_features.json" "resources/environments_name.json" "resources/environments_features.json" "resources/equipment_names.json" "glossary/_glossary.json" --output "source/temp/_merged_terms.json" --original "source/_original.md"
 python scripts/replace_terms.py "source/_original.md" "source/temp/_merged_terms.json" "source/temp/_tagged.md"
 ```
 
@@ -121,7 +121,8 @@ python scripts/replace_terms.py "source/_original.md" "source/temp/_merged_terms
 - 标记格式：`【原文｜推荐译文｜注释】`
 - `注释` 可为空；若为空则标记退化为 `【原文｜推荐译文】`
 - 默认手动模式：若出现术语冲突，暂停，等待用户处理后再继续
-- 全自动模式：给 `merge_terms.py` 增加 `--auto-resolve`，按固定优先级自动保留高优先级译名，并继续执行；最终汇报冲突结果
+- 全自动模式同样先生成冲突报告并暂停。只有用户已审阅相关来源冲突、明确授权按输入顺序保留高优先级译名时，才给 `merge_terms.py` 增加 `--auto-resolve`；保留冲突报告并汇报取舍。选择“全自动模式”本身不授权未审阅的来源冲突裁决。
+- 清单变更后同步更新上述输入列表；仅加载 `default: true` 分组。默认关闭的固定用语、`scoped/` 和语境参考不能用目录通配符混入。
 
 ## 第 5 步：分块
 
@@ -230,7 +231,10 @@ python scripts/split_chunks.py "source/temp/_translated_chunks_clean" --merge --
 
 ## 第 10 步：makeup 后处理
 
+本步骤用于本技能的既有管线。先用 `--diff` 查看差异；CLI 默认会覆盖输入。实验两阶段流程的候选精修终稿不接此步骤，见 `experiments/context_contract/README.md`。
+
 ```bash
+python scripts/makeup.py "source/_translated.md" --diff
 python scripts/makeup.py "source/_translated.md" --suffix ""
 ```
 

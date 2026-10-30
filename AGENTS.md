@@ -62,3 +62,5 @@ project/<项目名>/
 用户加载 `daggerheart-translation-pipeline` skill 后按 SKILL.md 指示的 12 步管线执行。管线所有产物写入当前翻译项目的 `source/` 和 `source/temp/` 下。
 
 技能之间通过 `__file__` 相对路径解析互相引用，不依赖安装位置。
+
+两阶段翻译与中文交付检查已纳入 main，操作入口见 `experiments/context_contract/README.md`。这些入口须显式调用，不自动替换 12 步默认管线；`recovery/` 为历史归档，不安装或执行。
